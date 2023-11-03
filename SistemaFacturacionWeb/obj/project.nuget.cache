@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ebWLwypPe7xrqb6rwbW0nlVW0NpsgVTq1WFogtTErccT+y6Oru5DfTp/nfE/zuv4ek1QSBSSpHZ8R9znno998Q==",
+  "dgSpecHash": "H5T/4nfvyqiptcIyaD4IlaKr2Ey1F6rhq6mxahqSiPNDTj4Jdi9RT++uXUvSPYzzgVABWLalLZSswporxB6I+Q==",
   "success": true,
   "projectFilePath": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacionWeb\\SistemaFacturacionWeb.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\markg\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\markg\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\7.0.13\\microsoft.aspnetcore.jsonpatch.7.0.13.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\7.0.13\\microsoft.aspnetcore.mvc.newtonsoftjson.7.0.13.nupkg.sha512",

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SistemaFacturacionWeb;
 using SistemaFacturacionWeb.Datos;
 using System.Threading.RateLimiting;
 
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("CadenaSQL"));
 
 });
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
