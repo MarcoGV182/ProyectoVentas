@@ -15,6 +15,12 @@ namespace SistemaFacturacionWeb
             CreateMap<VillaCreateDTO, Villa>();
 
             CreateMap<Villa, VillaUpdateDTO>().ReverseMap();
-        }
+
+            CreateMap<Producto, ProductoDTO>().ReverseMap();
+            CreateMap<Producto, ProductoCreateDTO>().ReverseMap();
+            CreateMap<Producto, ProductoUpdateDTO>()
+            .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Descripcion))
+            .ReverseMap();
+        } 
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SistemaFacturacionWeb.Datos;
 using SistemaFacturacionWeb.Modelos;
 using SistemaFacturacionWeb.Modelos.DTO;
+using SistemaFacturacionWeb.Repositorio.IRepositorio;
 
 namespace SistemaFacturacionWeb.Controllers
 {
@@ -13,14 +14,14 @@ namespace SistemaFacturacionWeb.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
-        private readonly ILogger<VillaController> _logger;
-        private readonly ApplicationDbContext _db;
+        private readonly ILogger<VillaController> _logger;     
         private readonly IMapper _mapper;
+        private readonly IVillaRepositorio _villaRepositorio;
 
-        public VillaController(ILogger<VillaController> logger, ApplicationDbContext db, IMapper mapper)
+        public VillaController(ILogger<VillaController> logger, IVillaRepositorio villaRepositorio, IMapper mapper)
         {
             _logger = logger;
-            _db = db;
+            _villaRepositorio = villaRepositorio;
             _mapper = mapper;
         }
 
@@ -31,7 +32,7 @@ namespace SistemaFacturacionWeb.Controllers
         {
             _logger.LogInformation("Obteniendo datos de las villas");
 
-            IEnumerable<Villa> villaList = await _db.Villas.ToListAsync();
+            IEnumerable<Villa> villaList = await _villaRepositorio.ObtenerTodos();
 
             return Ok(_mapper.Map<IEnumerable<VillaDTO>>(villaList));
         }
@@ -47,7 +48,7 @@ namespace SistemaFacturacionWeb.Controllers
             }
 
             //var villa = VillaStore.VillaList.Where(c => c.Id == id).FirstOrDefault();
-            var villa = await _db.Villas.Where(c => c.Id == id).FirstOrDefaultAsync();
+            var villa = await _villaRepositorio.Obtener(c => c.Id == id);
 
             if (villa == null)
             {
@@ -67,7 +68,7 @@ namespace SistemaFacturacionWeb.Controllers
         {
             try
             {
-                if (_db.Villas.Where(v => v.Nombre.ToLower() == CreateDTO.Nombre.ToLower()).Count() > 0)
+                if (_villaRepositorio.Obtener(v => v.Nombre.ToLower() == CreateDTO.Nombre.ToLower()) == null)
                 {
                     ModelState.AddModelError("NombreExiste", "La villa con el nombre ingresado ya existe");
                     return BadRequest(ModelState);
@@ -78,11 +79,9 @@ namespace SistemaFacturacionWeb.Controllers
                     return BadRequest();
                 }
                                
-
                 var Modelo = _mapper.Map<Villa>(CreateDTO);
 
-                await _db.Villas.AddAsync(Modelo);
-                await _db.SaveChangesAsync();
+                await _villaRepositorio.Crear(Modelo);
 
                 return CreatedAtRoute("GetVilla", new { id = Modelo.Id }, Modelo);
             }
@@ -109,14 +108,13 @@ namespace SistemaFacturacionWeb.Controllers
                 return BadRequest();
             }
 
-            var villa = await _db.Villas.Where(c => c.Id == id).FirstOrDefaultAsync();
+            var villa = await _villaRepositorio.Obtener(c => c.Id == id);
             if (villa == null)
             {
                 return NotFound();
             }
 
-            _db.Villas.Remove(villa);
-            await _db.SaveChangesAsync();
+            await _villaRepositorio.Eliminar(villa);
 
             return NoContent();
         
@@ -134,7 +132,7 @@ namespace SistemaFacturacionWeb.Controllers
                 return BadRequest();
             }
 
-            var villa = await _db.Villas.Where(c => c.Id == id).FirstOrDefaultAsync();
+            var villa = await _villaRepositorio.Obtener(c => c.Id == id);
             if (villa == null)
             {
                 return NotFound();
@@ -142,8 +140,7 @@ namespace SistemaFacturacionWeb.Controllers
 
             Villa modelo = _mapper.Map<Villa>(villaUpdatedto);
 
-            _db.Villas.Update(modelo);
-            await _db.SaveChangesAsync();
+            await _villaRepositorio.Actualizar(villa);
 
             return NoContent();
         }
@@ -161,7 +158,7 @@ namespace SistemaFacturacionWeb.Controllers
                 return BadRequest();
             }
 
-            var villa = await _db.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id);
+            var villa = await _villaRepositorio.Obtener(c => c.Id == id,false);
 
             VillaUpdateDTO villadto = _mapper.Map<VillaUpdateDTO>(villa);
 
@@ -175,10 +172,7 @@ namespace SistemaFacturacionWeb.Controllers
 
             Villa modelo = _mapper.Map<Villa>(villadto);
 
-
-
-            _db.Villas.Update(modelo);
-            await _db.SaveChangesAsync();
+            await _villaRepositorio.Eliminar(villa);
 
             return NoContent();
         }

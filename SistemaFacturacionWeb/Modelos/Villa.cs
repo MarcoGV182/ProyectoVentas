@@ -23,5 +23,10 @@ namespace SistemaFacturacionWeb.Modelos
         public string Amenidad { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }
+
+        public Villa()
+        {
+            FechaCreacion = DateTime.Now;
+        }
     }
 }

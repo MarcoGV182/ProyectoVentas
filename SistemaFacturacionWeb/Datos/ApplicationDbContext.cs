@@ -11,32 +11,20 @@ namespace SistemaFacturacionWeb.Datos
         }
 
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<Articulo> Articulo { get; set; }
+        public DbSet<Producto> Producto { get; set; }
+        public DbSet<TipoImpuesto> TipoImpuesto { get; set; }
+        public DbSet<Marca> Marca { get; set; }
+        public DbSet<Presentacion> Presentacion { get; set; }
+        public DbSet<Stock> Stock { get; set; }
+        public DbSet<TipoProducto> TipoProducto { get; set; }
+        public DbSet<UnidadMedida> UnidadMedida { get; set; }
+        public DbSet<Ubicacion> Ubicacion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Villa>().HasData(
-                new Villa()
-                {
-                    Id = 1,
-                    Nombre = "Villa Real",
-                    Detalle = "Detalle villa real",
-                    ImagenURL = string.Empty,
-                    Ocupantes = 5,
-                    MetrosCuadratos = 50,
-                    Amenidad = "",
-                    FechaCreacion = DateTime.Now
-                },
-                new Villa()
-                {
-                    Id = 2,
-                    Nombre = "Villa Nueva 2 ",
-                    Detalle = "Detalle villa nueva 2",
-                    ImagenURL = string.Empty,
-                    Ocupantes = 10,
-                    MetrosCuadratos = 60,
-                    Amenidad = "",
-                    FechaCreacion = DateTime.Now
-                });
+            modelBuilder.Entity<Articulo>().ToTable("Articulo");
+            modelBuilder.Entity<Producto>().ToTable("Producto");
         }
     }
 }
