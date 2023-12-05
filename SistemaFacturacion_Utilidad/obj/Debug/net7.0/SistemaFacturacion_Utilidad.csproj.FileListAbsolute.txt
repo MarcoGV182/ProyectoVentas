@@ -1,0 +1,12 @@
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\bin\Debug\net7.0\SistemaFacturacion_Utilidad.deps.json
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\bin\Debug\net7.0\SistemaFacturacion_Utilidad.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\bin\Debug\net7.0\SistemaFacturacion_Utilidad.pdb
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.csproj.AssemblyReference.cache
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.GeneratedMSBuildEditorConfig.editorconfig
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.AssemblyInfoInputs.cache
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.AssemblyInfo.cs
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.csproj.CoreCompileInputs.cache
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\refint\SistemaFacturacion_Utilidad.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\SistemaFacturacion_Utilidad.pdb
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_Utilidad\obj\Debug\net7.0\ref\SistemaFacturacion_Utilidad.dll

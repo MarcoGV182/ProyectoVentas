@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SistemaFacturacion_Web.Models.DTO.MarcaDTO>
+@{
+    ViewData["Title"] = "IndexMarca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Listado de Marcas</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a asp-controller="Marca" asp-action="CrearMarca" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i> Crear nueva Marca</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descripcion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Marcanro</td>
+                    <td>@item.Descripcion</td>
+                    <td>
+                        <a asp-controller="Marca" asp-action="ActualizarMarca" asp-route-marcaId="@item.Marcanro" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Marca" asp-action="EliminarMarca"   asp-route-marcaId="@item.Marcanro" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
