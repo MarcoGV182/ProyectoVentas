@@ -48,8 +48,6 @@ namespace SistemaFacturacion_API.Controllers
                 _response.ErrorMessages = new List<string>() { ex.ToString() };                
             }
             return _response;
-
-
         }
 
 
