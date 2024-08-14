@@ -9,8 +9,8 @@ namespace SistemaFacturacion_API.Modelos.DTO
 
         public string Descripcion { get; set; }
 
-        public double Porcentajeiva { get; set; } = 0;
+        public double Porcentajeiva { get; set; }
 
-        public double Baseimponible { get; set; } = 0;
+        public double Baseimponible { get; set; }
     }
 }

@@ -105,7 +105,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("HistorialRefreshToken", (string)null);
+                    b.ToTable("HistorialRefreshToken");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Marca", b =>
@@ -121,7 +121,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Marcanro");
 
-                    b.ToTable("Marca", (string)null);
+                    b.ToTable("Marca");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Persona", b =>
@@ -146,6 +146,12 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.Property<DateTime?>("Fecharegistro")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LoginActualizacion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LoginRegistro")
+                        .HasColumnType("text");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -184,7 +190,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Idpresentacion");
 
-                    b.ToTable("Presentacion", (string)null);
+                    b.ToTable("Presentacion");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Stock", b =>
@@ -213,7 +219,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UbicacionId");
 
-                    b.ToTable("Stock", (string)null);
+                    b.ToTable("Stock");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoImpuesto", b =>
@@ -237,7 +243,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("TipoimpuestoNro");
 
-                    b.ToTable("TipoImpuesto", (string)null);
+                    b.ToTable("TipoImpuesto");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoProducto", b =>
@@ -253,7 +259,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Tiporoductonro");
 
-                    b.ToTable("TipoProducto", (string)null);
+                    b.ToTable("TipoProducto");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Ubicacion", b =>
@@ -276,7 +282,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("UbicacionId");
 
-                    b.ToTable("Ubicacion", (string)null);
+                    b.ToTable("Ubicacion");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.UnidadMedida", b =>
@@ -292,7 +298,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Unidadmedidanro");
 
-                    b.ToTable("UnidadMedida", (string)null);
+                    b.ToTable("UnidadMedida");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Usuario", b =>

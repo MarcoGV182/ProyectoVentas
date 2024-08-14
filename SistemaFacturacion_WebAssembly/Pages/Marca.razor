@@ -1,0 +1,155 @@
+﻿@page "/marca"
+@inject IMarcaService _marcaservice
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject SweetAlertService Swal;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+  <MudText Typo="Typo.h5" GutterBottom="true">Marcas</MudText>
+
+   <MudPaper Elevation="3" Class="pa-4" Width="100%">
+       <MudGrid>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.Add"
+            Color="Color.Primary"
+            OnClick="AbrirNuevaMarca">
+                Nueva Marca</MudButton>
+        </MudItem>
+        <MudItem xs="12">
+
+                <MudTable 
+                    Items="@listaMarcas"
+                    Dense="true"
+                    Striped="true" Bordered="true" 
+                    Filter="new Func<MarcaDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                    Loading="@_loading" LoadingProgressColor="Color.Info"
+                >
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Codigo</MudTh>
+                        <MudTh>Descripcion</MudTh>                      
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="marcaRow">
+                        <MudTd DataLabel="Codigo">@marcaRow.Marcanro</MudTd>
+                        <MudTd DataLabel="Descripcion">@marcaRow.Descripcion</MudTd>                        
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary" 
+                                StartIcon="@Icons.Material.Filled.Edit"
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarMarca(marcaRow))" />
+                            <MudFab 
+                                Color="Color.Error" 
+                                StartIcon="@Icons.Material.Filled.Delete" 
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                OnClick="@(() => EliminarMarca(marcaRow))"
+                            />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+
+
+        </MudItem>
+    </MudGrid>
+   </MudPaper>
+
+</MudContainer>
+@code {
+    List<MarcaDTO> listaMarcas = new List<MarcaDTO>();
+    private string searchString1 = "";
+    private MarcaDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerMarcas()
+    {
+        var result = await _marcaservice.ObtenerTodos<List<MarcaDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaMarcas = (List<MarcaDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerMarcas();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(MarcaDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(MarcaDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
+        /*if (element.Marcanro == Convert.ToInt32(searchString))
+            return true;*/
+
+        return false;
+    }
+
+    private async Task AbrirNuevaMarca()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = _dialogServicio.Show<MdMarca>("Nueva Marca", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerMarcas();
+        }
+    }
+
+    private async Task AbrirEditarMarca(MarcaDTO marca)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_marca"] = marca };
+
+        var dialogo = _dialogServicio.Show<MdMarca>("Editar Marca", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerMarcas();
+        }
+    }
+
+    private async Task EliminarMarca(MarcaDTO marca)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar la marca: {marca.Descripcion}({marca.Marcanro})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.Marcanro);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La Marca fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerMarcas();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 
+string myCors = "AllowBlazor";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//Configuracion de SWAGGER
 builder.Services.AddSwaggerGen(c=> 
 {
     //Titulo
@@ -29,6 +33,11 @@ builder.Services.AddSwaggerGen(c=>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
+});
+
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy(myCors, builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
 
 builder.Services.InyectarDependencia(builder.Configuration);
@@ -77,5 +86,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(myCors);
 
 app.Run();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFacturacion_API.Modelos;
 using SistemaFacturacion_API.Modelos.DTO;
+using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using System.Net;
 
@@ -48,5 +49,186 @@ namespace SistemaFacturacion_API.Controllers
 
 
         }
+
+
+        [HttpGet("{id:int}", Name = "ObtenerTipoImpuestoById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<APIResponse>> ObtenerTipoImpuestoById(int id)
+        {
+            _logger.LogInformation($"Obteniendo datos de los Tipos de Impuesto por id: {id}");
+
+            try
+            {
+                if (id == 0)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+
+                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(p => p.TipoimpuestoNro == id);
+
+                if (tipoImpuesto == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return _response;
+                }
+
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Resultado = _mapper.Map<TipoImpuestoDTO>(tipoImpuesto);
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+            }
+            return _response;
+
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> CrearTipoImpuesto([FromBody] TipoImpuestoDTO CreateDTO)
+        {
+            try
+            {
+                if (CreateDTO == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+
+                var existeImpuesto = _tipoImpuestoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
+                if (existeImpuesto.Result != null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "El Tipo de Impuesto con el nombre ingresado ya existe");
+                    return BadRequest(ModelState);
+                }
+
+                
+
+                var _tipoImpuesto = new TipoImpuesto();
+                _tipoImpuesto.Descripcion = CreateDTO.Descripcion;
+
+                await _tipoImpuestoRepositorio.Crear(_tipoImpuesto);
+
+                _response.isExitoso = true;
+                _response.Resultado = _tipoImpuesto;
+                _response.StatusCode = HttpStatusCode.Created;
+
+                return CreatedAtRoute("ObtenerTipoImpuestoById", new { id = _tipoImpuesto.TipoimpuestoNro }, _response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+                return BadRequest(ex);
+            }
+
+        }
+
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoDTO UpdateDTO)
+        {
+            try
+            {
+                if (UpdateDTO == null || id != UpdateDTO.TipoimpuestoNro)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+                var marca = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoNro == id, tracked: false);
+                if (marca == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                TipoImpuesto modelo = _mapper.Map<TipoImpuesto>(UpdateDTO);
+
+                await _tipoImpuestoRepositorio.Actualizar(modelo);
+
+                _response.isExitoso = true;
+                _response.Resultado = modelo;
+                _response.StatusCode = HttpStatusCode.NoContent;
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.StatusCode = HttpStatusCode.BadRequest;
+            }
+
+            return BadRequest(_response);
+
+        }
+
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> EliminarTipoImpuesto(int id)
+        {
+            try
+            {
+                #region Validaciones
+                //Validar que el id recibido no sea cero
+                if (id == 0)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+                //Validar que el objecto a eliminar exista
+                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoNro == id, tracked: false);
+
+                if (tipoImpuesto == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+                #endregion
+
+                await _tipoImpuestoRepositorio.Eliminar(tipoImpuesto);
+
+                _response.isExitoso = true;
+                _response.Resultado = tipoImpuesto;
+                _response.StatusCode = HttpStatusCode.NoContent;
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
+            }
+
+            return BadRequest(_response);
+
+        }
+
     }
 }

@@ -105,6 +105,7 @@ namespace SistemaFacturacion_API.Controllers
                 var _UsuarioNuevo = _mapper.Map<Usuario>(CreateDTO);
 
                 _UsuarioNuevo.Password = Utilidades.EncriptarClave(CreateDTO.Password);
+                _UsuarioNuevo.Fechaalta = DateTime.Now;
 
                 await _usuarioRepositorio.Crear(_UsuarioNuevo);
 

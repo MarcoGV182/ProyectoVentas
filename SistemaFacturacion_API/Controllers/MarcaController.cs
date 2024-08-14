@@ -213,7 +213,7 @@ namespace SistemaFacturacion_API.Controllers
             catch (Exception ex)
             {
                 _response.isExitoso = false;
-                _response.ErrorMessages = new List<string> { ex.Message };
+                _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
             }
 
             return BadRequest(_response);

@@ -16,7 +16,7 @@ namespace SistemaFacturacion_API
 
             });
 
-            services.AddAutoMapper(typeof(MappingConfig));
+            services.AddAutoMapper(typeof(MappingConfig).Assembly);
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
