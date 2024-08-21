@@ -25,13 +25,13 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Marca"
             });
         }
-        public Task<APIResponse> Actualizar<T>(MarcaDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id,MarcaCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
-                URL = $"api/Marca/{dto.Marcanro}"
+                URL = $"api/Marca/{id}"
             });
         }
 

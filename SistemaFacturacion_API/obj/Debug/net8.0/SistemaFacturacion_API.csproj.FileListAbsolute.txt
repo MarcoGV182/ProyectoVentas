@@ -6,6 +6,7 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\SistemaFacturacion_API.dll
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\SistemaFacturacion_API.pdb
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\AutoMapper.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\Humanizer.dll
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll

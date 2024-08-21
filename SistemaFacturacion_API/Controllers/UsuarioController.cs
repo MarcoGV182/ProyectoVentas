@@ -9,6 +9,7 @@ using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Services;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -48,7 +49,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuario()
         {
-            //_logger.LogInformation("Obteniendo datos de las Productos");
+            //_logger.LogInformation("Obteniendo datos del Usuario");
 
 
             IEnumerable<Usuario> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
@@ -106,6 +107,7 @@ namespace SistemaFacturacion_API.Controllers
 
                 _UsuarioNuevo.Password = Utilidades.EncriptarClave(CreateDTO.Password);
                 _UsuarioNuevo.Fechaalta = DateTime.Now;
+                _UsuarioNuevo.Estado = "A";
 
                 await _usuarioRepositorio.Crear(_UsuarioNuevo);
 
@@ -149,6 +151,48 @@ namespace SistemaFacturacion_API.Controllers
             {
                 return BadRequest(autorizacionResponse);
             }
+        }
+
+
+        [HttpPost]
+        [Route("IniciarSesion")]
+        public async Task<ActionResult<APIResponse>> IniciarSesion([FromBody] LoginDTO loginDto)
+        {
+            APIResponse _response = new APIResponse();
+            try
+            {
+                Usuario _usuario = await _usuarioRepositorio.Obtener(u => u.Login == loginDto.Usuario, incluirPropiedades: "Colaborador");
+
+                if (_usuario == null)
+                {
+                    _response.isExitoso = false;
+                    _response.ErrorMessages = new List<string>() { "El Usuario/Login no existe" };
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return _response;
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(loginDto.Clave, _usuario.Password))
+                {
+                    _response.isExitoso = false;
+                    _response.ErrorMessages = new List<string>() { "La contraseña ingresada es incorrecta"};
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return _response;
+
+                }
+
+                _response.isExitoso = true;
+                _response.Resultado = _usuario;
+                _response.StatusCode = HttpStatusCode.OK;
+
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message.ToString() };
+                return _response;
+            }        
         }
     }
 }

@@ -6,8 +6,8 @@ namespace SistemaFacturacion_API.Modelos
     public class TipoProducto
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public short Tiporoductonro { get; set; }
+        public short TipoProductonro { get; set; }
 
-        public string? Descripcion { get; set; }
+        public string Descripcion { get; set; }
     }
 }

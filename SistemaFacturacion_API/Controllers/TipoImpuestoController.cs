@@ -98,7 +98,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTipoImpuesto([FromBody] TipoImpuestoDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> CrearTipoImpuesto([FromBody] TipoImpuestoCreateDTO CreateDTO)
         {
             try
             {
@@ -117,10 +117,9 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                
 
-                var _tipoImpuesto = new TipoImpuesto();
-                _tipoImpuesto.Descripcion = CreateDTO.Descripcion;
+
+                TipoImpuesto _tipoImpuesto = _mapper.Map<TipoImpuesto>(CreateDTO);
 
                 await _tipoImpuestoRepositorio.Crear(_tipoImpuesto);
 
@@ -145,11 +144,11 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoDTO UpdateDTO)
+        public async Task<IActionResult> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
         {
             try
             {
-                if (UpdateDTO == null || id != UpdateDTO.TipoimpuestoNro)
+                if (UpdateDTO == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -165,6 +164,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 TipoImpuesto modelo = _mapper.Map<TipoImpuesto>(UpdateDTO);
+                modelo.TipoimpuestoNro = id;
 
                 await _tipoImpuestoRepositorio.Actualizar(modelo);
 

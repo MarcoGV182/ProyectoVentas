@@ -4,12 +4,11 @@ using System.ComponentModel.DataAnnotations;
 namespace SistemaFacturacion_API.Modelos.DTO
 {
     public class UsuarioCreateDTO
-    {      
-        public int UsuarioId { get; set; }
-        [Required]
-        public string Login { get; set; }
-        [Required]
-        public string Password { get; set; }        
-        public string Correo { get; set; }
+    {  
+        public string login { get; set; }       
+        public string Password { get; set; }
+        public int? ColaboradorId { get; set; } = null;
+
+
     }
 }

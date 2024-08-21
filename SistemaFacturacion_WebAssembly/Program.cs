@@ -5,7 +5,6 @@ using SistemaFacturacion_WebAssembly.Services.IServices;
 using SistemaFacturacion_WebAssembly.Services;
 using CurrieTechnologies.Razor.SweetAlert2;
 using MudBlazor.Services;
-using SistemaFacturacion_WebAssembly.Pages;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,6 +21,8 @@ builder.Services.AddHttpClient("Facturacion", client =>
 
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<ITipoImpuestoService, TipoImpuestoService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
 
 builder.Services.AddMudServices();
 builder.Services.AddSweetAlert2();

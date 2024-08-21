@@ -26,6 +26,7 @@ namespace SistemaFacturacion_API
             services.AddScoped<IAutorizacionService, AutorizacionService>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
             services.AddScoped<ITipoImpuestoRepositorio, TipoImpuestoRepositorio>();
+            services.AddScoped<ITipoProductoRepositorio, TipoProductoRepositorio>();
         }
     }
 }

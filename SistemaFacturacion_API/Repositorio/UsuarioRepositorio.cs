@@ -23,13 +23,14 @@ namespace SistemaFacturacion_API.Repositorio
 
         public async Task<bool> ValidarUsuario(UsuarioCreateDTO entidad)
         {  
-            var ExisteColaborador = await _db.Colaborador.FirstOrDefaultAsync(c => c.PersonaId == entidad.UsuarioId);
+            var Usuario = await _db.Usuario.FirstOrDefaultAsync(c => c.Login == entidad.login);
 
-            if (ExisteColaborador == null)
-                return false;
+            if (Usuario == null)
+                return true;
 
-            if (ExisteColaborador.Fechaegreso != null)
+            if (Usuario.Estado == "I" || Usuario.Fechabaja != null)
                 return false;
+                       
 
             return true;
         }

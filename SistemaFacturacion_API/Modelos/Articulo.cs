@@ -10,7 +10,7 @@ namespace SistemaFacturacion_API.Modelos
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Comment("Id de la tabla")]
         public int Articulonro { get; set; }
-        [MaxLength(100)]
+        [Required,MaxLength(100)]
         public string Descripcion { get; set; }
 
         public double Precio { get; set; }
@@ -26,15 +26,12 @@ namespace SistemaFacturacion_API.Modelos
 
         public DateTime? Fechaultactualizacion { get; set; }
 
+
+        //Relacion con TipoImpuesto
         public int? TipoimpuestoId { get; set; }
 
         [ForeignKey(nameof(TipoimpuestoId))]
         public TipoImpuesto TipoImpuesto { get; set; }
-
-        public short? UnidadMedidaId { get; set; }
-
-        [ForeignKey(nameof(UnidadMedidaId))]
-        public UnidadMedida UnidadMedida { get; set; }
     }
 
     public enum TipoArticulo 

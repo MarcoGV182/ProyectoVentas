@@ -139,11 +139,11 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarMarca(int id,[FromBody] MarcaDTO CreateDTO)
+        public async Task<IActionResult> ActualizarMarca(int id,[FromBody] MarcaCreateDTO CreateDTO)
         {
             try
             {
-                if (CreateDTO == null || id != CreateDTO.Marcanro)
+                if (CreateDTO == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -159,6 +159,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Marca modelo = _mapper.Map<Marca>(CreateDTO);
+                modelo.Marcanro = id;
 
                 await _marcaRepositorio.Actualizar(modelo);               
 

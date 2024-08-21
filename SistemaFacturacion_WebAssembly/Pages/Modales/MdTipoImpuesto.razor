@@ -4,35 +4,46 @@
 <MudDialog Style="width:400px">
     <DialogContent>
         <MudContainer Style="max-height: 400px; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_tipoimpuesto" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
 
-            <EditForm Model="@_tipoimpuesto">
+                <MudTextField @bind-Value="@_tipoimpuesto.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_tipoimpuesto.Descripcion)"
+                              HelperText="Ingrese la Descripción del impuesto" />
 
-                <MudTextField @bind-Value="@_tipoimpuesto.Descripcion" Class="mb-3"
-                              Label="Descripcion" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Badge" />
+                <MudNumericField @bind-Value="@_tipoimpuesto.Baseimponible"
+                                 Class="mb-3"
+                                 Label="Base Imponible"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 AdornmentIcon="@Icons.Material.Filled.Numbers" />
 
-                <MudNumericField @bind-Value="@_tipoimpuesto.Baseimponible" Class="mb-3"
-                              Label="Base Imponible" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Numbers" />
+                <MudNumericField @bind-Value="@_tipoimpuesto.Porcentajeiva"
+                                 Class="mb-3"
+                                 Label="Porcentaje IVA"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 AdornmentIcon="@Icons.Material.Filled.Numbers"
+                                 HelperText="Ingrese el Porcentaje de IVA del impuesto" />
 
-                <MudNumericField @bind-Value="@_tipoimpuesto.Porcentajeiva" Class="mb-3"
-                             Label="Porcentaje IVA" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Numbers" />
-
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
             </EditForm>
         </MudContainer>
-
-    </DialogContent>
-    <DialogActions>
-        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel">Cancelar</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Guardar">Guardar</MudButton>
-    </DialogActions>
+    </DialogContent>    
 </MudDialog>
 
 @code {
+
     [Parameter]
     public TipoImpuestoDTO _tipoimpuesto { get; set; } = new TipoImpuestoDTO();
-
-    bool isShow;
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
@@ -43,21 +54,7 @@
         Console.WriteLine(_tipoimpuesto.TipoimpuestoNro);
     }
 
-    void MostrarClave()
-    {
-        @if (isShow)
-        {
-            isShow = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            isShow = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
-    }
+
     private void Cancel()
     {
         Console.WriteLine("Cancelar presionado");
@@ -66,8 +63,7 @@
 
     private async Task Guardar()
     {
-        TipoImpuestoDTO _nuevoimpuesto = new TipoImpuestoDTO();
-        _nuevoimpuesto.TipoimpuestoNro = _tipoimpuesto.TipoimpuestoNro;
+        TipoImpuestoCreateDTO _nuevoimpuesto = new TipoImpuestoCreateDTO();
         _nuevoimpuesto.Descripcion = _tipoimpuesto.Descripcion;
         _nuevoimpuesto.Baseimponible = _tipoimpuesto.Baseimponible;
         _nuevoimpuesto.Porcentajeiva = _tipoimpuesto.Porcentajeiva;
@@ -76,13 +72,13 @@
 
         if (_tipoimpuesto.TipoimpuestoNro != 0)
         {
-            var response = await _tipoImpuestoService.Actualizar<TipoImpuestoDTO>(_nuevoimpuesto);
+            var response = await _tipoImpuestoService.Actualizar<TipoImpuestoDTO>(_tipoimpuesto.TipoimpuestoNro, _nuevoimpuesto);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }
         else
         {
-            var response = await _tipoImpuestoService.Crear<MarcaDTO>(_nuevoimpuesto);
+            var response = await _tipoImpuestoService.Crear<TipoImpuestoDTO>(_nuevoimpuesto);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con exito";
         }

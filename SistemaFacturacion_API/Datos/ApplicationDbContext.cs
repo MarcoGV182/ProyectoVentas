@@ -21,15 +21,29 @@ namespace SistemaFacturacion_API.Datos
         public DbSet<Persona> Persona { get; set; }
         public DbSet<Colaborador> Colaborador { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Servicio> Servicio { get; set; }
+        public DbSet<TipoServicio> TipoServicio { get; set; }
         public DbSet<HistorialRefreshToken> HistorialRefreshToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Colaborador>()
+            .HasOne(c => c.Persona)
+            .WithMany()
+            .HasForeignKey(c => c.PersonaId);
+
+            modelBuilder.Entity<Usuario>()
+                .HasOne(u => u.Colaborador)
+                .WithMany()
+                .HasForeignKey(u => u.ColaboradorId);
+
             modelBuilder.Entity<Articulo>().ToTable("Articulo");
             modelBuilder.Entity<Producto>().ToTable("Producto");
             modelBuilder.Entity<Persona>().ToTable("Persona");
             modelBuilder.Entity<Colaborador>().ToTable("Colaborador");
             modelBuilder.Entity<Usuario>().ToTable("Usuario");
+            modelBuilder.Entity<Servicio>().ToTable("Servicio");
+            modelBuilder.Entity<TipoServicio>().ToTable("TipoServicio");
 
             modelBuilder.Entity<HistorialRefreshToken>()
             .Property(e => e.EsActivo)

@@ -10,6 +10,6 @@ namespace SistemaFacturacion_WebAssembly.Models.DTO
         public string Login { get; set; }
         [Required]
         public string Password { get; set; }        
-        public string? Correo { get; set; }
+        public string Correo { get; set; }
     }
 }

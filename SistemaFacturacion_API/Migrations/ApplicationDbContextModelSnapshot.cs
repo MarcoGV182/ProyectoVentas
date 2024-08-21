@@ -17,7 +17,7 @@ namespace SistemaFacturacion_API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -32,6 +32,7 @@ namespace SistemaFacturacion_API.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Articulonro"));
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -59,18 +60,43 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int?>("TipoimpuestoId")
                         .HasColumnType("integer");
 
-                    b.Property<short?>("UnidadMedidaId")
-                        .HasColumnType("smallint");
-
                     b.HasKey("Articulonro");
 
                     b.HasIndex("TipoimpuestoId");
 
-                    b.HasIndex("UnidadMedidaId");
-
                     b.ToTable("Articulo", (string)null);
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+                {
+                    b.Property<int>("ColaboradorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ColaboradorId"));
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("Fechaegreso")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("Fechaingreso")
+                        .HasColumnType("date");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Salario")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("ColaboradorId");
+
+                    b.HasIndex("PersonaId");
+
+                    b.ToTable("Colaborador", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.HistorialRefreshToken", b =>
@@ -172,17 +198,15 @@ namespace SistemaFacturacion_API.Migrations
                     b.HasKey("PersonaId");
 
                     b.ToTable("Persona", (string)null);
-
-                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Presentacion", b =>
                 {
-                    b.Property<int>("Idpresentacion")
+                    b.Property<short>("Idpresentacion")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("smallint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idpresentacion"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Idpresentacion"));
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(100)
@@ -248,18 +272,34 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoProducto", b =>
                 {
-                    b.Property<short>("Tiporoductonro")
+                    b.Property<short>("TipoProductonro")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Tiporoductonro"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoProductonro"));
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("text");
 
-                    b.HasKey("Tiporoductonro");
+                    b.HasKey("TipoProductonro");
 
                     b.ToTable("TipoProducto");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoServicio", b =>
+                {
+                    b.Property<short>("TipoServicoNro")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoServicoNro"));
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("text");
+
+                    b.HasKey("TipoServicoNro");
+
+                    b.ToTable("TipoServicio", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Ubicacion", b =>
@@ -304,9 +344,15 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Usuario", b =>
                 {
                     b.Property<int>("UsuarioId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<string>("Correo")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UsuarioId"));
+
+                    b.Property<int?>("ColaboradorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Estado")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Fechaalta")
@@ -320,9 +366,12 @@ namespace SistemaFacturacion_API.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("UsuarioId");
+
+                    b.HasIndex("ColaboradorId");
 
                     b.ToTable("Usuario", (string)null);
                 });
@@ -335,17 +384,17 @@ namespace SistemaFacturacion_API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DateOnly?>("Fechavencimiento")
+                    b.Property<DateOnly?>("FechaVencimiento")
                         .HasColumnType("date");
+
+                    b.Property<short?>("Idpresentacion")
+                        .HasColumnType("smallint");
 
                     b.Property<int?>("MarcaId")
                         .HasColumnType("integer");
 
                     b.Property<double>("PrecioCompra")
                         .HasColumnType("double precision");
-
-                    b.Property<int?>("PresentacionId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Stockactual")
                         .HasColumnType("integer");
@@ -359,9 +408,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<short?>("Unidadmedidanro")
                         .HasColumnType("smallint");
 
-                    b.HasIndex("MarcaId");
+                    b.HasIndex("Idpresentacion");
 
-                    b.HasIndex("PresentacionId");
+                    b.HasIndex("MarcaId");
 
                     b.HasIndex("TipoproductoId");
 
@@ -370,28 +419,19 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
                 {
-                    b.HasBaseType("SistemaFacturacion_API.Modelos.Persona");
+                    b.HasBaseType("SistemaFacturacion_API.Modelos.Articulo");
 
-                    b.Property<string>("Estado")
-                        .HasColumnType("text");
+                    b.Property<short?>("TipoServicioTipoServicoNro")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateOnly?>("Fechaegreso")
-                        .HasColumnType("date");
+                    b.Property<short>("TipoServicoNro")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateOnly>("Fechaingreso")
-                        .HasColumnType("date");
+                    b.HasIndex("TipoServicioTipoServicoNro");
 
-                    b.Property<double?>("Salario")
-                        .HasColumnType("double precision");
-
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("integer");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Colaborador", (string)null);
+                    b.ToTable("Servicio", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
@@ -400,13 +440,18 @@ namespace SistemaFacturacion_API.Migrations
                         .WithMany()
                         .HasForeignKey("TipoimpuestoId");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.UnidadMedida", "UnidadMedida")
-                        .WithMany()
-                        .HasForeignKey("UnidadMedidaId");
-
                     b.Navigation("TipoImpuesto");
+                });
 
-                    b.Navigation("UnidadMedida");
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+                {
+                    b.HasOne("SistemaFacturacion_API.Modelos.Persona", "Persona")
+                        .WithMany()
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.HistorialRefreshToken", b =>
@@ -439,6 +484,15 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Ubicacion");
                 });
 
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Usuario", b =>
+                {
+                    b.HasOne("SistemaFacturacion_API.Modelos.Colaborador", "Colaborador")
+                        .WithMany()
+                        .HasForeignKey("ColaboradorId");
+
+                    b.Navigation("Colaborador");
+                });
+
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
                 {
                     b.HasOne("SistemaFacturacion_API.Modelos.Articulo", null)
@@ -447,19 +501,19 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SistemaFacturacion_API.Modelos.Presentacion", "Presentacion")
+                        .WithMany("Productos")
+                        .HasForeignKey("Idpresentacion");
+
                     b.HasOne("SistemaFacturacion_API.Modelos.Marca", "Marca")
                         .WithMany()
                         .HasForeignKey("MarcaId");
-
-                    b.HasOne("SistemaFacturacion_API.Modelos.Presentacion", "Presentacion")
-                        .WithMany("Productos")
-                        .HasForeignKey("PresentacionId");
 
                     b.HasOne("SistemaFacturacion_API.Modelos.TipoProducto", "TipoProducto")
                         .WithMany()
                         .HasForeignKey("TipoproductoId");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.UnidadMedida", null)
+                    b.HasOne("SistemaFacturacion_API.Modelos.UnidadMedida", "UnidadMedida")
                         .WithMany("Productos")
                         .HasForeignKey("Unidadmedidanro");
 
@@ -468,21 +522,23 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Presentacion");
 
                     b.Navigation("TipoProducto");
+
+                    b.Navigation("UnidadMedida");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Persona", null)
+                    b.HasOne("SistemaFacturacion_API.Modelos.Articulo", null)
                         .WithOne()
-                        .HasForeignKey("SistemaFacturacion_API.Modelos.Colaborador", "PersonaId")
+                        .HasForeignKey("SistemaFacturacion_API.Modelos.Servicio", "Articulonro")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "Usuario")
+                    b.HasOne("SistemaFacturacion_API.Modelos.TipoServicio", "TipoServicio")
                         .WithMany()
-                        .HasForeignKey("UsuarioId");
+                        .HasForeignKey("TipoServicioTipoServicoNro");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("TipoServicio");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Presentacion", b =>

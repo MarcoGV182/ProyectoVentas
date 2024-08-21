@@ -41,7 +41,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             });
         }
 
-        public Task<APIResponse> Crear<T>(TipoImpuestoDTO dto)
+        public Task<APIResponse> Crear<T>(TipoImpuestoCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
@@ -50,13 +50,13 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/TipoImpuesto"
             });
         }
-        public Task<APIResponse> Actualizar<T>(TipoImpuestoDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id,TipoImpuestoCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
-                URL = $"api/TipoImpuesto/{dto.TipoimpuestoNro}"
+                URL = $"api/TipoImpuesto/{id}"
             });
         }
 

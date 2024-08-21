@@ -4,62 +4,47 @@
 <MudDialog Style="width:400px">
     <DialogContent>
         <MudContainer Style="max-height: 400px; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_marca" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
 
-            <EditForm Model="@_marca">
+                <MudTextField @bind-Value="@_marca.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_marca.Descripcion)" />
+                                              
 
-                <MudTextField @bind-Value="@_marca.Descripcion" Class="mb-3"
-                              Label="Descripcion" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Badge" />
-
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
             </EditForm>
         </MudContainer>
-
     </DialogContent>
-    <DialogActions>
-        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel">Cancelar</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Guardar">Guardar</MudButton>
-    </DialogActions>
 </MudDialog>
 
 @code {
     [Parameter]
     public MarcaDTO _marca { get; set; } = new MarcaDTO();
-
-    bool isShow;   
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+      
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
 
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
 
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine(_marca.Marcanro);
-    }
-
-    void MostrarClave()
-    {
-        @if (isShow)
-        {
-            isShow = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            isShow = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
-    }
-    private void Cancel()
-    {
-        Console.WriteLine("Cancelar presionado");
-        MudDialog.Cancel();
-    }
+    }    
 
     private async Task Guardar()
-    {
+    {        
         MarcaCreateDTO _nuevaMarca = new MarcaCreateDTO();
         _nuevaMarca.Descripcion = _marca.Descripcion;
         string _mensaje = "";
@@ -67,15 +52,15 @@
 
         if (_marca.Marcanro != 0)
         {
-            var response = await _marcaService.Actualizar<MarcaDTO>(_marca);
+            var response = await _marcaService.Actualizar<MarcaDTO>(_marca.Marcanro, _nuevaMarca);
             _resultado = response.isExitoso;
-            _mensaje = "La Marca fue modificada";
+            _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
             var response = await _marcaService.Crear<MarcaDTO>(_nuevaMarca);
             _resultado = response.isExitoso;
-            _mensaje = "Marca creada";
+            _mensaje = "El registro fue creado con éxito";
         }
 
         if (_resultado)
@@ -85,6 +70,5 @@
         }
         else
             _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
-
     }
 }

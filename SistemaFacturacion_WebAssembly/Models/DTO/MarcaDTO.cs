@@ -6,6 +6,7 @@ namespace SistemaFacturacion_WebAssembly.Models.DTO
     public class MarcaDTO
     {
         public int Marcanro { get; set; }
-        public string Descripcion { get; set; }
+        [Required(ErrorMessage = "La Descripcion es requerida")]
+        public string Descripcion { get; set; } = null!;
     }
 }

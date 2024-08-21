@@ -5,19 +5,16 @@ namespace SistemaFacturacion_API.Modelos
 {
     public class Usuario
     {
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UsuarioId { get; set; }
         [Required]
-        public string? Login { get; set; }
-
-        public string? Password { get; set; }        
-
+        public string Login { get; set; } = null;
+        [Required]
+        public string Password { get; set; } = null;   
         public DateTime? Fechaalta { get; set; }
-
         public DateTime? Fechabaja { get; set; }
-        public string Correo { get; set; }
-        /*
-        public int? Idrol { get; set; }
-        public virtual Rol? Rol { get; set; }*/
+        public string Estado { get; set; }
+        public int? ColaboradorId { get; set; }//Clave externa opcional con colaborador
+        public Colaborador Colaborador { get; set; }//Relacion opcional       
     }
 }

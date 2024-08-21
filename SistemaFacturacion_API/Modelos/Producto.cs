@@ -11,10 +11,10 @@ namespace SistemaFacturacion_API.Modelos
         public int Stockminimo { get; set; } 
         public int Stockactual { get; set; } = 0;
         public double PrecioCompra { get; set; } = 0;
-        public DateOnly? Fechavencimiento { get; set; }
+        public DateOnly? FechaVencimiento { get; set; }
 
-        public int? PresentacionId { get; set; }
-        [ForeignKey(nameof(PresentacionId))]
+        public short? Idpresentacion { get; set; }
+        [ForeignKey(nameof(Idpresentacion))]
         public Presentacion Presentacion { get; set; }
 
         public int? MarcaId { get; set; }
@@ -24,5 +24,11 @@ namespace SistemaFacturacion_API.Modelos
         public short? TipoproductoId { get; set; }
         [ForeignKey(nameof(TipoproductoId))]
         public TipoProducto TipoProducto { get; set; }
+
+        public short? Unidadmedidanro { get; set; }
+        [ForeignKey(nameof(Unidadmedidanro))]
+        public UnidadMedida UnidadMedida { get; set; }
+
+
     }
 }
