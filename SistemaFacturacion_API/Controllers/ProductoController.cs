@@ -36,7 +36,7 @@ namespace SistemaFacturacion_API.Controllers
             //_logger.LogInformation("Obteniendo datos de las Productos");
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca");
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
@@ -72,7 +72,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
 
-                var producto = await _ProductoRepositorio.Obtener(p => p.Articulonro == id, incluirPropiedades: "TipoImpuesto,Marca");
+                var producto = await _ProductoRepositorio.Obtener(p => p.Articulonro == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto");
 
                 if (producto == null)
                 {
@@ -85,7 +85,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<ProductoDTO>(producto);
 
-                return Ok(_response);
+               
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace SistemaFacturacion_API.Controllers
             {
                 if (_ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower()) == null)
                 {
-                    var mensajeError = "El producto con el nombre ingresado ya existe";
+                    var mensajeError = "El producto con el mismo nombre ingresado ya existe";
                     ModelState.AddModelError("ErrorMessages", mensajeError);
                     _response.isExitoso = false;
                     _response.ErrorMessages = new List<string>() { mensajeError };
@@ -125,7 +125,7 @@ namespace SistemaFacturacion_API.Controllers
 
                 var _producto = _mapper.Map<Producto>(CreateDTO);
                 _producto.Fecharegistro = DateTime.Now;
-                _producto.Tipoarticulo = TipoArticulo.Producto;
+
 
                 await _ProductoRepositorio.Crear(_producto);
 
@@ -156,7 +156,7 @@ namespace SistemaFacturacion_API.Controllers
         {
             try
             {
-                if (productoUpdatedto == null || id != productoUpdatedto.Articulonro)
+                if (productoUpdatedto == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -172,6 +172,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Producto modelo = _mapper.Map<Producto>(productoUpdatedto);
+                modelo.Articulonro = id;
                 modelo.Fechaultactualizacion = DateTime.Now;
 
                 await _ProductoRepositorio.Actualizar(modelo);

@@ -37,12 +37,17 @@ namespace SistemaFacturacion_API.Datos
                 .WithMany()
                 .HasForeignKey(u => u.ColaboradorId);
 
-            modelBuilder.Entity<Articulo>().ToTable("Articulo");
-            modelBuilder.Entity<Producto>().ToTable("Producto");
+            modelBuilder.Entity<Articulo>()
+            .HasDiscriminator<TipoArticulo>("TipoArticulo")
+            .HasValue<Producto>(TipoArticulo.Producto)
+            .HasValue<Servicio>(TipoArticulo.Servicio);
+
+            //modelBuilder.Entity<Articulo>().ToTable("Articulo");
+            //modelBuilder.Entity<Producto>().ToTable("Producto");
+            //modelBuilder.Entity<Servicio>().ToTable("Servicio");
             modelBuilder.Entity<Persona>().ToTable("Persona");
             modelBuilder.Entity<Colaborador>().ToTable("Colaborador");
-            modelBuilder.Entity<Usuario>().ToTable("Usuario");
-            modelBuilder.Entity<Servicio>().ToTable("Servicio");
+            modelBuilder.Entity<Usuario>().ToTable("Usuario");   
             modelBuilder.Entity<TipoServicio>().ToTable("TipoServicio");
 
             modelBuilder.Entity<HistorialRefreshToken>()

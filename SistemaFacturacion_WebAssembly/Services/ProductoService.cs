@@ -2,6 +2,7 @@
 using SistemaFacturacion_WebAssembly.Models.DTO;
 using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
@@ -24,13 +25,13 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"{_productoURL}/api/Producto"
             });
         }
-        public Task<APIResponse> Actualizar<T>(ProductoUpdateDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id,ProductoUpdateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
-                URL = $"{_productoURL}/api/Producto/{dto.Articulonro}"
+                URL = $"{_productoURL}/api/Producto/{id}"
             });
         }
 

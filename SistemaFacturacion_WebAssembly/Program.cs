@@ -19,10 +19,12 @@ builder.Services.AddHttpClient("Facturacion", client =>
     // Puedes agregar más configuraciones aquí, como políticas de reintento
 });
 
+//Inyectar dependencias
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<ITipoImpuestoService, TipoImpuestoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
+builder.Services.AddScoped<IPresentacionService, PresentacionService>();
 
 builder.Services.AddMudServices();
 builder.Services.AddSweetAlert2();

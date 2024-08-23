@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaFacturacion_API.Modelos
 {
-    public class Articulo
+    public abstract class Articulo
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Comment("Id de la tabla")]
@@ -20,12 +20,11 @@ namespace SistemaFacturacion_API.Modelos
         [MaxLength(150),Comment("Estado del Producto,Servicio")]
         public string Estado { get; set; }
 
-        public TipoArticulo? Tipoarticulo { get; set; }
+        public TipoArticulo TipoArticulo { get; set; }
 
         public DateTime? Fecharegistro { get; set; }
 
         public DateTime? Fechaultactualizacion { get; set; }
-
 
         //Relacion con TipoImpuesto
         public int? TipoimpuestoId { get; set; }

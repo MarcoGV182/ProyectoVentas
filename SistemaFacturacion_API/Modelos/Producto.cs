@@ -30,5 +30,6 @@ namespace SistemaFacturacion_API.Modelos
         public UnidadMedida UnidadMedida { get; set; }
 
 
+
     }
 }

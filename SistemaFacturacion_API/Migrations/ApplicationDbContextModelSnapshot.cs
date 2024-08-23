@@ -54,7 +54,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<double>("Precio")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("Tipoarticulo")
+                    b.Property<int>("TipoArticulo")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TipoimpuestoId")
@@ -64,9 +64,11 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TipoimpuestoId");
 
-                    b.ToTable("Articulo", (string)null);
+                    b.ToTable("Articulo");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<int>("TipoArticulo");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
@@ -416,7 +418,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("Unidadmedidanro");
 
-                    b.ToTable("Producto", (string)null);
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
@@ -431,7 +433,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TipoServicioTipoServicoNro");
 
-                    b.ToTable("Servicio", (string)null);
+                    b.HasDiscriminator().HasValue(0);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
@@ -495,12 +497,6 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Articulo", null)
-                        .WithOne()
-                        .HasForeignKey("SistemaFacturacion_API.Modelos.Producto", "Articulonro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SistemaFacturacion_API.Modelos.Presentacion", "Presentacion")
                         .WithMany("Productos")
                         .HasForeignKey("Idpresentacion");
@@ -528,12 +524,6 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Articulo", null)
-                        .WithOne()
-                        .HasForeignKey("SistemaFacturacion_API.Modelos.Servicio", "Articulonro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SistemaFacturacion_API.Modelos.TipoServicio", "TipoServicio")
                         .WithMany()
                         .HasForeignKey("TipoServicioTipoServicoNro");

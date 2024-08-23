@@ -367,7 +367,6 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\Microsoft.JSInterop.WebAssembly.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\SistemaFacturacion_Utilidad.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Net.wasm.gz
-D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Numerics.Vectors.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Logging.Abstractions.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\mscorlib.wasm.gz
@@ -413,6 +412,7 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Linq.Parallel.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebProxy.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Data.DataSetExtensions.wasm.gz
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.IO.Packaging.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.Serialization.Json.wasm.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.Emit.wasm.gz
@@ -898,6 +898,7 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\scopedcss\Layout\NavMenu.razor.rz.scp.css
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\scopedcss\bundle\SistemaFacturacion_WebAssembly.styles.css
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\scopedcss\projectbundle\SistemaFacturacion_WebAssembly.bundle.scp.css
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\compressed\u9k132dyqq.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\compressed\pkiccg0qwk.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\compressed\w0t4cusvjy.gz
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\compressed\qircbey0ed.gz
@@ -1127,4 +1128,3 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\refint\SistemaFacturacion_WebAssembly.dll
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\SistemaFacturacion_WebAssembly.pdb
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\ref\SistemaFacturacion_WebAssembly.dll
-D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly\obj\Debug\net8.0\compressed\u9k132dyqq.gz

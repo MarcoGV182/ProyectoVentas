@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using SistemaFacturacion_API.Modelos;
+using System.Text.Json.Serialization;
 
 string myCors = "AllowBlazor";
 
@@ -34,6 +36,10 @@ builder.Services.AddSwaggerGen(c=>
         Scheme = "Bearer"
     });
 });
+
+//Evitar Referencias cíclicas
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddCors(options => 
 {
