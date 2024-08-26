@@ -24,7 +24,7 @@ namespace SistemaFacturacion_WebAssembly.Models.DTO
         [Required(ErrorMessage = "El precio de compra no puede ser nula")]
         public double PrecioCompra { get; set; }
 
-        public DateOnly? Fechavencimiento { get; set; }
+        public DateTime? Fechavencimiento { get; set; }
         public short? Idpresentacion { get; set; }
         public int? MarcaId { get; set; }
         public short? TipoproductoId { get; set; }
@@ -34,7 +34,5 @@ namespace SistemaFacturacion_WebAssembly.Models.DTO
         public int TipoimpuestoId { get; set; }
 
         public DateTime? Fecharegistro { get; set; }
-
-
     }
 }

@@ -11,7 +11,7 @@ namespace SistemaFacturacion_API.Modelos
         public int Stockminimo { get; set; } 
         public int Stockactual { get; set; } = 0;
         public double PrecioCompra { get; set; } = 0;
-        public DateOnly? FechaVencimiento { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
 
         public short? Idpresentacion { get; set; }
         [ForeignKey(nameof(Idpresentacion))]

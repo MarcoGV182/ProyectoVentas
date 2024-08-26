@@ -1,0 +1,294 @@
+﻿@inject IProductoService _productoService
+@inject ITipoImpuestoService _tipoImpuestoService
+@inject ITipoProductoService _tipoProductoService
+@inject IPresentacionService _presentacionService
+@inject IMarcaService _marcarvice
+@inject IUnidadMedidaService _unidadMedidaService
+@inject ISnackbar _snackBar
+
+<MudDialog Style="width:400px">
+    <DialogContent>
+        <MudContainer Style="max-height: 400; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_producto" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <MudTextField @bind-Value="@_producto.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_producto.Descripcion)" />
+
+                <MudNumericField @bind-Value="@_producto.Precio"
+                              Class="mb-3"
+                              Label="Precio"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentText="Gs"
+                              For="@(()=>_producto.Precio)" />
+
+                @if (_producto.Articulonro == 0)
+                {
+                    <MudNumericField @bind-Value="@_producto.PrecioCompra"
+                                     Class="mb-3"
+                                     Label="Precio Compra"
+                                     Variant="Variant.Outlined"
+                                     Adornment="Adornment.End"
+                                     AdornmentText="Gs"
+                                     For="@(()=>_producto.PrecioCompra)" />
+                }
+
+                <MudDatePicker @bind-Date="@_producto.FechaVencimiento"
+                                 Class="mb-3"
+                                 Label="Fecha Vencimiento"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 Editable="true"
+                                 DateFormat="dd/MM/yyyy"
+                                 AdornmentIcon="@Icons.Material.Filled.Badge"/>
+
+                <MudTextField @bind-Value="@_producto.Codigobarra"
+                                 Class="mb-3"
+                                 Label="Codigo de Barras"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_producto.Codigobarra)" />
+
+                <MudNumericField @bind-Value="@_producto.Stockminimo"
+                                 Class="mb-3"
+                                 Label="Stock Minimo"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 Placeholder="Ingrese el minimo de Stock del Producto para alertar"
+                                 AdornmentIcon="@Icons.Material.Filled.Badge"
+                                 For="@(()=>_producto.Stockminimo)" />
+
+                <MudSelect Label="Marca" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="MarcaDTO" @bind-Value="marcaSeleccionada">
+                    @if (ListaMarcas.Any())
+                    {
+                        foreach (var rol in ListaMarcas)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado">
+                    @if (ListaImpuestos.Any())
+                    {
+                        foreach (var rol in ListaImpuestos)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Presentacion" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="PresentacionDTO" @bind-Value="presentacionSeleccionada">
+                    @if (ListaPresentacion.Any())
+                    {
+                        foreach (var rol in ListaPresentacion)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Tipo Producto" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TipoProductoDTO" @bind-Value="tipoProductoSeleccionado">
+                    @if (ListaTipoProducto.Any())
+                    {
+                        foreach (var rol in ListaTipoProducto)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Unidad de Medida" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="UnidadMedidaDTO" @bind-Value="unidadMedidaSeleccionada">
+                    @if (ListaUnidadMedida.Any())
+                    {
+                        foreach (var rol in ListaUnidadMedida)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudTextField @bind-Value="@_producto.Observacion"
+                                 Class="mb-3"
+                                 Label="Observación"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 AdornmentIcon="@Icons.Material.Filled.Badge"
+                                 For="@(()=>_producto.Observacion)" />
+
+                <MudSelect Label="Estado" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" @bind-Value="_producto.Estado"
+                           For="@(()=>_producto.Estado)">
+                    <MudSelectItem Value="@("A")">Activo</MudSelectItem>
+                    <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
+                </MudSelect>
+                                              
+
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public ProductoDTO _producto { get; set; } = new ProductoDTO();
+
+    public List<MarcaDTO> ListaMarcas { get; set; } = new List<MarcaDTO>();
+    public MarcaDTO marcaSeleccionada { get; set; }
+
+    public List<TipoImpuestoDTO> ListaImpuestos { get; set; } = new List<TipoImpuestoDTO>();
+    public TipoImpuestoDTO impuestoSeleccionado { get; set; }
+
+    public List<TipoProductoDTO> ListaTipoProducto { get; set; } = new List<TipoProductoDTO>();
+    public TipoProductoDTO tipoProductoSeleccionado { get; set; }
+
+    public List<PresentacionDTO> ListaPresentacion { get; set; } = new List<PresentacionDTO>();
+    public PresentacionDTO presentacionSeleccionada { get; set; }
+
+    public List<UnidadMedidaDTO> ListaUnidadMedida { get; set; } = new List<UnidadMedidaDTO>();
+    public UnidadMedidaDTO unidadMedidaSeleccionada { get; set; }
+    
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(_producto.Articulonro);
+        await ObtenerListados();
+
+        if (_producto.Articulonro != 0)
+        {
+            try
+            {
+                marcaSeleccionada = _producto.Marca == null ? null : ListaMarcas.FirstOrDefault(p => p.Marcanro == _producto.Marca.Marcanro);
+                impuestoSeleccionado = _producto.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoNro == _producto.TipoImpuesto.TipoimpuestoNro);
+                presentacionSeleccionada = _producto.Presentacion == null ? null: ListaPresentacion.FirstOrDefault(p => p.Idpresentacion == _producto.Presentacion.Idpresentacion);
+                tipoProductoSeleccionado = _producto.TipoProducto == null ? null: ListaTipoProducto.FirstOrDefault(p => p.TipoProductonro == _producto.TipoProducto.TipoProductonro);
+                unidadMedidaSeleccionada = _producto.UnidadMedida == null ? null: ListaUnidadMedida.FirstOrDefault(p => p.Unidadmedidanro == _producto.UnidadMedida.Unidadmedidanro);
+                //estadoSeleccionado = _producto.Estado;
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+           
+        }
+    }    
+
+    private async Task ObtenerListados()
+    {
+        try
+        {
+            var result = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
+            if (result.isExitoso)
+            {
+                ListaMarcas = (List<MarcaDTO>)result.Resultado!;
+            }
+
+            result = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            if (result.isExitoso)
+            {
+                ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
+            }
+
+            result = await _tipoProductoService.ObtenerTodos<List<TipoProductoDTO>>();
+            if (result.isExitoso)
+            {
+                ListaTipoProducto = (List<TipoProductoDTO>)result.Resultado!;
+            }
+
+            result = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
+            if (result.isExitoso)
+            {
+                ListaPresentacion = (List<PresentacionDTO>)result.Resultado!;
+            }
+
+            result = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
+            if (result.isExitoso)
+            {
+                ListaUnidadMedida = (List<UnidadMedidaDTO>)result.Resultado!;
+            }
+        }
+        catch (Exception ex)
+        {            
+            throw ex;
+        }
+        
+    }
+
+
+
+    private async Task Guardar()
+    {                
+        string _mensaje = "";
+        bool _resultado;
+
+        if (_producto.Articulonro != 0)
+        {
+            ProductoUpdateDTO _editRegistro = new ProductoUpdateDTO();
+            _editRegistro.Descripcion = _producto.Descripcion;
+            _editRegistro.Precio = _producto.Precio;
+            _editRegistro.Observacion = _producto.Observacion;
+            _editRegistro.Estado = _producto.Estado;
+            _editRegistro.Codigobarra = _producto.Codigobarra;
+            _editRegistro.Stockminimo = _producto.Stockminimo;
+            _editRegistro.PrecioCompra = _producto.PrecioCompra;
+            _editRegistro.Fechavencimiento = _producto.FechaVencimiento;
+            _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.Idpresentacion : null;
+            _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.Marcanro : null;
+            _editRegistro.TipoproductoId = tipoProductoSeleccionado != null ? tipoProductoSeleccionado.TipoProductonro : null;
+            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.Unidadmedidanro : null;
+            _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoNro;
+
+            var response = await _productoService.Actualizar<ProductoDTO>(_producto.Articulonro, _editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {
+            ProductoCreateDTO _nuevoRegistro = new ProductoCreateDTO();
+            _nuevoRegistro.Descripcion = _producto.Descripcion;
+            _nuevoRegistro.Precio = _producto.Precio;
+            _nuevoRegistro.Observacion = _producto.Observacion;
+            _nuevoRegistro.Estado = _producto.Estado;
+            _nuevoRegistro.Codigobarra = _producto.Codigobarra;
+            _nuevoRegistro.Stockminimo = _producto.Stockminimo;
+            _nuevoRegistro.PrecioCompra = _producto.PrecioCompra;
+            _nuevoRegistro.Fechavencimiento = _producto.FechaVencimiento;
+            _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.Idpresentacion : null;
+            _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.Marcanro : null;
+            _nuevoRegistro.TipoproductoId = tipoProductoSeleccionado != null ? tipoProductoSeleccionado.TipoProductonro : null;
+            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.Unidadmedidanro : null;
+            _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoNro;
+
+            var response = await _productoService.Crear<ProductoDTO>(_nuevoRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

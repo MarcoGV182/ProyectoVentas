@@ -1,20 +1,20 @@
-﻿@inject IMarcaService _marcaService
+﻿@inject ITipoProductoService _tipoProductoService
 @inject ISnackbar _snackBar
 
 <MudDialog Style="width:400px">
     <DialogContent>
         <MudContainer Style="max-height: 400px; overflow-y: scroll" Class="m-0 p-0">
-            <EditForm Model="@_marca" OnValidSubmit="Guardar">
+            <EditForm Model="@_tipoProducto" OnValidSubmit="Guardar">
                 <DataAnnotationsValidator />
 
-                <MudTextField @bind-Value="@_marca.Descripcion"
+                <MudTextField @bind-Value="@_tipoProducto.Descripcion"
                               Class="mb-3"
                               Label="Descripcion"
                               Variant="Variant.Outlined"
                               Adornment="Adornment.End"
                               AdornmentIcon="@Icons.Material.Filled.Badge"
-                              For="@(()=>_marca.Descripcion)" />
-                                              
+                              For="@(()=>_tipoProducto.Descripcion)" />
+
 
                 <MudCardActions Class="d-flex justify-end">
                     <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
@@ -25,42 +25,45 @@
     </DialogContent>
 </MudDialog>
 
-@code {
+@code {   
+
     [Parameter]
-    public MarcaDTO _marca { get; set; } = new MarcaDTO();
-      
+    public TipoProductoDTO _tipoProducto { get; set; } = new TipoProductoDTO();
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
 
-    private void Cancel()
-    {
-        MudDialog.Cancel();
-    }
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_marca.Marcanro);
-    }    
+        Console.WriteLine(_tipoProducto.TipoProductonro);
+    }
+
+    
+    private void Cancel()
+    {
+        Console.WriteLine("Cancelar presionado");
+        MudDialog.Cancel();
+    }
 
     private async Task Guardar()
-    {        
-        MarcaCreateDTO _nuevaMarca = new MarcaCreateDTO();
-        _nuevaMarca.Descripcion = _marca.Descripcion;
+    {
+        TablaMenorDTO _nuevoRegistro = new TablaMenorDTO();
+        _nuevoRegistro.Descripcion = _tipoProducto.Descripcion;
         string _mensaje = "";
         bool _resultado;
 
-        if (_marca.Marcanro != 0)
+        if (_tipoProducto.TipoProductonro != 0)
         {
-            var response = await _marcaService.Actualizar<MarcaDTO>(_marca.Marcanro, _nuevaMarca);
+            var response = await _tipoProductoService.Actualizar<TipoProductoDTO>(_tipoProducto.TipoProductonro,_nuevoRegistro);
             _resultado = response.isExitoso;
-            _mensaje = "El registro fue modificado con éxito";
+            _mensaje = "El registro fue modificado con exito";
         }
-        else
+        else 
         {
-            var response = await _marcaService.Crear<MarcaDTO>(_nuevaMarca);
+            var response = await _tipoProductoService.Crear<TipoProductoDTO>(_nuevoRegistro);
             _resultado = response.isExitoso;
-            _mensaje = "El registro fue creado con éxito";
+            _mensaje = "El registro fue creado con exito";
         }
 
         if (_resultado)
@@ -70,5 +73,6 @@
         }
         else
             _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+
     }
 }

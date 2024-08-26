@@ -7,8 +7,8 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
     {
         Task<APIResponse> ObtenerTodos<T>();
         Task<APIResponse> Obtener<T>(int id);
-        Task<APIResponse> Crear<T>(TipoProductoCreateDTO dto);
+        Task<APIResponse> Crear<T>(TablaMenorDTO dto);
         Task<APIResponse> Eliminar<T>(int id);
-        Task<APIResponse> Actualizar<T>(int id, TipoProductoCreateDTO dto);
+        Task<APIResponse> Actualizar<T>(int id, TablaMenorDTO dto);
     }
 }

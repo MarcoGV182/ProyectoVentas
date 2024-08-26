@@ -16,7 +16,7 @@ namespace SistemaFacturacion_WebAssembly.Services
         }
 
 
-        public Task<APIResponse> Crear<T>(MarcaCreateDTO dto)
+        public Task<APIResponse> Crear<T>(TablaMenorDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
@@ -25,7 +25,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Marca"
             });
         }
-        public Task<APIResponse> Actualizar<T>(int id,MarcaCreateDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id, TablaMenorDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {

@@ -386,8 +386,8 @@ namespace SistemaFacturacion_API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DateOnly?>("FechaVencimiento")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("FechaVencimiento")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<short?>("Idpresentacion")
                         .HasColumnType("smallint");

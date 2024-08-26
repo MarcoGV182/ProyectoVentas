@@ -15,19 +15,12 @@ namespace SistemaFacturacion_API.Modelos.DTO
         public int Stockminimo { get; set; }
         public int Stockactual { get; set; } = 0;
         public double PrecioCompra { get; set; } = 0;
-        public DateOnly? FechaVencimiento { get; set; }
-        public int? TipoimpuestoNro { get; set; }
-        public string TipoImpuestoDescripcion { get; set; }
-        public double Porcentajeiva { get; set; } = 0;
-        public double Baseimponible { get; set; } = 0;
-        public int? Idpresentacion { get; set; }
-        public string PresentacionDescripcion { get; set; }
-        public int? Marcanro { get; set; }
-        public string MarcaDescripcion { get; set; }
-        public short? TipoProductonro { get; set; }
-        public string TipoProductoDescripcion { get; set; }
-        public short? Unidadmedidanro { get; set; }
-        public string UMDescripcion { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
+        public TipoImpuesto TipoImpuesto { get; set; }       
+        public Presentacion Presentacion { get; set; }        
+        public Marca Marca { get; set; }      
+        public TipoProducto TipoProducto { get; set; }       
+        public UnidadMedida UnidadMedida { get; set; }
 
     }
 }

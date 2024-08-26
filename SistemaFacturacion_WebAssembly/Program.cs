@@ -25,6 +25,8 @@ builder.Services.AddScoped<ITipoImpuestoService, TipoImpuestoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
 builder.Services.AddScoped<IPresentacionService, PresentacionService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IUnidadMedidaService, UnidadMedidaService>();
 
 builder.Services.AddMudServices();
 builder.Services.AddSweetAlert2();

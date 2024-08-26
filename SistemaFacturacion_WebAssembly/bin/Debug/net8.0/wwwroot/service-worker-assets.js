@@ -81,12 +81,12 @@
       "url": "sample-data\/weather.json"
     },
     {
-      "hash": "sha256-JyFmAt1xkWIRooKGaVy\/IC6an7MKGHo2JwjM7QTJXnk=",
-      "url": "SistemaFacturacion_WebAssembly.styles.css"
-    },
-    {
       "hash": "sha256-gvHfnndfEu1tRf0rFb5988rWq7ITIotOaE8+AMbKYbc=",
       "url": "_framework\/blazor.webassembly.js"
+    },
+    {
+      "hash": "sha256-JyFmAt1xkWIRooKGaVy\/IC6an7MKGHo2JwjM7QTJXnk=",
+      "url": "SistemaFacturacion_WebAssembly.styles.css"
     },
     {
       "hash": "sha256-w+7LWVNvsBZXAZIl\/fwpTkv1CwyMyYCQUFfFMgF1NuI=",
@@ -957,23 +957,23 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-3AbrACZ4YE+vuEB+CHdPJSZZBoPXvhJt387InGXqaMk=",
+      "hash": "sha256-x9jnSQhJpVIpFUEpJZDJt4BN4KKA6ror0AgOMKpKsk0=",
       "url": "_framework\/SistemaFacturacion_Utilidad.wasm"
     },
     {
-      "hash": "sha256-0JiukJCusODsM+2wg1xUlhcw2TJpiZBBDVogzkRHjHU=",
+      "hash": "sha256-vPhpH0CJFGENz+o4\/ijk6s5xdHoOEs+i2jX\/uhRNU6c=",
       "url": "_framework\/SistemaFacturacion_Utilidad.pdb"
     },
     {
-      "hash": "sha256-VoOdUIgmctQuwt4BActjx2PpjI7pRxRtnv7UlWYHXKI=",
+      "hash": "sha256-aArLoBHTD8rC6cFOl5hmP+DItpx+AYfnRCfjU0CMEng=",
       "url": "_framework\/SistemaFacturacion_WebAssembly.wasm"
     },
     {
-      "hash": "sha256-2Sjw7\/D6888hi9xRP1umUIfOO0un5UQ4zfTLRuNelqY=",
+      "hash": "sha256-MG64T11y\/WXJB+ZoLIQk+eQMoeuNl8y7+TmOYfz+Crs=",
       "url": "_framework\/SistemaFacturacion_WebAssembly.pdb"
     },
     {
-      "hash": "sha256-Q0pUyT+w1R7DurlYZRReu0U8mzcrpHxgQMJzubgStPs=",
+      "hash": "sha256-yMz35\/OJnUNwC9SI+5JxOzcGtQhW8ArNSPhSVCW7H0A=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1125,5 +1125,5 @@
       "url": "_content\/ChartJs.Blazor.Fork\/ChartJsBlazorInterop.js"
     }
   ],
-  "version": "c76uLAhM"
+  "version": "THQBh\/sQ"
 };

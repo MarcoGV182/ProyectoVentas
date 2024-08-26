@@ -2,9 +2,9 @@
 
 namespace SistemaFacturacion_WebAssembly.Models.DTO
 {
-    public class MarcaCreateDTO
+    public class TablaMenorDTO
     {
-        [Required(ErrorMessage ="La descripcion es requerida")]
+        [Required(ErrorMessage = "La descripcion es requerida")]
         public string Descripcion { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace SistemaFacturacion_API.Modelos.DTO
         [Required(ErrorMessage = "El precio de compra no puede ser nula")]
         public double PrecioCompra { get; set; }
 
-        public DateOnly? Fechavencimiento { get; set; }
+        public DateTime? Fechavencimiento { get; set; }
         public short? Idpresentacion { get; set; }
         public int? MarcaId { get; set; }
         public short? TipoproductoId { get; set; }      

@@ -1,0 +1,162 @@
+﻿@page "/unidadMedida"
+@inject IUnidadMedidaService _unidadMedidaservice
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject SweetAlertService Swal;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+  <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Unidad de Medida</MudText>
+
+   <MudPaper Elevation="3" Class="pa-4" Width="100%">
+       <MudGrid>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.Add"
+            Color="Color.Primary"
+            OnClick="AbrirNuevaUnidadMedida">
+                Nueva UnidadMedida</MudButton>
+        </MudItem>
+        <MudItem xs="12">
+
+                <MudTable 
+                    Items="@listaUnidadMedidas"
+                    Dense="true"
+                    Striped="true" Bordered="true" 
+                    Filter="new Func<UnidadMedidaDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                    Loading="@_loading" LoadingProgressColor="Color.Info" >
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<UnidadMedidaDTO, object>(x=> x.Unidadmedidanro)">
+                                Código
+                            </MudTableSortLabel>
+                         </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<UnidadMedidaDTO, object>(x=> x.Descripcion)">
+                                Descripción
+                            </MudTableSortLabel>
+                         </MudTh>                      
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="UnidadMedidaRow">
+                        <MudTd DataLabel="Codigo">@UnidadMedidaRow.Unidadmedidanro</MudTd>
+                        <MudTd DataLabel="Descripcion">@UnidadMedidaRow.Descripcion</MudTd>                        
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary" 
+                                StartIcon="@Icons.Material.Filled.Edit"
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarUnidadMedida(UnidadMedidaRow))" />
+                            <MudFab 
+                                Color="Color.Error" 
+                                StartIcon="@Icons.Material.Filled.Delete" 
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                OnClick="@(() => EliminarUnidadMedida(UnidadMedidaRow))"
+                            />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+
+
+        </MudItem>
+    </MudGrid>
+   </MudPaper>
+
+</MudContainer>
+@code {
+    List<UnidadMedidaDTO> listaUnidadMedidas = new List<UnidadMedidaDTO>();
+    private string searchString1 = "";
+    private UnidadMedidaDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerUnidadMedidas()
+    {
+        var result = await _unidadMedidaservice.ObtenerTodos<List<UnidadMedidaDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaUnidadMedidas = (List<UnidadMedidaDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerUnidadMedidas();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(UnidadMedidaDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(UnidadMedidaDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
+        /*if (element.UnidadMedidanro == Convert.ToInt32(searchString))
+            return true;*/
+
+        return false;
+    }
+
+    private async Task AbrirNuevaUnidadMedida()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = _dialogServicio.Show<MdUnidadMedida>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerUnidadMedidas();
+        }
+    }
+
+    private async Task AbrirEditarUnidadMedida(UnidadMedidaDTO UnidadMedida)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_UnidadMedida"] = UnidadMedida };
+
+        var dialogo = _dialogServicio.Show<MdUnidadMedida>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerUnidadMedidas();
+        }
+    }
+
+    private async Task EliminarUnidadMedida(UnidadMedidaDTO UnidadMedida)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar la UnidadMedida: {UnidadMedida.Descripcion}({UnidadMedida.Unidadmedidanro})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _unidadMedidaservice.Eliminar<UnidadMedidaDTO>(UnidadMedida.Unidadmedidanro);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La UnidadMedida fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerUnidadMedidas();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

@@ -1,19 +1,19 @@
-﻿@inject ITipoProductoService _tipoProductoService
+﻿@inject IPresentacionService _PresentacionService
 @inject ISnackbar _snackBar
 
 <MudDialog Style="width:400px">
     <DialogContent>
         <MudContainer Style="max-height: 400px; overflow-y: scroll" Class="m-0 p-0">
-            <EditForm Model="@_tipoProducto" OnValidSubmit="Guardar">
+            <EditForm Model="@_Presentacion" OnValidSubmit="Guardar">
                 <DataAnnotationsValidator />
 
-                <MudTextField @bind-Value="@_tipoProducto.Descripcion"
+                <MudTextField @bind-Value="@_Presentacion.Descripcion"
                               Class="mb-3"
                               Label="Descripcion"
                               Variant="Variant.Outlined"
                               Adornment="Adornment.End"
                               AdornmentIcon="@Icons.Material.Filled.Badge"
-                              For="@(()=>_tipoProducto.Descripcion)" />
+                              For="@(()=>_Presentacion.Descripcion)" />
 
 
                 <MudCardActions Class="d-flex justify-end">
@@ -28,7 +28,7 @@
 @code {   
 
     [Parameter]
-    public TipoProductoDTO _tipoProducto { get; set; } = new TipoProductoDTO();
+    public PresentacionDTO _Presentacion { get; set; } = new PresentacionDTO();
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_tipoProducto.TipoProductonro);
+        Console.WriteLine(_Presentacion.Idpresentacion);
     }
 
     
@@ -48,20 +48,20 @@
 
     private async Task Guardar()
     {
-        TipoProductoCreateDTO _nuevoRegistro = new TipoProductoCreateDTO();
-        _nuevoRegistro.Descripcion = _tipoProducto.Descripcion;
+        TablaMenorDTO _nuevoRegistro = new TablaMenorDTO();
+        _nuevoRegistro.Descripcion = _Presentacion.Descripcion;
         string _mensaje = "";
         bool _resultado;
 
-        if (_tipoProducto.TipoProductonro != 0)
+        if (_Presentacion.Idpresentacion != 0)
         {
-            var response = await _tipoProductoService.Actualizar<TipoProductoDTO>(_tipoProducto.TipoProductonro,_nuevoRegistro);
+            var response = await _PresentacionService.Actualizar<PresentacionDTO>(_Presentacion.Idpresentacion, _nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }
         else 
         {
-            var response = await _tipoProductoService.Crear<TipoProductoDTO>(_nuevoRegistro);
+            var response = await _PresentacionService.Crear<PresentacionDTO>(_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con exito";
         }

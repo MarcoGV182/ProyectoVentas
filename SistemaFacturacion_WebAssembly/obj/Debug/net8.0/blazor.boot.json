@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "SistemaFacturacion_WebAssembly",
   "resources": {
-    "hash": "sha256-uVuuKWgoki5KN7BP3QtF+egvPrUDiWB4hMEZeclGf9M=",
+    "hash": "sha256-+9gchxSyhqS9PoeTLBNlUbZ5cb91MbtceVNsUnGzPMY=",
     "jsModuleNative": {
       "dotnet.native.8.0.8.3r9dknhjru.js": "sha256-juC5sA7gHTLXFEhAKgdM2/RavswpwCtDfjYGsAz2FXg="
     },
@@ -225,12 +225,12 @@
       "mscorlib.wasm": "sha256-Gz8PyW2/fwihe5ul81OwmRUrU71r+KtbyRw6xlOGD+Q=",
       "netstandard.wasm": "sha256-jMTqIQzoDS810lyhZpMO5eEC36EzntXqSVn+2qwkOMQ=",
       "System.Private.CoreLib.wasm": "sha256-NFj5WE5VLP2LptZIRJCUIc1AMk06FmxpsSILfPISwAw=",
-      "SistemaFacturacion_Utilidad.wasm": "sha256-3AbrACZ4YE+vuEB+CHdPJSZZBoPXvhJt387InGXqaMk=",
-      "SistemaFacturacion_WebAssembly.wasm": "sha256-VoOdUIgmctQuwt4BActjx2PpjI7pRxRtnv7UlWYHXKI="
+      "SistemaFacturacion_Utilidad.wasm": "sha256-x9jnSQhJpVIpFUEpJZDJt4BN4KKA6ror0AgOMKpKsk0=",
+      "SistemaFacturacion_WebAssembly.wasm": "sha256-Ta6a5pHKf/SxMBuMUe6J0qtOed9ZDlfoG3NG2loA/sk="
     },
     "pdb": {
-      "SistemaFacturacion_Utilidad.pdb": "sha256-0JiukJCusODsM+2wg1xUlhcw2TJpiZBBDVogzkRHjHU=",
-      "SistemaFacturacion_WebAssembly.pdb": "sha256-2Sjw7/D6888hi9xRP1umUIfOO0un5UQ4zfTLRuNelqY="
+      "SistemaFacturacion_Utilidad.pdb": "sha256-vPhpH0CJFGENz+o4/ijk6s5xdHoOEs+i2jX/uhRNU6c=",
+      "SistemaFacturacion_WebAssembly.pdb": "sha256-8VD1eivjUztplpCMo2/nbaHxHsuMhVHHxjBe6LuFnqg="
     }
   },
   "cacheBootResources": true,

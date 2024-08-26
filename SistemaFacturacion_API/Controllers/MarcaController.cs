@@ -139,7 +139,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarMarca(int id,[FromBody] MarcaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarMarca(int id,[FromBody] MarcaCreateDTO CreateDTO)
         {
             try
             {

@@ -1,0 +1,224 @@
+﻿@page "/producto"
+@inject IProductoService _productoservice
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject SweetAlertService Swal;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+  <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Productos</MudText>
+
+   <MudPaper Elevation="3" Class="pa-4" Width="100%">
+       <MudGrid>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.Add"
+            Color="Color.Primary"
+            OnClick="AbrirNuevaproducto">
+                Nuevo producto</MudButton>
+        </MudItem>
+        <MudItem xs="12">
+                <MudTable 
+                    Items="@listaproductos"
+                    Dense="true"
+                    Striped="true" Bordered="true" 
+                    Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                    Loading="@_loading" LoadingProgressColor="Color.Info" >
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Articulonro)">
+                                Código
+                            </MudTableSortLabel>
+                         </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Codigobarra)">
+                                Código de Barras
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Descripcion)">
+                                Descripción
+                            </MudTableSortLabel>
+                         </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.TipoImpuesto.Descripcion)">
+                                Impuesto
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.TipoProducto.Descripcion)">
+                                Tipo Producto
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Marca.Descripcion)">
+                                Marca
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Precio)">
+                                Precio
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioCompra)">
+                                Precio Compra
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockminimo)">
+                                Stock Mínimo
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockactual)">
+                                Stock Actual
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Presentacion.Descripcion)">
+                                Presentación
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.UnidadMedida.Descripcion)">
+                                Unidad Medida
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.FechaVencimiento)">
+                               Fecha Vencimiento
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="productoRow">
+                        <MudTd DataLabel="Codigo">@productoRow.Articulonro</MudTd>
+                        <MudTd DataLabel="Cod. de Barras">@productoRow.Codigobarra</MudTd>
+                        <MudTd DataLabel="Descripcion">@productoRow.Descripcion</MudTd>
+                        <MudTd DataLabel="Impuesto">@productoRow.TipoImpuesto.Descripcion</MudTd>
+                        <MudTd DataLabel="Tipo Producto">@((productoRow.TipoProducto?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="Marca">@((productoRow.Marca?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="Precio">@productoRow.Precio.ToString("N0")</MudTd>
+                        <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
+                        <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
+                        <MudTd DataLabel="Stock">@productoRow.Stockactual</MudTd>
+                        <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "": productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary" 
+                                StartIcon="@Icons.Material.Filled.Edit"
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarproducto(productoRow))" />
+                            <MudFab 
+                                Color="Color.Error" 
+                                StartIcon="@Icons.Material.Filled.Delete" 
+                                Size="Size.Small" 
+                                IconSize="Size.Small"
+                                OnClick="@(() => Eliminarproducto(productoRow))"
+                            />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+        </MudItem>
+    </MudGrid>
+   </MudPaper>
+</MudContainer>
+@code {
+    List<ProductoDTO> listaproductos = new List<ProductoDTO>();
+    private string searchString1 = "";
+    private ProductoDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task Obtenerproductos()
+    {
+        var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaproductos = (List<ProductoDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Obtenerproductos();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(ProductoDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(ProductoDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
+        /*if (element.productonro == Convert.ToInt32(searchString))
+            return true;*/
+
+        return false;
+    }
+
+    private async Task AbrirNuevaproducto()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = _dialogServicio.Show<MdProducto>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await Obtenerproductos();
+        }
+    }
+
+    private async Task AbrirEditarproducto(ProductoDTO producto)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_producto"] = producto };
+
+        var dialogo = _dialogServicio.Show<MdProducto>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await Obtenerproductos();
+        }
+    }
+
+    private async Task Eliminarproducto(ProductoDTO producto)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar la producto: {producto.Descripcion}({producto.Articulonro})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _productoservice.Eliminar<ProductoDTO>(producto.Articulonro);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La producto fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
+                await Obtenerproductos();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

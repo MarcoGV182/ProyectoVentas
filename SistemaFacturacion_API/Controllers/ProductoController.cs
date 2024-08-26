@@ -36,7 +36,7 @@ namespace SistemaFacturacion_API.Controllers
             //_logger.LogInformation("Obteniendo datos de las Productos");
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto");
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto,UnidadMedida");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
@@ -72,7 +72,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
 
-                var producto = await _ProductoRepositorio.Obtener(p => p.Articulonro == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto");
+                var producto = await _ProductoRepositorio.Obtener(p => p.Articulonro == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto,UnidadMedida");
 
                 if (producto == null)
                 {
@@ -178,6 +178,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ProductoRepositorio.Actualizar(modelo);
 
                 _response.isExitoso = true;
+                _response.Resultado = modelo;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
