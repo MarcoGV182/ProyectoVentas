@@ -6,7 +6,7 @@ namespace SistemaFacturacion_API.Services
     {
         Task<AutorizacionResponse> DevolverToken(AutorizacionRequest autorizacion);
 
-        Task<AutorizacionResponse> DevolverRefrestToken(RefreshTokenRequest refrestToken,int idUsuario);
+        Task<AutorizacionResponse> DevolverRefrestToken(RefreshTokenRequest refrestToken,short idUsuario);
 
     }
 }

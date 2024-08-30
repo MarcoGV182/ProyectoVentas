@@ -7,7 +7,7 @@ namespace SistemaFacturacion_API.Modelos
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int HistorialTokenId { get; set; }
-        public int UsuarioId { get; set; }
+        public short UsuarioId { get; set; }
         [ForeignKey(nameof(UsuarioId))]
         public Usuario Usuario { get; set; }
         public string Token { get; set; }

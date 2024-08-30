@@ -6,7 +6,7 @@ namespace SistemaFacturacion_API.Modelos
     public class Usuario
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UsuarioId { get; set; }
+        public short UsuarioId { get; set; }
         [Required]
         public string Login { get; set; } = null;
         [Required]

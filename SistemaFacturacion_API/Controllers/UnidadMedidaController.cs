@@ -186,7 +186,7 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> EliminarUnidadMedida(int id)
+        public async Task<ActionResult<APIResponse>> EliminarUnidadMedida(int id)
         {
             try
             {
@@ -217,11 +217,8 @@ namespace SistemaFacturacion_API.Controllers
             {
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
+                return BadRequest(_response);
             }
-
-            return BadRequest(_response);
-
         }
-
     }
 }

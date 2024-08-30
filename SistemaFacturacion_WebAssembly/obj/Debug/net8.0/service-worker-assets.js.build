@@ -5,7 +5,7 @@
       "url": "ChartJsBlazorInterop.js"
     },
     {
-      "hash": "sha256-yoa1W1mp6ymf1qQirKcsBGchnbVRz21If78ZlmW+k+4=",
+      "hash": "sha256-nH2Z0HnOyCCZrmPLO6uhZaAebH\/hm86bIlaIFPF7P7o=",
       "url": "css\/app.css"
     },
     {
@@ -965,15 +965,15 @@
       "url": "_framework\/SistemaFacturacion_Utilidad.pdb"
     },
     {
-      "hash": "sha256-aArLoBHTD8rC6cFOl5hmP+DItpx+AYfnRCfjU0CMEng=",
+      "hash": "sha256-1RWU2fpwJQsuF8st6AIot0Q0zFY\/fJcnAplZd0bYJX8=",
       "url": "_framework\/SistemaFacturacion_WebAssembly.wasm"
     },
     {
-      "hash": "sha256-MG64T11y\/WXJB+ZoLIQk+eQMoeuNl8y7+TmOYfz+Crs=",
+      "hash": "sha256-6rmMY5i\/Y1mFbVSYu63\/8TxZGcrqIexYif1zkzlJtp0=",
       "url": "_framework\/SistemaFacturacion_WebAssembly.pdb"
     },
     {
-      "hash": "sha256-yMz35\/OJnUNwC9SI+5JxOzcGtQhW8ArNSPhSVCW7H0A=",
+      "hash": "sha256-UXaCqgE2g\/EG805a6ryOeE1f7J2ko4OVekdr8TwLw4A=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1125,5 +1125,5 @@
       "url": "_content\/ChartJs.Blazor.Fork\/ChartJsBlazorInterop.js"
     }
   ],
-  "version": "THQBh\/sQ"
+  "version": "XhISYOVI"
 };

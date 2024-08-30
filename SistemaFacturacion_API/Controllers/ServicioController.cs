@@ -1,0 +1,225 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SistemaFacturacion_API.Modelos.DTO;
+using SistemaFacturacion_API.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using SistemaFacturacion_API.Repositorio.IRepositorio;
+using SistemaFacturacion_API.Repositorio;
+
+namespace SistemaFacturacion_API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    //[Authorize]
+    public class ServicioController : ControllerBase
+    {
+        private readonly ILogger<ServicioController> _logger;
+        private readonly IMapper _mapper;
+        private readonly IServicioRepositorio _ServicioRepositorio;
+        protected APIResponse _response;
+
+        public ServicioController(ILogger<ServicioController> logger, IServicioRepositorio ServicioRepositorio, IMapper mapper)
+        {
+            _logger = logger;
+            _ServicioRepositorio = ServicioRepositorio;
+            _mapper = mapper;
+            _response = new APIResponse();
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse>> GetServicios()
+        {
+            try
+            {
+                //_logger.LogInformation("Obteniendo lista de Servicios");
+                IEnumerable<Servicio> ServicioList = await _ServicioRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,TipoServicio");
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Resultado = _mapper.Map<IEnumerable<ServicioDTO>>(ServicioList);
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+
+        [HttpGet("{id:int}", Name = "GetServicioById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<APIResponse>> GetServicioById(int id)
+        {
+            //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            try
+            {
+                if (id == 0)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+
+                var Servicio = await _ServicioRepositorio.Obtener(p => p.Articulonro == id, incluirPropiedades: "TipoImpuesto,TipoServicio");
+
+                if (Servicio == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return _response;
+                }
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.isExitoso = true;
+                _response.Resultado = Servicio;
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message.ToString() };
+            }
+
+            return _response;
+
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> CrearServicio([FromBody] ServicioCreateDTO CreateDTO)
+        {
+            try
+            {
+                var existeServicio = _ServicioRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
+                if (existeServicio.Result != null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "La Servicio con el nombre ingresado ya existe");
+                    return BadRequest(ModelState);
+                }
+
+                if (CreateDTO == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+                var _Servicio = _mapper.Map<Servicio>(CreateDTO);
+                _Servicio.Fecharegistro = DateTime.Now;
+
+                await _ServicioRepositorio.Crear(_Servicio);
+
+                _response.isExitoso = true;
+                _response.Resultado = _Servicio;
+                _response.StatusCode = HttpStatusCode.Created;
+
+                return CreatedAtRoute("GetServicioById", new { id = _Servicio.Articulonro }, _response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+                return BadRequest(ex);
+            }
+
+        }
+
+
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> ActualizarServicio(int id, [FromBody] ServicioCreateDTO CreateDTO)
+        {
+            try
+            {
+                if (CreateDTO == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+                var Servicio = await _ServicioRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                if (Servicio == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                Servicio modelo = _mapper.Map<Servicio>(CreateDTO);
+                modelo.Articulonro = id;
+
+                await _ServicioRepositorio.Actualizar(modelo);
+
+                _response.isExitoso = true;
+                _response.Resultado = modelo;
+                _response.StatusCode = HttpStatusCode.NoContent;
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.StatusCode = HttpStatusCode.BadRequest;
+            }
+
+            return BadRequest(_response);
+
+        }
+
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> EliminarServicio(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+                var Servicio = await _ServicioRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                if (Servicio == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                await _ServicioRepositorio.Eliminar(Servicio);
+
+                _response.isExitoso = true;
+                _response.Resultado = Servicio;
+                _response.StatusCode = HttpStatusCode.NoContent;
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
+                return BadRequest(_response);
+            }
+        }
+
+    }
+}

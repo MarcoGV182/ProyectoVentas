@@ -140,7 +140,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarPresentacion(int id,[FromBody] PresentacionCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarPresentacion(int id,[FromBody] PresentacionCreateDTO CreateDTO)
         {
             try
             {
@@ -174,18 +174,16 @@ namespace SistemaFacturacion_API.Controllers
             {
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string>() { ex.Message };
-                _response.StatusCode = HttpStatusCode.BadRequest;            
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(_response);
             }
-
-            return BadRequest(_response);
-
         }
 
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> EliminarPresentacion(int id)
+        public async Task<ActionResult<APIResponse>> EliminarPresentacion(int id)
         {
             try
             {
@@ -216,11 +214,8 @@ namespace SistemaFacturacion_API.Controllers
             {
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
+                return BadRequest(_response);
             }
-
-            return BadRequest(_response);
-
         }
-
     }
 }

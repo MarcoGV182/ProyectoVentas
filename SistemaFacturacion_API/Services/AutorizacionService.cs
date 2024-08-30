@@ -93,7 +93,7 @@ namespace SistemaFacturacion_API.Services
             return refreshToken;
         }
 
-        private async Task<AutorizacionResponse> GuardarHistorialRefreshToken(int idUsuario,string token,string refreshToken) 
+        private async Task<AutorizacionResponse> GuardarHistorialRefreshToken(short idUsuario,string token,string refreshToken) 
         {
             var historialRefresh = new HistorialRefreshToken()
             {
@@ -110,7 +110,7 @@ namespace SistemaFacturacion_API.Services
             return new AutorizacionResponse { Token = token,RefreshToken= refreshToken,Resultado = true, Mensaje = "OK" };
         }
 
-        public async Task<AutorizacionResponse> DevolverRefrestToken(RefreshTokenRequest refrestTokenRequest, int idUsuario)
+        public async Task<AutorizacionResponse> DevolverRefrestToken(RefreshTokenRequest refrestTokenRequest, short idUsuario)
         {
             var refreshTokenEncontrado = _context.HistorialRefreshToken.Where(c=> 
             c.Token == refrestTokenRequest.TokenExpirado && 

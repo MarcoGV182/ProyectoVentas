@@ -9,7 +9,7 @@ namespace SistemaFacturacion_API.Modelos
         public int UbicacionId { get; set; }
         [Required]
         public string Nombre { get; set; }
-        public string? Direccion { get; set; }
+        public string Direccion { get; set; }
         public DateTime FechaCreacion { get; set; }
     }
 }

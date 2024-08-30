@@ -138,3 +138,10 @@ code {
         width: 100%;
     }
 
+
+.mud-table .mud-table-cell {
+    padding: 4px; /* Espacio de relleno reducido */
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+    line-height: 1.2;
+}
+

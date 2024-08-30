@@ -144,7 +144,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
         {
             try
             {
@@ -179,17 +179,15 @@ namespace SistemaFacturacion_API.Controllers
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string>() { ex.Message };
                 _response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(_response);
             }
-
-            return BadRequest(_response);
-
         }
 
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> EliminarTipoImpuesto(int id)
+        public async Task<ActionResult<APIResponse>> EliminarTipoImpuesto(int id)
         {
             try
             {
@@ -224,10 +222,8 @@ namespace SistemaFacturacion_API.Controllers
             {
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
+                return BadRequest(_response);
             }
-
-            return BadRequest(_response);
-
         }
 
     }

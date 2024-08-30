@@ -7,7 +7,7 @@ namespace SistemaFacturacion_API.Modelos
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Marcanro { get; set; }
-
+        [MaxLength(150)]
         public string Descripcion { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace SistemaFacturacion_API.Controllers
         private readonly IAutorizacionService _autorizacionService;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IMapper _mapper;
+        protected APIResponse _response;
 
         public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
         {
@@ -32,7 +33,7 @@ namespace SistemaFacturacion_API.Controllers
 
         [HttpPost]
         [Route("Autenticar")]
-        public async Task<IActionResult> Autenticar([FromBody] AutorizacionRequest autorizacion) 
+        public async Task<ActionResult<APIResponse>> Autenticar([FromBody] AutorizacionRequest autorizacion) 
         {
             var resultado_autorizacion = await _autorizacionService.DevolverToken(autorizacion);
 
@@ -47,21 +48,38 @@ namespace SistemaFacturacion_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuario()
+        public async Task<ActionResult<APIResponse>> GetUsuario()
         {
             //_logger.LogInformation("Obteniendo datos del Usuario");
 
+            try 
+            {
+                IEnumerable<Usuario> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
 
-            IEnumerable<Usuario> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
+                if (UsuarioList == null)
+                {
+                    return NoContent();
+                }
 
-            return Ok(_mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioList));
+                _response.Resultado = _mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioList);
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return BadRequest(_response);
+            }
+           
         }
 
 
         [HttpGet("id:int", Name = "GetUsuarioById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarioById(int id)
+        public async Task<ActionResult<APIResponse>> GetUsuarioById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
             try
@@ -69,16 +87,21 @@ namespace SistemaFacturacion_API.Controllers
                 if (id == 0)
                     return BadRequest();
 
-                var UsuarioResult = await _usuarioRepositorio.Obtener(p => p.UsuarioId == id, incluirPropiedades: "Colaborador");
+                var UsuarioResult = await _usuarioRepositorio.Obtener(p => p.UsuarioId == id, incluirPropiedades: "Colaborador");               
 
                 if (UsuarioResult == null)
                     return NoContent();
 
-                return Ok(UsuarioResult);
+                _response.Resultado = _mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioResult);
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return BadRequest(_response);
             }
 
         }
@@ -88,7 +111,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Usuario>> RegistrarUsuario([FromBody] UsuarioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> RegistrarUsuario([FromBody] UsuarioCreateDTO CreateDTO)
         {
             try
             {
@@ -111,11 +134,17 @@ namespace SistemaFacturacion_API.Controllers
 
                 await _usuarioRepositorio.Crear(_UsuarioNuevo);
 
-                return CreatedAtRoute("GetUsuarioById", new { id = _UsuarioNuevo.UsuarioId }, _UsuarioNuevo);
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Resultado = _UsuarioNuevo;
+
+                return CreatedAtRoute("GetUsuarioById", new { id = _UsuarioNuevo.UsuarioId }, _response);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return BadRequest(_response);
             }
 
         }
@@ -141,7 +170,7 @@ namespace SistemaFacturacion_API.Controllers
             string idUsuarioJwt = tokenExpirado.Claims.First(x =>
             x.Type == JwtRegisteredClaimNames.NameId).Value.ToString();
 
-            var autorizacionResponse = await _autorizacionService.DevolverRefrestToken(resquest, int.Parse(idUsuarioJwt));
+            var autorizacionResponse = await _autorizacionService.DevolverRefrestToken(resquest, short.Parse(idUsuarioJwt));
 
             if (autorizacionResponse.Resultado)
             {
@@ -184,7 +213,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _usuario;
                 _response.StatusCode = HttpStatusCode.OK;
 
-                return _response;
+                return Ok(_response);
             }
             catch (Exception ex)
             {

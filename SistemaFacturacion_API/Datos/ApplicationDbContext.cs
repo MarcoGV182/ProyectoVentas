@@ -23,6 +23,11 @@ namespace SistemaFacturacion_API.Datos
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Servicio> Servicio { get; set; }
         public DbSet<TipoServicio> TipoServicio { get; set; }
+        public DbSet<Ciudad> Ciudad { get; set; }
+        public DbSet<Venta> Venta { get; set; }
+        public DbSet<TipoDocumentoIdentidad> TipoDocumentoIdentidad { get; set; }
+        public DbSet<Timbrado> Timbrado { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
         public DbSet<HistorialRefreshToken> HistorialRefreshToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,9 +47,7 @@ namespace SistemaFacturacion_API.Datos
             .HasValue<Producto>(TipoArticulo.Producto)
             .HasValue<Servicio>(TipoArticulo.Servicio);
 
-            //modelBuilder.Entity<Articulo>().ToTable("Articulo");
-            //modelBuilder.Entity<Producto>().ToTable("Producto");
-            //modelBuilder.Entity<Servicio>().ToTable("Servicio");
+         
             modelBuilder.Entity<Persona>().ToTable("Persona");
             modelBuilder.Entity<Colaborador>().ToTable("Colaborador");
             modelBuilder.Entity<Usuario>().ToTable("Usuario");   
