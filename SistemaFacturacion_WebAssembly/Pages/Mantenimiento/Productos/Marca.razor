@@ -31,7 +31,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<MarcaDTO, object>(x=> x.Marcanro)">
+                            <MudTableSortLabel SortBy="new Func<MarcaDTO, object>(x=> x.MarcaId)">
                                 Código
                             </MudTableSortLabel>
                          </MudTh>
@@ -43,7 +43,7 @@
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="marcaRow">
-                        <MudTd DataLabel="Codigo">@marcaRow.Marcanro</MudTd>
+                        <MudTd DataLabel="Codigo">@marcaRow.MarcaId</MudTd>
                         <MudTd DataLabel="Descripcion">@marcaRow.Descripcion</MudTd>                        
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary" 
@@ -61,7 +61,7 @@
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
 
@@ -138,7 +138,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar la marca: {marca.Descripcion}({marca.Marcanro})",
+                Text = $"Eliminar la marca: {marca.Descripcion}({marca.MarcaId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -147,7 +147,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.Marcanro);
+            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.MarcaId);
 
             if (resultado.isExitoso)
             {

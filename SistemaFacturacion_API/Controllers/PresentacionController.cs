@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using Microsoft.AspNetCore.Http.HttpResults;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -68,7 +69,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                     
 
-                var Presentacion = await _PresentacionRepositorio.Obtener(p => p.Idpresentacion == id);
+                var Presentacion = await _PresentacionRepositorio.Obtener(p => p.PresentacionId == id);
 
                 if (Presentacion == null) 
                 {
@@ -122,7 +123,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _Presentacion;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetPresentacionById", new { id = _Presentacion.Idpresentacion }, _response);
+                return CreatedAtRoute("GetPresentacionById", new { id = _Presentacion.PresentacionId }, _response);
             }
             catch (Exception ex)
             {
@@ -151,7 +152,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var Presentacion = await _PresentacionRepositorio.Obtener(c => c.Idpresentacion == id, tracked: false);
+                var Presentacion = await _PresentacionRepositorio.Obtener(c => c.PresentacionId == id, tracked: false);
                 if (Presentacion == null)
                 {
                     _response.isExitoso = false;
@@ -160,7 +161,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Presentacion modelo = _mapper.Map<Presentacion>(CreateDTO);
-                modelo.Idpresentacion = (short)id;
+                modelo.PresentacionId = (short)id;
 
                 await _PresentacionRepositorio.Actualizar(modelo);               
 
@@ -194,7 +195,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var Presentacion = await _PresentacionRepositorio.Obtener(c => c.Idpresentacion == id, tracked: false);
+                var Presentacion = await _PresentacionRepositorio.Obtener(c => c.PresentacionId == id, tracked: false);
                 if (Presentacion == null)
                 {
                     _response.isExitoso = false;

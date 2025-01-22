@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -67,7 +68,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                     
 
-                var marca = await _marcaRepositorio.Obtener(p => p.Marcanro == id);
+                var marca = await _marcaRepositorio.Obtener(p => p.MarcaId == id);
 
                 if (marca == null) 
                 {
@@ -121,7 +122,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _marca;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetMarcaById", new { id = _marca.Marcanro }, _response);
+                return CreatedAtRoute("GetMarcaById", new { id = _marca.MarcaId }, _response);
             }
             catch (Exception ex)
             {
@@ -150,7 +151,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _marcaRepositorio.Obtener(c => c.Marcanro == id, tracked: false);
+                var marca = await _marcaRepositorio.Obtener(c => c.MarcaId == id, tracked: false);
                 if (marca == null)
                 {
                     _response.isExitoso = false;
@@ -159,7 +160,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Marca modelo = _mapper.Map<Marca>(CreateDTO);
-                modelo.Marcanro = id;
+                modelo.MarcaId = id;
 
                 await _marcaRepositorio.Actualizar(modelo);               
 
@@ -195,7 +196,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _marcaRepositorio.Obtener(c => c.Marcanro == id, tracked: false);
+                var marca = await _marcaRepositorio.Obtener(c => c.MarcaId == id, tracked: false);
                 if (marca == null)
                 {
                     _response.isExitoso = false;

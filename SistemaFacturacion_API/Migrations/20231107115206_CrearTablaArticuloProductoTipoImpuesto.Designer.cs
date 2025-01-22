@@ -25,7 +25,7 @@ namespace SistemaFacturacion_API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
                     b.Property<int>("Articulonro")
                         .ValueGeneratedOnAdd()
@@ -73,7 +73,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoImpuesto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoImpuesto", b =>
                 {
                     b.Property<int>("TipoimpuestoNro")
                         .ValueGeneratedOnAdd()
@@ -97,7 +97,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("TipoImpuesto");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Villa", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Villa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -145,9 +145,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Villas");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
                 {
-                    b.HasBaseType("SistemaFacturacion_API.Modelos.Articulo");
+                    b.HasBaseType("SistemaFacturacion_Model.Modelos.Articulo");
 
                     b.Property<string>("Codigobarra")
                         .HasMaxLength(50)
@@ -168,9 +168,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.TipoImpuesto", "TipoImpuesto")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
                         .WithMany()
                         .HasForeignKey("TipoimpuestoNro")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -179,11 +179,11 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("TipoImpuesto");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Articulo", null)
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Articulo", null)
                         .WithOne()
-                        .HasForeignKey("SistemaFacturacion_API.Modelos.Producto", "Articulonro")
+                        .HasForeignKey("SistemaFacturacion_Model.Modelos.Producto", "Articulonro")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

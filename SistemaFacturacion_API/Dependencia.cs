@@ -12,7 +12,8 @@ namespace SistemaFacturacion_API
         {
             services.AddDbContext<ApplicationDbContext>(option =>
             {
-                option.UseNpgsql(configuration.GetConnectionString("CadenaSQL"));
+                var setting = configuration.GetSection("ConnectionStrings").Get<ApiSettings>();
+                option.UseNpgsql(setting.CadenaSQL);
 
             });
 
@@ -26,12 +27,13 @@ namespace SistemaFacturacion_API
             services.AddScoped<IAutorizacionService, AutorizacionService>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
             services.AddScoped<ITipoImpuestoRepositorio, TipoImpuestoRepositorio>();
-            services.AddScoped<ITipoProductoRepositorio, TipoProductoRepositorio>();
+            services.AddScoped<ICategoriaProductoRepositorio, CategoriaProductoRepositorio>();
             services.AddScoped<IPresentacionRepositorio, PresentacionRepositorio>();
             services.AddScoped<IUnidadMedidaRepositorio, UnidadMedidaRepositorio>();
             services.AddScoped<ITimbradoRepositorio, TimbradoRepositorio>();
             services.AddScoped<IServicioRepositorio, ServicioRepositorio>();
             services.AddScoped<ITipoServicioRepositorio, TipoServicioRepositorio>();
+            services.AddScoped<ICiudadRepositorio, CiudadRepositorio>();
         }
     }
 }

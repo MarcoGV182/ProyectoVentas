@@ -31,7 +31,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<UnidadMedidaDTO, object>(x=> x.Unidadmedidanro)">
+                            <MudTableSortLabel SortBy="new Func<UnidadMedidaDTO, object>(x=> x.UnidadmedidaId)">
                                 Código
                             </MudTableSortLabel>
                          </MudTh>
@@ -43,7 +43,7 @@
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="UnidadMedidaRow">
-                        <MudTd DataLabel="Codigo">@UnidadMedidaRow.Unidadmedidanro</MudTd>
+                        <MudTd DataLabel="Codigo">@UnidadMedidaRow.UnidadmedidaId</MudTd>
                         <MudTd DataLabel="Descripcion">@UnidadMedidaRow.Descripcion</MudTd>                        
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary" 
@@ -61,7 +61,7 @@
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
 
@@ -138,7 +138,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar la UnidadMedida: {UnidadMedida.Descripcion}({UnidadMedida.Unidadmedidanro})",
+                Text = $"Eliminar la UnidadMedida: {UnidadMedida.Descripcion}({UnidadMedida.UnidadmedidaId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -147,7 +147,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _unidadMedidaservice.Eliminar<UnidadMedidaDTO>(UnidadMedida.Unidadmedidanro);
+            var resultado = await _unidadMedidaservice.Eliminar<UnidadMedidaDTO>(UnidadMedida.UnidadmedidaId);
 
             if (resultado.isExitoso)
             {

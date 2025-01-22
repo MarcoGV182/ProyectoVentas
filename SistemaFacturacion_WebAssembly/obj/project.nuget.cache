@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DZelO5PsXyk=",
+  "dgSpecHash": "/doB7eJToiY=",
   "success": true,
   "projectFilePath": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\SistemaFacturacion_WebAssembly.csproj",
   "expectedPackageFiles": [
@@ -41,8 +41,8 @@
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.jsinterop\\8.0.8\\microsoft.jsinterop.8.0.8.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.jsinterop.webassembly\\8.0.8\\microsoft.jsinterop.webassembly.8.0.8.nupkg.sha512",
-    "C:\\Users\\markg\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.8\\microsoft.net.illink.tasks.8.0.8.nupkg.sha512",
-    "C:\\Users\\markg\\.nuget\\packages\\microsoft.net.sdk.webassembly.pack\\8.0.8\\microsoft.net.sdk.webassembly.pack.8.0.8.nupkg.sha512",
+    "C:\\Users\\markg\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.12\\microsoft.net.illink.tasks.8.0.12.nupkg.sha512",
+    "C:\\Users\\markg\\.nuget\\packages\\microsoft.net.sdk.webassembly.pack\\9.0.1\\microsoft.net.sdk.webassembly.pack.9.0.1.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
@@ -142,7 +142,7 @@
     "C:\\Users\\markg\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\markg\\.nuget\\packages\\xlparser\\1.5.2\\xlparser.1.5.2.nupkg.sha512",
-    "C:\\Users\\markg\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\8.0.8\\microsoft.netcore.app.runtime.mono.browser-wasm.8.0.8.nupkg.sha512"
+    "C:\\Users\\markg\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\8.0.12\\microsoft.netcore.app.runtime.mono.browser-wasm.8.0.12.nupkg.sha512"
   ],
   "logs": []
 }

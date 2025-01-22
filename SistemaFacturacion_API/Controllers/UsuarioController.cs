@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos;
-using SistemaFacturacion_API.Modelos.Custom;
-using SistemaFacturacion_API.Modelos.DTO;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_Model.Modelos.Custom;
 using SistemaFacturacion_API.Recursos;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -19,49 +22,34 @@ namespace SistemaFacturacion_API.Controllers
     {
         private readonly IAutorizacionService _autorizacionService;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IMapper _mapper;
         protected APIResponse _response;
 
-        public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
+        public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper, UserManager<IdentityUser> userManager = null)
         {
             _autorizacionService = autorizacionService;
             _usuarioRepositorio = usuarioRepositorio;
             _mapper = mapper;
+            _userManager = userManager;
         }
-
-
-
-        [HttpPost]
-        [Route("Autenticar")]
-        public async Task<ActionResult<APIResponse>> Autenticar([FromBody] AutorizacionRequest autorizacion) 
-        {
-            var resultado_autorizacion = await _autorizacionService.DevolverToken(autorizacion);
-
-            if (resultado_autorizacion == null)
-            {
-                return Unauthorized();
-            }
-
-            return Ok(resultado_autorizacion);
-        }
-
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetUsuario()
         {
             //_logger.LogInformation("Obteniendo datos del Usuario");
-
+            _response = new APIResponse();
             try 
             {
-                IEnumerable<Usuario> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
+                IEnumerable<IdentityUser> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
 
                 if (UsuarioList == null)
                 {
                     return NoContent();
                 }
 
-                _response.Resultado = _mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioList);
+                _response.Resultado = UsuarioList;
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -76,23 +64,24 @@ namespace SistemaFacturacion_API.Controllers
         }
 
 
-        [HttpGet("id:int", Name = "GetUsuarioById")]
+        [HttpGet("id:string", Name = "GetUsuarioById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetUsuarioById(int id)
+        public async Task<ActionResult<APIResponse>> GetUsuarioById(string id)
         {
+            _response = new APIResponse();
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
             try
             {
-                if (id == 0)
+                if (string.IsNullOrEmpty(id))
                     return BadRequest();
 
-                var UsuarioResult = await _usuarioRepositorio.Obtener(p => p.UsuarioId == id, incluirPropiedades: "Colaborador");               
+                var UsuarioResult = await _userManager.FindByIdAsync(id);               
 
                 if (UsuarioResult == null)
                     return NoContent();
 
-                _response.Resultado = _mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioResult);
+                _response.Resultado = UsuarioResult;
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -111,34 +100,63 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> RegistrarUsuario([FromBody] UsuarioCreateDTO CreateDTO)
+        [Route("Registrar")]
+        public async Task<ActionResult<APIResponse>> RegistrarUsuario([FromBody] UsuarioRegistroDTO CreateDTO)
         {
+               _response = new APIResponse();
             try
             {
+                //Validar el estado del modelo
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                //Validar que el objeto no se nulo
+                if (CreateDTO == null)
+                {
+                    return BadRequest();
+                }
+                //Verificar que el Email ingresado exista
+                var emailExists = await _userManager.FindByEmailAsync(CreateDTO.DireccionEmail);
+                if (emailExists != null) 
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "El email ingresado ya existe" };
+                    _response.Resultado = null;
+                    return BadRequest(_response);
+                }
+
+
+                //Validar datos del usuario
                 if (!await _usuarioRepositorio.ValidarUsuario(CreateDTO))
                 {
                     ModelState.AddModelError("Validaciones", "El registro para el nuevo usuario no cumple con las condiciones.");
                     return BadRequest(ModelState);
                 }
 
-                if (CreateDTO == null)
+                //Mapear objecto recibido por parametro
+                IdentityUser _UsuarioNuevo = new IdentityUser();
+                _UsuarioNuevo.Email = CreateDTO.DireccionEmail;
+                _UsuarioNuevo.UserName = CreateDTO.UserName;
+
+                var isCreated = await _userManager.CreateAsync(_UsuarioNuevo, CreateDTO.Password);
+                if (!isCreated.Succeeded)
                 {
-                    return BadRequest();
+                    var listaErrores = isCreated.Errors.Select(c => c.Description).ToList();
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.isExitoso = false;
+                    _response.ErrorMessages = listaErrores;
+                    return BadRequest(_response);
                 }
 
-                var _UsuarioNuevo = _mapper.Map<Usuario>(CreateDTO);
-
-                _UsuarioNuevo.Password = Utilidades.EncriptarClave(CreateDTO.Password);
-                _UsuarioNuevo.Fechaalta = DateTime.Now;
-                _UsuarioNuevo.Estado = "A";
-
-                await _usuarioRepositorio.Crear(_UsuarioNuevo);
 
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _UsuarioNuevo;
 
-                return CreatedAtRoute("GetUsuarioById", new { id = _UsuarioNuevo.UsuarioId }, _response);
+                return CreatedAtRoute("GetUsuarioById", new { id = _UsuarioNuevo.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -148,79 +166,53 @@ namespace SistemaFacturacion_API.Controllers
             }
 
         }
-
-
-
-        [HttpPost]
-        [Route("ObtenerRefreshToken")]
-        public async Task<IActionResult> ObtenerRefreshToken([FromBody] RefreshTokenRequest resquest)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenExpirado = tokenHandler.ReadJwtToken(resquest.TokenExpirado);
-
-            if (tokenExpirado.ValidTo > DateTime.UtcNow)
-            {
-                return BadRequest(new AutorizacionResponse() 
-                { 
-                    Resultado = false,
-                    Mensaje = "Token aun no ha expirado"
-                });
-            }
-
-            string idUsuarioJwt = tokenExpirado.Claims.First(x =>
-            x.Type == JwtRegisteredClaimNames.NameId).Value.ToString();
-
-            var autorizacionResponse = await _autorizacionService.DevolverRefrestToken(resquest, short.Parse(idUsuarioJwt));
-
-            if (autorizacionResponse.Resultado)
-            {
-                return Ok(autorizacionResponse);
-            }
-            else
-            {
-                return BadRequest(autorizacionResponse);
-            }
-        }
-
+       
 
         [HttpPost]
         [Route("IniciarSesion")]
-        public async Task<ActionResult<APIResponse>> IniciarSesion([FromBody] LoginDTO loginDto)
+        public async Task<ActionResult<AutorizacionResponse>> IniciarSesion([FromBody] LoginDTO loginDto)
         {
-            APIResponse _response = new APIResponse();
+            AutorizacionResponse _response = new AutorizacionResponse();
             try
             {
-                Usuario _usuario = await _usuarioRepositorio.Obtener(u => u.Login == loginDto.Usuario, incluirPropiedades: "Colaborador");
-
-                if (_usuario == null)
+                #region Validaciones
+                //Validar el estado del modelo
+                if (!ModelState.IsValid)
                 {
-                    _response.isExitoso = false;
-                    _response.ErrorMessages = new List<string>() { "El Usuario/Login no existe" };
-                    _response.StatusCode = HttpStatusCode.NoContent;
-                    return _response;
+                    return BadRequest();
                 }
 
-                if (!BCrypt.Net.BCrypt.Verify(loginDto.Clave, _usuario.Password))
+                //Verificar que el Email ingresado exista
+                var existingUser = await _userManager.FindByEmailAsync(loginDto.DireccionEmail);
+                if (existingUser == null)
                 {
-                    _response.isExitoso = false;
-                    _response.ErrorMessages = new List<string>() { "La contraseña ingresada es incorrecta"};
-                    _response.StatusCode = HttpStatusCode.NoContent;
-                    return _response;
-
+                    _response.Resultado = false;
+                    _response.Mensaje = new List<string>() { "El Usuario/Email no existe" };
+                    return BadRequest(_response);
                 }
 
-                _response.isExitoso = true;
-                _response.Resultado = _usuario;
-                _response.StatusCode = HttpStatusCode.OK;
+                //Validar credenciales
+                var checkUserAndPass = await _userManager.CheckPasswordAsync(existingUser, loginDto.Password);
+                if (!checkUserAndPass)
+                {
+                    _response.Resultado = false;
+                    _response.Mensaje = new List<string>() { "Credenciales Inválidas" };
+                    return BadRequest(_response);
+                }
+                #endregion
+
+                //Se genera el token para devolver al usuario
+                var resultToken = _autorizacionService.GenerarToken(existingUser);
+                _response.Token = resultToken;
+                _response.Resultado = true;
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                _response.isExitoso = false;
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.ErrorMessages = new List<string>() { ex.Message.ToString() };
-                return _response;
+                _response.Resultado = false;
+                _response.Mensaje = new List<string>() { ex.Message.ToString() };
+                return BadRequest(_response);
             }        
         }
     }

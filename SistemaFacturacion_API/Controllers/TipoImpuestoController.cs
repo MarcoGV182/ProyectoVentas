@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos;
-using SistemaFacturacion_API.Modelos.DTO;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using System.Net;
@@ -68,7 +69,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
 
-                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(p => p.TipoimpuestoNro == id);
+                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(p => p.TipoimpuestoId == id);
 
                 if (tipoImpuesto == null)
                 {
@@ -127,7 +128,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _tipoImpuesto;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("ObtenerTipoImpuestoById", new { id = _tipoImpuesto.TipoimpuestoNro }, _response);
+                return CreatedAtRoute("ObtenerTipoImpuestoById", new { id = _tipoImpuesto.TipoimpuestoId }, _response);
             }
             catch (Exception ex)
             {
@@ -144,7 +145,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTipoImpuesto(int id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarTipoImpuesto(short id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
         {
             try
             {
@@ -155,7 +156,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoNro == id, tracked: false);
+                var marca = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoId == id, tracked: false);
                 if (marca == null)
                 {
                     _response.isExitoso = false;
@@ -164,7 +165,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 TipoImpuesto modelo = _mapper.Map<TipoImpuesto>(UpdateDTO);
-                modelo.TipoimpuestoNro = id;
+                modelo.TipoimpuestoId = id;
 
                 await _tipoImpuestoRepositorio.Actualizar(modelo);
 
@@ -200,7 +201,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
                 //Validar que el objecto a eliminar exista
-                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoNro == id, tracked: false);
+                var tipoImpuesto = await _tipoImpuestoRepositorio.Obtener(c => c.TipoimpuestoId == id, tracked: false);
 
                 if (tipoImpuesto == null)
                 {

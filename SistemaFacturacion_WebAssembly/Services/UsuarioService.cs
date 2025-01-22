@@ -1,6 +1,6 @@
-﻿using SistemaFacturacion_Utilidad;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Models;
-using SistemaFacturacion_WebAssembly.Models.DTO;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 
 namespace SistemaFacturacion_WebAssembly.Services
@@ -15,7 +15,7 @@ namespace SistemaFacturacion_WebAssembly.Services
         }
 
 
-        public Task<APIResponse> Crear<T>(UsuarioCreateDTO dto)
+        public Task<APIResponse> Crear<T>(UsuarioRegistroDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
@@ -24,13 +24,14 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Usuario"
             });
         }
-        public Task<APIResponse> Actualizar<T>(UsuarioDTO dto)
+
+        public Task<APIResponse> Actualizar<T>(int id,UsuarioRegistroDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
-                URL = $"api/Usuario/{dto.UsuarioId}"
+                URL = $"api/Usuario/{id}"
             });
         }
 

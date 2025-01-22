@@ -1,5 +1,5 @@
-﻿using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_WebAssembly.Models.DTO;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 using System.Net.Http;
@@ -16,7 +16,7 @@ namespace SistemaFacturacion_WebAssembly.Services
         }
 
 
-        public Task<APIResponse> Crear<T>(TablaMenorDTO dto)
+        public Task<APIResponse> Crear<T>(MarcaCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
@@ -25,7 +25,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Marca"
             });
         }
-        public Task<APIResponse> Actualizar<T>(int id, TablaMenorDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id, MarcaCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {

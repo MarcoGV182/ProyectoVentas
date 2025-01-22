@@ -8,6 +8,9 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using static SistemaFacturacion_Utilidad.DS;
 using System.Net.Http;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using System.Net.Http.Headers;
+using Irony.Parsing;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
@@ -26,10 +29,16 @@ namespace SistemaFacturacion_WebAssembly.Services
             responseModel = new APIResponse();
             try
             {
-                var client = _httpClientFactory.CreateClient("Facturacion");
+                var client = _httpClientFactory.CreateClient("Facturacion");                
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
+                if (!string.IsNullOrEmpty(apiRequest.Token))
+                {
+                    message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
+
                 message.RequestUri = new Uri(apiRequest.URL, UriKind.RelativeOrAbsolute);
+
 
                 if (apiRequest.Datos != null)
                 {

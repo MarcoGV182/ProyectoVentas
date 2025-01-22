@@ -1,5 +1,5 @@
-﻿using SistemaFacturacion_WebAssembly.Models;
-using SistemaFacturacion_WebAssembly.Models.DTO;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_WebAssembly.Models;
 
 namespace SistemaFacturacion_WebAssembly.Services.IServices 
 { 

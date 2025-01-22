@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
@@ -68,7 +69,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
 
-                var Servicio = await _ServicioRepositorio.Obtener(p => p.Articulonro == id, incluirPropiedades: "TipoImpuesto,TipoServicio");
+                var Servicio = await _ServicioRepositorio.Obtener(p => p.ArticuloId == id, incluirPropiedades: "TipoImpuesto,TipoServicio");
 
                 if (Servicio == null)
                 {
@@ -123,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _Servicio;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetServicioById", new { id = _Servicio.Articulonro }, _response);
+                return CreatedAtRoute("GetServicioById", new { id = _Servicio.ArticuloId }, _response);
             }
             catch (Exception ex)
             {
@@ -152,7 +153,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var Servicio = await _ServicioRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                var Servicio = await _ServicioRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
                 if (Servicio == null)
                 {
                     _response.isExitoso = false;
@@ -161,7 +162,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Servicio modelo = _mapper.Map<Servicio>(CreateDTO);
-                modelo.Articulonro = id;
+                modelo.ArticuloId = id;
 
                 await _ServicioRepositorio.Actualizar(modelo);
 
@@ -197,7 +198,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var Servicio = await _ServicioRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                var Servicio = await _ServicioRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
                 if (Servicio == null)
                 {
                     _response.isExitoso = false;

@@ -1,12 +1,11 @@
-﻿using SistemaFacturacion_API.Modelos.Custom;
+﻿using Microsoft.AspNetCore.Identity;
+using SistemaFacturacion_Model.Modelos.Custom;
 
 namespace SistemaFacturacion_API.Services
 {
     public interface IAutorizacionService
     {
-        Task<AutorizacionResponse> DevolverToken(AutorizacionRequest autorizacion);
-
-        Task<AutorizacionResponse> DevolverRefrestToken(RefreshTokenRequest refrestToken,short idUsuario);
+        string GenerarToken(IdentityUser user);
 
     }
 }

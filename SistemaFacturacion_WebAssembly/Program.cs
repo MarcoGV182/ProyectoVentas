@@ -23,7 +23,7 @@ builder.Services.AddHttpClient("Facturacion", client =>
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<ITipoImpuestoService, TipoImpuestoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IPresentacionService, PresentacionService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IUnidadMedidaService, UnidadMedidaService>();

@@ -25,7 +25,7 @@ namespace SistemaFacturacion_API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
                     b.Property<int>("Articulonro")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Ciudad", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Ciudad", b =>
                 {
                     b.Property<short>("IdCiudad")
                         .ValueGeneratedOnAdd()
@@ -91,7 +91,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Ciudad");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Colaborador", b =>
                 {
                     b.Property<int>("ColaboradorId")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Colaborador", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Empresa", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Empresa", b =>
                 {
                     b.Property<short>("EmpresaId")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Empresa");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.HistorialRefreshToken", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.HistorialRefreshToken", b =>
                 {
                     b.Property<int>("HistorialTokenId")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("HistorialRefreshToken");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Marca", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Marca", b =>
                 {
                     b.Property<int>("Marcanro")
                         .ValueGeneratedOnAdd()
@@ -202,7 +202,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Marca");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Persona", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
                 {
                     b.Property<int>("PersonaId")
                         .ValueGeneratedOnAdd()
@@ -266,7 +266,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Persona", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Presentacion", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Presentacion", b =>
                 {
                     b.Property<short>("Idpresentacion")
                         .ValueGeneratedOnAdd()
@@ -283,7 +283,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Presentacion");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Stock", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -312,7 +312,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Stock");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Timbrado", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Timbrado", b =>
                 {
                     b.Property<short>("TimbradoId")
                         .ValueGeneratedOnAdd()
@@ -347,7 +347,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Timbrado");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoDocumentoIdentidad", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoDocumentoIdentidad", b =>
                 {
                     b.Property<short>("IdTipoDocIdentidad")
                         .ValueGeneratedOnAdd()
@@ -365,7 +365,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("TipoDocumentoIdentidad");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoImpuesto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoImpuesto", b =>
                 {
                     b.Property<int>("TipoimpuestoNro")
                         .ValueGeneratedOnAdd()
@@ -389,23 +389,23 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("TipoImpuesto");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoProducto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Categoria", b =>
                 {
-                    b.Property<short>("TipoProductonro")
+                    b.Property<short>("Categorianro")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoProductonro"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Categorianro"));
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("text");
 
-                    b.HasKey("TipoProductonro");
+                    b.HasKey("Categorianro");
 
-                    b.ToTable("TipoProducto");
+                    b.ToTable("Categoria");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.TipoServicio", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoServicio", b =>
                 {
                     b.Property<short>("TipoServicoNro")
                         .ValueGeneratedOnAdd()
@@ -421,7 +421,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("TipoServicio", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Ubicacion", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Ubicacion", b =>
                 {
                     b.Property<int>("UbicacionId")
                         .ValueGeneratedOnAdd()
@@ -444,7 +444,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Ubicacion");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.UnidadMedida", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.UnidadMedida", b =>
                 {
                     b.Property<short>("Unidadmedidanro")
                         .ValueGeneratedOnAdd()
@@ -460,7 +460,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("UnidadMedida");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Usuario", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Usuario", b =>
                 {
                     b.Property<short>("UsuarioId")
                         .ValueGeneratedOnAdd()
@@ -495,7 +495,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Usuario", (string)null);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Venta", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Venta", b =>
                 {
                     b.Property<int>("NroVenta")
                         .ValueGeneratedOnAdd()
@@ -580,9 +580,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("Venta");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
                 {
-                    b.HasBaseType("SistemaFacturacion_API.Modelos.Articulo");
+                    b.HasBaseType("SistemaFacturacion_Model.Modelos.Articulo");
 
                     b.Property<string>("Codigobarra")
                         .HasMaxLength(50)
@@ -606,7 +606,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int>("Stockminimo")
                         .HasColumnType("integer");
 
-                    b.Property<short?>("TipoproductoId")
+                    b.Property<short?>("CategoriaId")
                         .HasColumnType("smallint");
 
                     b.Property<short?>("Unidadmedidanro")
@@ -616,16 +616,16 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("MarcaId");
 
-                    b.HasIndex("TipoproductoId");
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("Unidadmedidanro");
 
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Servicio", b =>
                 {
-                    b.HasBaseType("SistemaFacturacion_API.Modelos.Articulo");
+                    b.HasBaseType("SistemaFacturacion_Model.Modelos.Articulo");
 
                     b.Property<short?>("TipoServicioTipoServicoNro")
                         .HasColumnType("smallint");
@@ -638,18 +638,18 @@ namespace SistemaFacturacion_API.Migrations
                     b.HasDiscriminator().HasValue(0);
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Articulo", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.TipoImpuesto", "TipoImpuesto")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
                         .WithMany()
                         .HasForeignKey("TipoimpuestoId");
 
                     b.Navigation("TipoImpuesto");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Colaborador", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Colaborador", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Persona", "Persona")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -658,9 +658,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.HistorialRefreshToken", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.HistorialRefreshToken", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "Usuario")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -669,21 +669,21 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Persona", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Ciudad", "Ciudad")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Ciudad", "Ciudad")
                         .WithMany()
                         .HasForeignKey("IdCiudad");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.TipoDocumentoIdentidad", "TipoDocumentoIdentidad")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoDocumentoIdentidad", "TipoDocumentoIdentidad")
                         .WithMany()
                         .HasForeignKey("IdTipoDocIdentidad");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "UsuarioRegistro")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "UsuarioRegistro")
                         .WithMany()
                         .HasForeignKey("IdUsuario");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "UsuarioModificacion")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "UsuarioModificacion")
                         .WithMany()
                         .HasForeignKey("IdUsuarioMod");
 
@@ -696,15 +696,15 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("UsuarioRegistro");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Stock", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Producto", "Producto")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Producto", "Producto")
                         .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Ubicacion", "Ubicacion")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Ubicacion", "Ubicacion")
                         .WithMany()
                         .HasForeignKey("UbicacionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -715,50 +715,50 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Ubicacion");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Usuario", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Usuario", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Colaborador", "Colaborador")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Colaborador", "Colaborador")
                         .WithMany()
                         .HasForeignKey("ColaboradorId");
 
                     b.Navigation("Colaborador");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Venta", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Venta", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Persona", "Cliente")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Persona", "Cliente")
                         .WithMany()
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Colaborador", "Vendedor")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Colaborador", "Vendedor")
                         .WithMany()
                         .HasForeignKey("ColaboradorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Empresa", "Empresa")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Empresa", "Empresa")
                         .WithMany()
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Timbrado", "Timbrado")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Timbrado", "Timbrado")
                         .WithMany()
                         .HasForeignKey("TimbradoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "UsuarioAnulacion")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "UsuarioAnulacion")
                         .WithMany()
                         .HasForeignKey("UsuarioIdAnulacion");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "UsuarioModificacion")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "UsuarioModificacion")
                         .WithMany()
                         .HasForeignKey("UsuarioIdModificacion");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Usuario", "UsuarioRegistro")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Usuario", "UsuarioRegistro")
                         .WithMany()
                         .HasForeignKey("UsuarioIdRegistro")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -779,21 +779,21 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Vendedor");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Producto", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.Presentacion", "Presentacion")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Presentacion", "Presentacion")
                         .WithMany("Productos")
                         .HasForeignKey("Idpresentacion");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.Marca", "Marca")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Marca", "Marca")
                         .WithMany()
                         .HasForeignKey("MarcaId");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.TipoProducto", "TipoProducto")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Categoria", "Categoria")
                         .WithMany()
-                        .HasForeignKey("TipoproductoId");
+                        .HasForeignKey("CategoriaId");
 
-                    b.HasOne("SistemaFacturacion_API.Modelos.UnidadMedida", "UnidadMedida")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.UnidadMedida", "UnidadMedida")
                         .WithMany("Productos")
                         .HasForeignKey("Unidadmedidanro");
 
@@ -801,26 +801,26 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.Navigation("Presentacion");
 
-                    b.Navigation("TipoProducto");
+                    b.Navigation("Categoria");
 
                     b.Navigation("UnidadMedida");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Servicio", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Servicio", b =>
                 {
-                    b.HasOne("SistemaFacturacion_API.Modelos.TipoServicio", "TipoServicio")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoServicio", "TipoServicio")
                         .WithMany()
                         .HasForeignKey("TipoServicioTipoServicoNro");
 
                     b.Navigation("TipoServicio");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Presentacion", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Presentacion", b =>
                 {
                     b.Navigation("Productos");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.UnidadMedida", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.UnidadMedida", b =>
                 {
                     b.Navigation("Productos");
                 });

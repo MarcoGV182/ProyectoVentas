@@ -1,5 +1,5 @@
 ﻿using SistemaFacturacion_API.Datos;
-using SistemaFacturacion_API.Modelos;
+using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 
 namespace SistemaFacturacion_API.Repositorio

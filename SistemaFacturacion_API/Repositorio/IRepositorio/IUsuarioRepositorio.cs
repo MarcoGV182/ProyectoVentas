@@ -1,12 +1,12 @@
-﻿using SistemaFacturacion_API.Modelos;
-using SistemaFacturacion_API.Modelos.DTO;
+﻿using Microsoft.AspNetCore.Identity;
+using SistemaFacturacion_Model.Modelos.DTOs;
 
 namespace SistemaFacturacion_API.Repositorio.IRepositorio
 {
-    public interface IUsuarioRepositorio:IRepositorioGenerico<Usuario>
+    public interface IUsuarioRepositorio:IRepositorioGenerico<IdentityUser>
     {
-        Task<Usuario> Actualizar(Usuario entidad);
+        //Task<IdentityUser> Actualizar(IdentityUser entidad);
 
-        Task<bool> ValidarUsuario(UsuarioCreateDTO entidad);
+        Task<bool> ValidarUsuario(UsuarioRegistroDTO entidad);
     }
 }

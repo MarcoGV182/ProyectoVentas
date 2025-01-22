@@ -84,7 +84,7 @@ namespace SistemaFacturacion_API.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<short>(
-                name: "TipoproductoId",
+                name: "CategoriaId",
                 table: "Articulo",
                 type: "smallint",
                 nullable: true);
@@ -106,9 +106,9 @@ namespace SistemaFacturacion_API.Migrations
                 column: "MarcaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articulo_TipoproductoId",
+                name: "IX_Articulo_CategoriaId",
                 table: "Articulo",
-                column: "TipoproductoId");
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articulo_TipoServicioTipoServicoNro",
@@ -135,11 +135,11 @@ namespace SistemaFacturacion_API.Migrations
                 principalColumn: "Idpresentacion");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Articulo_TipoProducto_TipoproductoId",
+                name: "FK_Articulo_Categoria_CategoriaId",
                 table: "Articulo",
-                column: "TipoproductoId",
-                principalTable: "TipoProducto",
-                principalColumn: "TipoProductonro");
+                column: "CategoriaId",
+                principalTable: "Categoria",
+                principalColumn: "Categorianro");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Articulo_TipoServicio_TipoServicioTipoServicoNro",
@@ -176,7 +176,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Articulo");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Articulo_TipoProducto_TipoproductoId",
+                name: "FK_Articulo_Categoria_CategoriaId",
                 table: "Articulo");
 
             migrationBuilder.DropForeignKey(
@@ -200,7 +200,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Articulo");
 
             migrationBuilder.DropIndex(
-                name: "IX_Articulo_TipoproductoId",
+                name: "IX_Articulo_CategoriaId",
                 table: "Articulo");
 
             migrationBuilder.DropIndex(
@@ -252,7 +252,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Articulo");
 
             migrationBuilder.DropColumn(
-                name: "TipoproductoId",
+                name: "CategoriaId",
                 table: "Articulo");
 
             migrationBuilder.DropColumn(
@@ -266,7 +266,7 @@ namespace SistemaFacturacion_API.Migrations
                     Articulonro = table.Column<int>(type: "integer", nullable: false, comment: "Id de la tabla"),
                     Idpresentacion = table.Column<short>(type: "smallint", nullable: true),
                     MarcaId = table.Column<int>(type: "integer", nullable: true),
-                    TipoproductoId = table.Column<short>(type: "smallint", nullable: true),
+                    CategoriaId = table.Column<short>(type: "smallint", nullable: true),
                     Unidadmedidanro = table.Column<short>(type: "smallint", nullable: true),
                     Codigobarra = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     FechaVencimiento = table.Column<DateOnly>(type: "date", nullable: true),
@@ -294,10 +294,10 @@ namespace SistemaFacturacion_API.Migrations
                         principalTable: "Presentacion",
                         principalColumn: "Idpresentacion");
                     table.ForeignKey(
-                        name: "FK_Producto_TipoProducto_TipoproductoId",
-                        column: x => x.TipoproductoId,
-                        principalTable: "TipoProducto",
-                        principalColumn: "TipoProductonro");
+                        name: "FK_Producto_Categoria_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categoria",
+                        principalColumn: "Categorianro");
                     table.ForeignKey(
                         name: "FK_Producto_UnidadMedida_Unidadmedidanro",
                         column: x => x.Unidadmedidanro,
@@ -340,9 +340,9 @@ namespace SistemaFacturacion_API.Migrations
                 column: "MarcaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Producto_TipoproductoId",
+                name: "IX_Producto_CategoriaId",
                 table: "Producto",
-                column: "TipoproductoId");
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Producto_Unidadmedidanro",

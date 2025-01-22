@@ -40,19 +40,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_unidadMedida.Unidadmedidanro);
+        Console.WriteLine(_unidadMedida.UnidadmedidaId);
     }    
 
     private async Task Guardar()
     {        
-        TablaMenorDTO _nuevaunidadMedida = new TablaMenorDTO();
+        UnidadMedidaCreateDTO _nuevaunidadMedida = new UnidadMedidaCreateDTO();
         _nuevaunidadMedida.Descripcion = _unidadMedida.Descripcion;
         string _mensaje = "";
         bool _resultado;
 
-        if (_unidadMedida.Unidadmedidanro != 0)
+        if (_unidadMedida.UnidadmedidaId != 0)
         {
-            var response = await _unidadMedidaService.Actualizar<UnidadMedidaDTO>(_unidadMedida.Unidadmedidanro, _nuevaunidadMedida);
+            var response = await _unidadMedidaService.Actualizar<UnidadMedidaDTO>(_unidadMedida.UnidadmedidaId, _nuevaunidadMedida);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }

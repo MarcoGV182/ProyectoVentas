@@ -28,8 +28,8 @@
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                     </ToolBarContent>
-                    <HeaderContent>
-                        <MudTh>
+                    <HeaderContent >
+                        <MudTh Style="width: 5px;">
                             <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Articulonro)">
                                 Código
                             </MudTableSortLabel>
@@ -50,8 +50,8 @@
                             </MudTableSortLabel>
                         </MudTh>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.TipoProducto.Descripcion)">
-                                Tipo Producto
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Categoria.Descripcion)">
+                                Categoria
                             </MudTableSortLabel>
                         </MudTh>
                         <MudTh>
@@ -101,7 +101,7 @@
                         <MudTd DataLabel="Cod. de Barras">@productoRow.Codigobarra</MudTd>
                         <MudTd DataLabel="Descripcion">@productoRow.Descripcion</MudTd>
                         <MudTd DataLabel="Impuesto">@productoRow.TipoImpuesto.Descripcion</MudTd>
-                        <MudTd DataLabel="Tipo Producto">@((productoRow.TipoProducto?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="Tipo Producto">@((productoRow.Categoria?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="Marca">@((productoRow.Marca?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="Precio">@productoRow.Precio.ToString("N0")</MudTd>
                         <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
@@ -126,7 +126,7 @@
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
         </MudItem>

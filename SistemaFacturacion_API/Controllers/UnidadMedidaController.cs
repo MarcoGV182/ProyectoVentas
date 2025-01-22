@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
@@ -67,7 +68,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                     
 
-                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(p => p.Unidadmedidanro == id);
+                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(p => p.UnidadMedidaId == id);
 
                 if (UnidadMedida == null) 
                 {
@@ -123,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _UnidadMedida;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetUnidadMedidaById", new { id = _UnidadMedida.Unidadmedidanro }, _response);
+                return CreatedAtRoute("GetUnidadMedidaById", new { id = _UnidadMedida.UnidadMedidaId }, _response);
             }
             catch (Exception ex)
             {
@@ -152,7 +153,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(c => c.Unidadmedidanro == id, tracked: false);
+                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(c => c.UnidadMedidaId == id, tracked: false);
                 if (UnidadMedida == null)
                 {
                     _response.isExitoso = false;
@@ -161,7 +162,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 UnidadMedida modelo = _mapper.Map<UnidadMedida>(CreateDTO);
-                modelo.Unidadmedidanro = (short)id;
+                modelo.UnidadMedidaId = (short)id;
 
                 await _UnidadMedidaRepositorio.Actualizar(modelo);               
 
@@ -197,7 +198,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(c => c.Unidadmedidanro == id, tracked: false);
+                var UnidadMedida = await _UnidadMedidaRepositorio.Obtener(c => c.UnidadMedidaId == id, tracked: false);
                 if (UnidadMedida == null)
                 {
                     _response.isExitoso = false;

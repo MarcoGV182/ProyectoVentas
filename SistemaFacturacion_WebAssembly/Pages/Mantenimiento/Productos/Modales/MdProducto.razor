@@ -1,6 +1,6 @@
 ﻿@inject IProductoService _productoService
 @inject ITipoImpuestoService _tipoImpuestoService
-@inject ITipoProductoService _tipoProductoService
+@inject ICategoriaService _CategoriaService
 @inject IPresentacionService _presentacionService
 @inject IMarcaService _marcarvice
 @inject IUnidadMedidaService _unidadMedidaService
@@ -95,10 +95,10 @@
                     }
                 </MudSelect>
 
-                <MudSelect Label="Tipo Producto" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TipoProductoDTO" @bind-Value="tipoProductoSeleccionado">
-                    @if (ListaTipoProducto.Any())
+                <MudSelect Label="Categoria" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="CategoriaProductoDTO" @bind-Value="CategoriaSeleccionado">
+                    @if (ListaCategoria.Any())
                     {
-                        foreach (var rol in ListaTipoProducto)
+                        foreach (var rol in ListaCategoria)
                         {
                             <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
                         }
@@ -149,8 +149,8 @@
     public List<TipoImpuestoDTO> ListaImpuestos { get; set; } = new List<TipoImpuestoDTO>();
     public TipoImpuestoDTO impuestoSeleccionado { get; set; }
 
-    public List<TipoProductoDTO> ListaTipoProducto { get; set; } = new List<TipoProductoDTO>();
-    public TipoProductoDTO tipoProductoSeleccionado { get; set; }
+    public List<CategoriaProductoDTO> ListaCategoria { get; set; } = new List<CategoriaProductoDTO>();
+    public CategoriaProductoDTO CategoriaSeleccionado { get; set; }
 
     public List<PresentacionDTO> ListaPresentacion { get; set; } = new List<PresentacionDTO>();
     public PresentacionDTO presentacionSeleccionada { get; set; }
@@ -176,11 +176,11 @@
         {
             try
             {
-                marcaSeleccionada = _producto.Marca == null ? null : ListaMarcas.FirstOrDefault(p => p.Marcanro == _producto.Marca.Marcanro);
-                impuestoSeleccionado = _producto.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoNro == _producto.TipoImpuesto.TipoimpuestoNro);
-                presentacionSeleccionada = _producto.Presentacion == null ? null: ListaPresentacion.FirstOrDefault(p => p.Idpresentacion == _producto.Presentacion.Idpresentacion);
-                tipoProductoSeleccionado = _producto.TipoProducto == null ? null: ListaTipoProducto.FirstOrDefault(p => p.TipoProductonro == _producto.TipoProducto.TipoProductonro);
-                unidadMedidaSeleccionada = _producto.UnidadMedida == null ? null: ListaUnidadMedida.FirstOrDefault(p => p.Unidadmedidanro == _producto.UnidadMedida.Unidadmedidanro);
+                marcaSeleccionada = _producto.Marca == null ? null : ListaMarcas.FirstOrDefault(p => p.MarcaId == _producto.Marca.MarcaId);
+                impuestoSeleccionado = _producto.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoId == _producto.TipoImpuesto.TipoimpuestoId);
+                presentacionSeleccionada = _producto.Presentacion == null ? null : ListaPresentacion.FirstOrDefault(p => p.PresentacionId == _producto.Presentacion.PresentacionId);
+                CategoriaSeleccionado = _producto.Categoria == null ? null: ListaCategoria.FirstOrDefault(p => p.Categorianro == _producto.Categoria.CategoriaId);
+                unidadMedidaSeleccionada = _producto.UnidadMedida == null ? null : ListaUnidadMedida.FirstOrDefault(p => p.UnidadmedidaId == _producto.UnidadMedida.UnidadMedidaId);
                 //estadoSeleccionado = _producto.Estado;
             }
             catch (Exception ex)
@@ -208,10 +208,10 @@
                 ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
             }
 
-            result = await _tipoProductoService.ObtenerTodos<List<TipoProductoDTO>>();
+            result = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
             if (result.isExitoso)
             {
-                ListaTipoProducto = (List<TipoProductoDTO>)result.Resultado!;
+                ListaCategoria = (List<CategoriaProductoDTO>)result.Resultado!;
             }
 
             result = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
@@ -251,11 +251,11 @@
             _editRegistro.Stockminimo = _producto.Stockminimo;
             _editRegistro.PrecioCompra = _producto.PrecioCompra;
             _editRegistro.Fechavencimiento = _producto.FechaVencimiento;
-            _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.Idpresentacion : null;
-            _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.Marcanro : null;
-            _editRegistro.TipoproductoId = tipoProductoSeleccionado != null ? tipoProductoSeleccionado.TipoProductonro : null;
-            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.Unidadmedidanro : null;
-            _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoNro;
+            _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+            _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
+            _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.Categorianro : null;
+            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadmedidaId : null;
+            _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
             var response = await _productoService.Actualizar<ProductoDTO>(_producto.Articulonro, _editRegistro);
             _resultado = response.isExitoso;
@@ -272,11 +272,11 @@
             _nuevoRegistro.Stockminimo = _producto.Stockminimo;
             _nuevoRegistro.PrecioCompra = _producto.PrecioCompra;
             _nuevoRegistro.Fechavencimiento = _producto.FechaVencimiento;
-            _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.Idpresentacion : null;
-            _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.Marcanro : null;
-            _nuevoRegistro.TipoproductoId = tipoProductoSeleccionado != null ? tipoProductoSeleccionado.TipoProductonro : null;
-            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.Unidadmedidanro : null;
-            _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoNro;
+            _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+            _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
+            _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.Categorianro : null;
+            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadmedidaId : null;
+            _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
             var response = await _productoService.Crear<ProductoDTO>(_nuevoRegistro);
             _resultado = response.isExitoso;

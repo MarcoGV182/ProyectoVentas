@@ -1,14 +1,14 @@
-﻿using SistemaFacturacion_Utilidad;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Models;
-using SistemaFacturacion_WebAssembly.Models.DTO;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
-    public class TipoProductoService:BaseService,ITipoProductoService
+    public class CategoriaService:BaseService,ICategoriaService
     {
         public readonly IHttpClientFactory _httpClientFactory;
-        public TipoProductoService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        public CategoriaService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
@@ -18,7 +18,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
-                URL = $"api/TipoProducto/{id}"
+                URL = $"api/Categoria/{id}"
             });
         }
 
@@ -27,7 +27,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
-                URL = $"api/TipoProducto"
+                URL = $"api/Categoria"
             });
         }
 
@@ -37,26 +37,26 @@ namespace SistemaFacturacion_WebAssembly.Services
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
-                URL = $"api/TipoProducto/{id}"
+                URL = $"api/Categoria/{id}"
             });
         }
 
-        public Task<APIResponse> Crear<T>(TablaMenorDTO dto)
+        public Task<APIResponse> Crear<T>(CategoriaProductoCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.POST,
                 Datos = dto,
-                URL = $"api/TipoProducto"
+                URL = $"api/Categoria"
             });
         }
-        public Task<APIResponse> Actualizar<T>(int id, TablaMenorDTO dto)
+        public Task<APIResponse> Actualizar<T>(int id, CategoriaProductoCreateDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
-                URL = $"api/TipoProducto/{id}"
+                URL = $"api/Categoria/{id}"
             });
         }
 

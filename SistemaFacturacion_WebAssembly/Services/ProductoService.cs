@@ -1,8 +1,8 @@
 ﻿using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_WebAssembly.Models.DTO;
 using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using SistemaFacturacion_Model.Modelos.DTOs;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {

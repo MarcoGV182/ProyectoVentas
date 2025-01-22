@@ -1,5 +1,349 @@
 [
   {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CategoriaController",
+    "Method": "GetCategoria",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CategoriaController",
+    "Method": "CrearCategoria",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.CategoriaProductoCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CategoriaController",
+    "Method": "GetCategoriaById",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "EndpointName": "GetCategoriaById"
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CategoriaController",
+    "Method": "ActualizarCategoria",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.CategoriaProductoCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CategoriaController",
+    "Method": "EliminarCategoria",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CiudadController",
+    "Method": "GetCiudad",
+    "RelativePath": "api/Ciudad",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CiudadController",
+    "Method": "CrearCiudad",
+    "RelativePath": "api/Ciudad",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.CiudadCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CiudadController",
+    "Method": "GetCiudadById",
+    "RelativePath": "api/Ciudad/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "EndpointName": "GetCiudadById"
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CiudadController",
+    "Method": "ActualizarCiudad",
+    "RelativePath": "api/Ciudad/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int16",
+        "IsRequired": true
+      },
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.CiudadCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.CiudadController",
+    "Method": "EliminarCiudad",
+    "RelativePath": "api/Ciudad/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
     "ContainingType": "SistemaFacturacion_API.Controllers.MarcaController",
     "Method": "GetMarcas",
     "RelativePath": "api/Marca",
@@ -9,7 +353,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -29,13 +373,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.MarcaCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.MarcaCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -75,7 +419,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -106,13 +450,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.MarcaCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.MarcaCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -181,7 +525,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -201,13 +545,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.PresentacionCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.PresentacionCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -247,7 +591,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -278,13 +622,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.PresentacionCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.PresentacionCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -353,7 +697,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -373,13 +717,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.ProductoCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.ProductoCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -419,7 +763,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -450,7 +794,7 @@
       },
       {
         "Name": "productoUpdatedto",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.ProductoUpdateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.ProductoUpdateDTO",
         "IsRequired": true
       }
     ],
@@ -525,7 +869,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -545,13 +889,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.ServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.ServicioCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -591,7 +935,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -622,13 +966,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.ServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.ServicioCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -697,7 +1041,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -717,13 +1061,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TimbradoCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TimbradoCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -763,7 +1107,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -794,13 +1138,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TimbradoCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TimbradoCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -869,7 +1213,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -889,13 +1233,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoImpuestoCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoImpuestoCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -935,7 +1279,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -961,18 +1305,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int16",
         "IsRequired": true
       },
       {
         "Name": "UpdateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoImpuestoCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoImpuestoCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1032,178 +1376,6 @@
     ]
   },
   {
-    "ContainingType": "SistemaFacturacion_API.Controllers.TipoProductoController",
-    "Method": "GetTipoProducto",
-    "RelativePath": "api/TipoProducto",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.TipoProductoController",
-    "Method": "CrearTipoProducto",
-    "RelativePath": "api/TipoProducto",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoProductoCreateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 201
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 500
-      }
-    ]
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.TipoProductoController",
-    "Method": "GetTipoProductoById",
-    "RelativePath": "api/TipoProducto/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 204
-      }
-    ],
-    "EndpointName": "GetTipoProductoById"
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.TipoProductoController",
-    "Method": "ActualizarTipoProducto",
-    "RelativePath": "api/TipoProducto/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoProductoCreateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 201
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 500
-      }
-    ]
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.TipoProductoController",
-    "Method": "EliminarTipoProducto",
-    "RelativePath": "api/TipoProducto/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
     "ContainingType": "SistemaFacturacion_API.Controllers.TipoServicioController",
     "Method": "GetTipoServicio",
     "RelativePath": "api/TipoServicio",
@@ -1213,7 +1385,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1233,13 +1405,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoServicioCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1279,7 +1451,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1310,13 +1482,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.TipoServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoServicioCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1385,7 +1557,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1405,13 +1577,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.UnidadMedidaCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.UnidadMedidaCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1451,7 +1623,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1482,13 +1654,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.UnidadMedidaCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.UnidadMedidaCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1557,73 +1729,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
-    "Method": "RegistrarUsuario",
-    "RelativePath": "api/Usuario",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.UsuarioCreateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 201
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 500
-      }
-    ]
-  },
-  {
-    "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
-    "Method": "Autenticar",
-    "RelativePath": "api/Usuario/Autenticar",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "autorizacion",
-        "Type": "SistemaFacturacion_API.Modelos.Custom.AutorizacionRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1636,20 +1742,20 @@
   {
     "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
     "Method": "GetUsuarioById",
-    "RelativePath": "api/Usuario/id:int",
+    "RelativePath": "api/Usuario/id:string",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1675,13 +1781,13 @@
     "Parameters": [
       {
         "Name": "loginDto",
-        "Type": "SistemaFacturacion_API.Modelos.DTO.LoginDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.LoginDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Modelos.APIResponse",
+        "Type": "SistemaFacturacion_Model.Modelos.Custom.AutorizacionResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1693,18 +1799,134 @@
   },
   {
     "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
-    "Method": "ObtenerRefreshToken",
-    "RelativePath": "api/Usuario/ObtenerRefreshToken",
+    "Method": "RegistrarUsuario",
+    "RelativePath": "api/Usuario/Registrar",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "resquest",
-        "Type": "SistemaFacturacion_API.Modelos.Custom.RefreshTokenRequest",
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.UsuarioRegistroDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.VentaController",
+    "Method": "GetVentas",
+    "RelativePath": "api/Venta",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.VentaController",
+    "Method": "CrearVenta",
+    "RelativePath": "api/Venta",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.VentaCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.VentaController",
+    "Method": "GetVentasById",
+    "RelativePath": "api/Venta/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "EndpointName": "GetVentasById"
   }
 ]

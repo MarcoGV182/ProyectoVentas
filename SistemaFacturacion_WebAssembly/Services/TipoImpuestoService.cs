@@ -1,6 +1,6 @@
-﻿using SistemaFacturacion_Utilidad;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Models;
-using SistemaFacturacion_WebAssembly.Models.DTO;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 
 namespace SistemaFacturacion_WebAssembly.Services

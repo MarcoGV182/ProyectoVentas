@@ -31,7 +31,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTd>
-                            <MudTableSortLabel SortBy="new Func<PresentacionDTO, object>(x=> x.Idpresentacion)">
+                            <MudTableSortLabel SortBy="new Func<PresentacionDTO, object>(x=> x.PresentacionId)">
                                 Código
                             </MudTableSortLabel>
                         </MudTd>                        
@@ -43,7 +43,7 @@
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="PresentacionRow">
-                        <MudTd DataLabel="Codigo">@PresentacionRow.Idpresentacion</MudTd>
+                        <MudTd DataLabel="Codigo">@PresentacionRow.PresentacionId</MudTd>
                         <MudTd DataLabel="Descripcion">@PresentacionRow.Descripcion</MudTd>
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary"
@@ -59,7 +59,7 @@
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
 
@@ -134,7 +134,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar : {Presentacion.Descripcion}({Presentacion.Idpresentacion})",
+                Text = $"Eliminar : {Presentacion.Descripcion}({Presentacion.PresentacionId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -143,7 +143,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Presentacionservice.Eliminar<PresentacionDTO>(Presentacion.Idpresentacion);
+            var resultado = await _Presentacionservice.Eliminar<PresentacionDTO>(Presentacion.PresentacionId);
 
             if (resultado.isExitoso)
             {
