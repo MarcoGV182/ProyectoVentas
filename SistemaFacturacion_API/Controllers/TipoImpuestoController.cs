@@ -7,11 +7,14 @@ using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TipoImpuestoController : ControllerBase
     {
         private readonly ILogger<TipoImpuestoController> _logger;

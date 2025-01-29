@@ -7,7 +7,7 @@ namespace SistemaFacturacion_Model.Modelos
     public class Producto:Articulo
     {
         [MaxLength(50)]
-        public string Codigobarra { get; set; }
+        public string Codigobarra { get; set; } = "";
         public int Stockminimo { get; set; } 
         public int Stockactual { get; set; } = 0;
         public decimal PrecioCompra { get; set; } = 0;

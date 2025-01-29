@@ -8,12 +8,13 @@ using System.Net;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ProductoController : Controller
     {
         private readonly ILogger<ProductoController> _logger;

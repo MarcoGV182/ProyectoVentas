@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UnidadMedidaController : ControllerBase
     {
         private readonly ILogger<UnidadMedidaController> _logger;

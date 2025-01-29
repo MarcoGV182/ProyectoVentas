@@ -19,6 +19,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "8.0.7",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.4",
           "SistemaFacturacion_Model": "1.0.0",
+          "SistemaFacturacion_Utilidad": "1.0.0",
           "Swashbuckle.AspNetCore": "6.7.0",
           "System.IdentityModel.Tokens.Jwt": "8.0.1"
         },
@@ -773,6 +774,14 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "SistemaFacturacion_Utilidad/1.0.0": {
+        "runtime": {
+          "SistemaFacturacion_Utilidad.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -1280,6 +1289,11 @@
       "hashPath": "system.threading.channels.6.0.0.nupkg.sha512"
     },
     "SistemaFacturacion_Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SistemaFacturacion_Utilidad/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

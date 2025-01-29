@@ -5,7 +5,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class ServicioDTO
     {       
-        public int ServicioNro { get; set; }       
+        public int ServicioId { get; set; }       
         public string Descripcion { get; set; }
         public double Precio { get; set; }        
         public string Observacion { get; set; }        

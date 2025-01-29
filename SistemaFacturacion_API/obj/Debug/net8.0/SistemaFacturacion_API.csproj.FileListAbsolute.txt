@@ -127,3 +127,5 @@ D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\obj\Debug\net8.0\SistemaFacturacion_API.pdb
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\obj\Debug\net8.0\SistemaFacturacion_API.genruntimeconfig.cache
 D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\obj\Debug\net8.0\ref\SistemaFacturacion_API.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\SistemaFacturacion_Utilidad.dll
+D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_API\bin\Debug\net8.0\SistemaFacturacion_Utilidad.pdb

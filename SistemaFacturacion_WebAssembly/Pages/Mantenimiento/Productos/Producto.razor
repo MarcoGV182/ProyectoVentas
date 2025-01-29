@@ -1,8 +1,11 @@
 ﻿@page "/producto"
+@attribute [Authorize]
 @inject IProductoService _productoservice
 @inject IDialogService _dialogServicio
 @inject ISnackbar _snackBar
-@inject SweetAlertService Swal;
+@inject NavigationManager _navigationManager
+@inject SweetAlertService Swal; 
+
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
 
@@ -24,13 +27,20 @@
                     Striped="true" Bordered="true" 
                     Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
                     Loading="@_loading" LoadingProgressColor="Color.Info" >
-                    <ToolBarContent>
+                    @* <ToolBarContent>
                         <MudSpacer />
-                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent> *@
+                    <ToolBarContent>
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString2" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString3" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudSpacer />
+                        <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
                     </ToolBarContent>
                     <HeaderContent >
                         <MudTh Style="width: 5px;">
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Articulonro)">
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.ArticuloId)">
                                 Código
                             </MudTableSortLabel>
                          </MudTh>
@@ -60,7 +70,7 @@
                             </MudTableSortLabel>
                         </MudTh>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Precio)">
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioBase)">
                                 Precio
                             </MudTableSortLabel>
                         </MudTh>
@@ -94,16 +104,17 @@
                                Fecha Vencimiento
                             </MudTableSortLabel>
                         </MudTh>
+                        <MudTh>Acciones</MudTh>
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="productoRow">
-                        <MudTd DataLabel="Codigo">@productoRow.Articulonro</MudTd>
+                        <MudTd DataLabel="Codigo">@productoRow.ArticuloId</MudTd>
                         <MudTd DataLabel="Cod. de Barras">@productoRow.Codigobarra</MudTd>
                         <MudTd DataLabel="Descripcion">@productoRow.Descripcion</MudTd>
                         <MudTd DataLabel="Impuesto">@productoRow.TipoImpuesto.Descripcion</MudTd>
-                        <MudTd DataLabel="Tipo Producto">@((productoRow.Categoria?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="Categoria">@((productoRow.Categoria?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="Marca">@((productoRow.Marca?.Descripcion) ?? "")</MudTd>
-                        <MudTd DataLabel="Precio">@productoRow.Precio.ToString("N0")</MudTd>
+                        <MudTd DataLabel="Precio">@productoRow.PrecioBase.ToString("N0")</MudTd>
                         <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
                         <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
                         <MudTd DataLabel="Stock">@productoRow.Stockactual</MudTd>
@@ -136,6 +147,8 @@
 @code {
     List<ProductoDTO> listaproductos = new List<ProductoDTO>();
     private string searchString1 = "";
+    private string searchString2 = "";
+    private string searchString3 = "";
     private ProductoDTO selectedItem1 = null;
     private bool _loading = true;
 
@@ -156,35 +169,43 @@
         _loading = false;
     }
 
-    private bool FilterFunc1(ProductoDTO element) => FilterFunc(element, searchString1);
+    private bool FilterFunc1(ProductoDTO element) => FilterFunc(element, searchString1, searchString2, searchString3);
 
-    private bool FilterFunc(ProductoDTO element, string searchString)
+    private bool FilterFunc(ProductoDTO element, string searchString, string searchString_2, string searchString_3)
     {
-        if (string.IsNullOrWhiteSpace(searchString))
+        if (string.IsNullOrWhiteSpace(searchString) && string.IsNullOrWhiteSpace(searchString_2) && string.IsNullOrWhiteSpace(searchString_3))
             return true;
-        if (element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;        
-        /*if (element.productonro == Convert.ToInt32(searchString))
-            return true;*/
 
-        return false;
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase);
+        var matchesSearch2 = string.IsNullOrWhiteSpace(searchString_2) || element.Codigobarra.Contains(searchString_2, StringComparison.OrdinalIgnoreCase);
+        var matchesSearch3 = string.IsNullOrWhiteSpace(searchString_3) || (element.Categoria?.Descripcion.Contains(searchString_3, StringComparison.OrdinalIgnoreCase) ?? false);
+
+        return matchesSearch1 && matchesSearch2 && matchesSearch3;
+    }
+
+    private void LimpiarFiltros()
+    {
+        searchString1 = string.Empty;
+        searchString2 = string.Empty;
+        searchString3 = string.Empty;
     }
 
     private async Task AbrirNuevaproducto()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var dialogo = _dialogServicio.Show<MdProducto>("Nuevo registro", options);
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = await _dialogServicio.ShowAsync<MdProducto>("Nuevo registro", options);
         var resultado = await dialogo.Result;
 
         if (!resultado.Canceled)
         {
             await Obtenerproductos();
-        }
+        }*/
+        _navigationManager.NavigateTo($"/Producto/ABM");
     }
 
     private async Task AbrirEditarproducto(ProductoDTO producto)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
         var parametros = new DialogParameters { ["_producto"] = producto };
 
         var dialogo = _dialogServicio.Show<MdProducto>("Editar registro", parametros, options);
@@ -192,7 +213,8 @@
         if (!resultado.Canceled)
         {
             await Obtenerproductos();
-        }
+        }*/
+        _navigationManager.NavigateTo($"/Producto/ABM/{producto.ArticuloId}");
     }
 
     private async Task Eliminarproducto(ProductoDTO producto)
@@ -200,7 +222,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar la producto: {producto.Descripcion}({producto.Articulonro})",
+                Text = $"Eliminar la producto: {producto.Descripcion}({producto.ArticuloId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -209,7 +231,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _productoservice.Eliminar<ProductoDTO>(producto.Articulonro);
+            var resultado = await _productoservice.Eliminar<ProductoDTO>(producto.ArticuloId);
 
             if (resultado.isExitoso)
             {

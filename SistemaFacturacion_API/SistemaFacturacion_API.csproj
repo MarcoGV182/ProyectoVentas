@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SistemaFacturacion_Model\SistemaFacturacion_Model.csproj" />
+    <ProjectReference Include="..\SistemaFacturacion_Utilidad\SistemaFacturacion_Utilidad.csproj" />
   </ItemGroup>
 
 </Project>

@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_Categoria.Categorianro);
+        Console.WriteLine(_Categoria.CategoriaId);
     }
 
     
@@ -53,9 +53,9 @@
         string _mensaje = "";
         bool _resultado;
 
-        if (_Categoria.Categorianro != 0)
+        if (_Categoria.CategoriaId != 0)
         {
-            var response = await _CategoriaService.Actualizar<CategoriaProductoDTO>(_Categoria.Categorianro,_nuevoRegistro);
+            var response = await _CategoriaService.Actualizar<CategoriaProductoDTO>(_Categoria.CategoriaId,_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }

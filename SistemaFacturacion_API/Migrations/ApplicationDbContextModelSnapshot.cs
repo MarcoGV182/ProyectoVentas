@@ -73,70 +73,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("aspnetroleclaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("aspnetusers", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -222,6 +158,76 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("aspnetusertokens", (string)null);
                 });
 
+            modelBuilder.Entity("SistemaFacturacion_API.Usuario", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ColaboradorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColaboradorId")
+                        .IsUnique();
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("aspnetusers", (string)null);
+                });
+
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
                     b.Property<int>("ArticuloId")
@@ -303,30 +309,23 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Colaborador", b =>
                 {
-                    b.Property<int>("ColaboradorId")
+                    b.Property<int>("PersonaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ColaboradorId"));
 
                     b.Property<string>("Estado")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly?>("Fechaegreso")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Fechaegreso")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateOnly>("Fechaingreso")
-                        .HasColumnType("date");
-
-                    b.Property<int>("PersonaId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("Fechaingreso")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("Salario")
                         .HasColumnType("numeric");
 
-                    b.HasKey("ColaboradorId");
-
-                    b.HasIndex("PersonaId");
+                    b.HasKey("PersonaId");
 
                     b.ToTable("colaborador");
                 });
@@ -439,7 +438,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("HistorialTokenId");
 
-                    b.ToTable("historialesrefreshtokens");
+                    b.ToTable("HistorialRefreshToken");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Marca", b =>
@@ -566,6 +565,40 @@ namespace SistemaFacturacion_API.Migrations
                     b.ToTable("presentacion");
                 });
 
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("FechaGrab")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JwtId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("refreshtokens");
+                });
+
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -630,17 +663,17 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoDocumentoIdentidad", b =>
                 {
-                    b.Property<short>("TipoDocIdentidadId")
+                    b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoDocIdentidadId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Id"));
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("TipoDocIdentidadId");
+                    b.HasKey("Id");
 
                     b.ToTable("tipodocumentoidentidad");
                 });
@@ -671,16 +704,16 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoServicio", b =>
                 {
-                    b.Property<short>("TipoServicoId")
+                    b.Property<short>("TipoServicioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoServicoId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("TipoServicioId"));
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("text");
 
-                    b.HasKey("TipoServicoId");
+                    b.HasKey("TipoServicioId");
 
                     b.ToTable("tiposervicio");
                 });
@@ -879,7 +912,7 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("SistemaFacturacion_API.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -888,7 +921,7 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("SistemaFacturacion_API.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -903,7 +936,7 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("SistemaFacturacion_API.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -912,11 +945,20 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("SistemaFacturacion_API.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_API.Usuario", b =>
+                {
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Colaborador", "Colaborador")
+                        .WithOne()
+                        .HasForeignKey("SistemaFacturacion_API.Usuario", "ColaboradorId");
+
+                    b.Navigation("Colaborador");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
@@ -931,8 +973,8 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Colaborador", b =>
                 {
                     b.HasOne("SistemaFacturacion_Model.Modelos.Persona", "Persona")
-                        .WithMany()
-                        .HasForeignKey("PersonaId")
+                        .WithOne("Colaborador")
+                        .HasForeignKey("SistemaFacturacion_Model.Modelos.Colaborador", "PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1087,6 +1129,11 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
                     b.Navigation("PreciosPromocionales");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
+                {
+                    b.Navigation("Colaborador");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Presentacion", b =>

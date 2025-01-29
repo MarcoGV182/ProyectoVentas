@@ -58,9 +58,15 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy(myCors, builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
+    options.AddPolicy(myCors, policy =>
+    {
+        policy.WithOrigins("https://localhost:7147") // Solo el dominio permitido
+              .AllowAnyHeader()                     // Permitir todos los encabezados
+              .AllowAnyMethod()                     // Permitir todos los métodos HTTP
+              .AllowCredentials();                  // Permitir cookies o credenciales
+    });
 });
 
 builder.Services.InyectarDependencia(builder.Configuration);
@@ -97,7 +103,7 @@ builder.Services.AddAuthentication(config =>
 #endregion
 
 //Configurar el IdentityUser
-builder.Services.AddDefaultIdentity<IdentityUser>(option =>
+builder.Services.AddDefaultIdentity<Usuario>(option =>
 {
     option.SignIn.RequireConfirmedAccount = false;
     option.Password.RequireDigit = false;       // No requiere un dígito
@@ -122,12 +128,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(myCors);
+
 app.UseAuthentication();    
 
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors(myCors);
 
 app.Run();

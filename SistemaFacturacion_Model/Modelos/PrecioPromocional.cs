@@ -10,6 +10,6 @@
         public bool Activo { get; set; }
 
         // Relaciones
-        public Articulo Articulo { get; set; }
+        public virtual Articulo Articulo { get; set; }
     }
 }

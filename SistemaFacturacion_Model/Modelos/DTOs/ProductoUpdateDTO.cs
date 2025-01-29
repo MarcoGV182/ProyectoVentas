@@ -8,7 +8,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public string Descripcion { get; set; } = null!;
 
         [Required(ErrorMessage = "El precio del producto es obligatorio")]
-        public double Precio { get; set; }
+        public decimal PrecioBase { get; set; }
 
         [MaxLength(150)]
         public string Observacion { get; set; }
@@ -21,7 +21,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public int? Stockminimo { get; set; }
 
         [Required(ErrorMessage = "El precio de compra no puede ser nula")]
-        public double PrecioCompra { get; set; }
+        public decimal PrecioCompra { get; set; }
 
         public DateTime? Fechavencimiento { get; set; }
         public short? Idpresentacion { get; set; }

@@ -2,7 +2,7 @@
 {
     public class TipoServicioDTO
     {
-        public short TipoServicionro { get; set; }
+        public short TipoServicioId { get; set; }
 
         public string Descripcion { get; set; }
     }

@@ -9,12 +9,13 @@ using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using Microsoft.AspNetCore.Http.HttpResults;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TipoServicioController : ControllerBase
     {
         private readonly ILogger<TipoServicioController> _logger;
@@ -70,7 +71,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                     
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(p => p.TipoServicoId == id);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(p => p.TipoServicioId == id);
 
                 if (TipoServicio == null) 
                 {
@@ -98,7 +99,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTipoServicio([FromBody] TipoServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> CrearTipoServicio([FromBody] TablaMenorCreateDTO CreateDTO)
         {
             try
             {
@@ -125,7 +126,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _TipoServicio;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetTipoServicioById", new { id = _TipoServicio.TipoServicoId }, _response);
+                return CreatedAtRoute("GetTipoServicioById", new { id = _TipoServicio.TipoServicioId }, _response);
             }
             catch (Exception ex)
             {
@@ -143,7 +144,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTipoServicio(int id,[FromBody] TipoServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarTipoServicio(int id,[FromBody] TablaMenorCreateDTO CreateDTO)
         {
             try
             {
@@ -154,7 +155,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicoId == id, tracked: false);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicioId == id, tracked: false);
                 if (TipoServicio == null)
                 {
                     _response.isExitoso = false;
@@ -163,7 +164,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 TipoServicio modelo = _mapper.Map<TipoServicio>(CreateDTO);
-                modelo.TipoServicoId = (short)id;
+                modelo.TipoServicioId = (short)id;
 
                 await _TipoServicioRepositorio.Actualizar(modelo);               
 
@@ -197,7 +198,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicoId == id, tracked: false);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicioId == id, tracked: false);
                 if (TipoServicio == null)
                 {
                     _response.isExitoso = false;

@@ -25,11 +25,13 @@ namespace SistemaFacturacion_Model.Modelos
         public short? IdUsuarioMod { get; set; }
         public short? IdTipoDocIdentidad { get; set; }
         [ForeignKey(nameof(IdTipoDocIdentidad))]
-        public TipoDocumentoIdentidad TipoDocumentoIdentidad { get; set; }
+        public virtual TipoDocumentoIdentidad TipoDocumentoIdentidad { get; set; }
 
         public short? IdCiudad { get; set; }
         [ForeignKey(nameof(IdCiudad))]
         public Ciudad Ciudad { get; set; }
+        // Relación con Colaborador
+        public virtual Colaborador Colaborador { get; set; }
 
 
 

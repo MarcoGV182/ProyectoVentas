@@ -8,12 +8,13 @@ using SistemaFacturacion_API.Repositorio.IRepositorio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class VentaController : Controller
     {
         private readonly ILogger<VentaController> _logger;

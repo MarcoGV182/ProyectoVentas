@@ -7,7 +7,7 @@ namespace SistemaFacturacion_Model.Modelos
     public class TipoDocumentoIdentidad
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]        
-        public short TipoDocIdentidadId { get; set; }
+        public short Id { get; set; }
         [MaxLength(100)]
         public string Descripcion { get; set; }
     }

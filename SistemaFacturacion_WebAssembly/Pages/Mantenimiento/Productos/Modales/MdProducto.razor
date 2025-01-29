@@ -20,15 +20,15 @@
                               AdornmentIcon="@Icons.Material.Filled.Badge"
                               For="@(()=>_producto.Descripcion)" />
 
-                <MudNumericField @bind-Value="@_producto.Precio"
+                <MudNumericField @bind-Value="@_producto.PrecioBase"
                               Class="mb-3"
                               Label="Precio"
                               Variant="Variant.Outlined"
                               Adornment="Adornment.End"
                               AdornmentText="Gs"
-                              For="@(()=>_producto.Precio)" />
+                              For="@(()=>_producto.PrecioBase)" />
 
-                @if (_producto.Articulonro == 0)
+                @if (_producto.ArticuloId == 0)
                 {
                     <MudNumericField @bind-Value="@_producto.PrecioCompra"
                                      Class="mb-3"
@@ -169,18 +169,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_producto.Articulonro);
+        Console.WriteLine(_producto.ArticuloId);
         await ObtenerListados();
 
-        if (_producto.Articulonro != 0)
+        if (_producto.ArticuloId != 0)
         {
             try
             {
                 marcaSeleccionada = _producto.Marca == null ? null : ListaMarcas.FirstOrDefault(p => p.MarcaId == _producto.Marca.MarcaId);
                 impuestoSeleccionado = _producto.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoId == _producto.TipoImpuesto.TipoimpuestoId);
                 presentacionSeleccionada = _producto.Presentacion == null ? null : ListaPresentacion.FirstOrDefault(p => p.PresentacionId == _producto.Presentacion.PresentacionId);
-                CategoriaSeleccionado = _producto.Categoria == null ? null: ListaCategoria.FirstOrDefault(p => p.Categorianro == _producto.Categoria.CategoriaId);
-                unidadMedidaSeleccionada = _producto.UnidadMedida == null ? null : ListaUnidadMedida.FirstOrDefault(p => p.UnidadmedidaId == _producto.UnidadMedida.UnidadMedidaId);
+                CategoriaSeleccionado = _producto.Categoria == null ? null: ListaCategoria.FirstOrDefault(p => p.CategoriaId == _producto.Categoria.CategoriaId);
+                unidadMedidaSeleccionada = _producto.UnidadMedida == null ? null : ListaUnidadMedida.FirstOrDefault(p => p.UnidadMedidaId == _producto.UnidadMedida.UnidadMedidaId);
                 //estadoSeleccionado = _producto.Estado;
             }
             catch (Exception ex)
@@ -240,11 +240,11 @@
         string _mensaje = "";
         bool _resultado;
 
-        if (_producto.Articulonro != 0)
+        if (_producto.ArticuloId != 0)
         {
             ProductoUpdateDTO _editRegistro = new ProductoUpdateDTO();
             _editRegistro.Descripcion = _producto.Descripcion;
-            _editRegistro.Precio = _producto.Precio;
+            _editRegistro.PrecioBase = _producto.PrecioBase;
             _editRegistro.Observacion = _producto.Observacion;
             _editRegistro.Estado = _producto.Estado;
             _editRegistro.Codigobarra = _producto.Codigobarra;
@@ -253,11 +253,11 @@
             _editRegistro.Fechavencimiento = _producto.FechaVencimiento;
             _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
             _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
-            _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.Categorianro : null;
-            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadmedidaId : null;
+            _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
+            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
-            var response = await _productoService.Actualizar<ProductoDTO>(_producto.Articulonro, _editRegistro);
+            var response = await _productoService.Actualizar<ProductoDTO>(_producto.ArticuloId, _editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
@@ -265,7 +265,7 @@
         {
             ProductoCreateDTO _nuevoRegistro = new ProductoCreateDTO();
             _nuevoRegistro.Descripcion = _producto.Descripcion;
-            _nuevoRegistro.Precio = _producto.Precio;
+            _nuevoRegistro.PrecioBase = _producto.PrecioBase;
             _nuevoRegistro.Observacion = _producto.Observacion;
             _nuevoRegistro.Estado = _producto.Estado;
             _nuevoRegistro.Codigobarra = _producto.Codigobarra;
@@ -274,8 +274,8 @@
             _nuevoRegistro.Fechavencimiento = _producto.FechaVencimiento;
             _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
             _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
-            _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.Categorianro : null;
-            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadmedidaId : null;
+            _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
+            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
             var response = await _productoService.Crear<ProductoDTO>(_nuevoRegistro);

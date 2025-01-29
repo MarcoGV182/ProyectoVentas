@@ -2,7 +2,7 @@
 {
     public class CategoriaProductoDTO
     {
-        public short Categorianro { get; set; }
+        public short CategoriaId { get; set; }
 
         public string Descripcion { get; set; }
     }

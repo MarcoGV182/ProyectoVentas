@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -35,7 +35,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -75,7 +75,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -112,7 +112,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -181,7 +181,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -207,7 +207,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -247,7 +247,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -284,7 +284,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -353,7 +353,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -379,7 +379,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -419,7 +419,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -456,7 +456,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -525,7 +525,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -551,7 +551,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -591,7 +591,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -628,7 +628,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -697,7 +697,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -723,7 +723,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -763,7 +763,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -869,7 +869,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -895,7 +895,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -935,7 +935,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -972,7 +972,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1041,7 +1041,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1067,7 +1067,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1107,7 +1107,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1144,7 +1144,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1204,6 +1204,178 @@
     ]
   },
   {
+    "ContainingType": "SistemaFacturacion_API.Controllers.TipoDocumentoIdentidadController",
+    "Method": "GetTipoDocumentoIdentidad",
+    "RelativePath": "api/TipoDocumentoIdentidad",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.TipoDocumentoIdentidadController",
+    "Method": "CrearTipoDocumentoIdentidad",
+    "RelativePath": "api/TipoDocumentoIdentidad",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TablaMenorCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.TipoDocumentoIdentidadController",
+    "Method": "GetTipoDocumentoIdentidadById",
+    "RelativePath": "api/TipoDocumentoIdentidad/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "EndpointName": "GetTipoDocumentoIdentidadById"
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.TipoDocumentoIdentidadController",
+    "Method": "ActualizarTipoDocumentoIdentidad",
+    "RelativePath": "api/TipoDocumentoIdentidad/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "CreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TablaMenorCreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.TipoDocumentoIdentidadController",
+    "Method": "EliminarTipoDocumentoIdentidad",
+    "RelativePath": "api/TipoDocumentoIdentidad/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
     "ContainingType": "SistemaFacturacion_API.Controllers.TipoImpuestoController",
     "Method": "ObtenerTipoImpuesto",
     "RelativePath": "api/TipoImpuesto",
@@ -1213,7 +1385,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1239,7 +1411,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1279,7 +1451,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1316,7 +1488,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1385,7 +1557,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1405,13 +1577,13 @@
     "Parameters": [
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TablaMenorCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1451,7 +1623,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1482,13 +1654,13 @@
       },
       {
         "Name": "CreateDTO",
-        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TipoServicioCreateDTO",
+        "Type": "SistemaFacturacion_Model.Modelos.DTOs.TablaMenorCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1557,7 +1729,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1583,7 +1755,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1623,7 +1795,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1660,7 +1832,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1729,7 +1901,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1755,7 +1927,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1799,6 +1971,32 @@
   },
   {
     "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
+    "Method": "RefreshToken",
+    "RelativePath": "api/Usuario/RefreshToken",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tokenrequest",
+        "Type": "SistemaFacturacion_Model.DTOs.TokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SistemaFacturacion_Model.Modelos.Custom.AutorizacionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaFacturacion_API.Controllers.UsuarioController",
     "Method": "RegistrarUsuario",
     "RelativePath": "api/Usuario/Registrar",
     "HttpMethod": "POST",
@@ -1813,7 +2011,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1847,7 +2045,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1873,7 +2071,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1913,7 +2111,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SistemaFacturacion_API.Datos.APIResponse",
+        "Type": "SistemaFacturacion_Utilidad.APIResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

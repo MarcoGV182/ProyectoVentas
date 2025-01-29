@@ -3,12 +3,12 @@
 namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class LoginDTO
-    {
-        [Required]
+    {   
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La dirección de correo es requerida")]
+        [EmailAddress]
         public string DireccionEmail { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La constraseña es requerida")]
         public string Password { get; set; }
     }
 }

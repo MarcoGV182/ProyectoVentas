@@ -6,7 +6,7 @@
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Tipos de Productos</MudText>
+    <MudText Typo="Typo.h5" GutterBottom="true">Categoria de Productos</MudText>
 
     <MudPaper Elevation="3" Class="pa-4" Width="100%">
         <MudGrid>
@@ -31,7 +31,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTd>
-                            <MudTableSortLabel SortBy="new Func<CategoriaProductoDTO, object>(x=> x.Categorianro)">
+                            <MudTableSortLabel SortBy="new Func<CategoriaProductoDTO, object>(x=> x.CategoriaId)">
                                 Código
                             </MudTableSortLabel>
                         </MudTd>                        
@@ -43,7 +43,7 @@
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="CategoriaRow">
-                        <MudTd DataLabel="Codigo">@CategoriaRow.Categorianro</MudTd>
+                        <MudTd DataLabel="Codigo">@CategoriaRow.CategoriaId</MudTd>
                         <MudTd DataLabel="Descripcion">@CategoriaRow.Descripcion</MudTd>
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary"
@@ -107,7 +107,7 @@
     private async Task CrearNuevoRegistro()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var dialogo = _dialogServicio.Show<MdCategoriaProducto>("Nuevo Tipo de Producto", options);
+        var dialogo = _dialogServicio.Show<MdCategoriaProducto>("Nuevo registro", options);
         var resultado = await dialogo.Result;
 
         if (!resultado.Canceled)
@@ -134,7 +134,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar : {Categoria.Descripcion}({Categoria.Categorianro})",
+                Text = $"Eliminar : {Categoria.Descripcion}({Categoria.CategoriaId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -143,7 +143,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Categoriaservice.Eliminar<CategoriaProductoDTO>(Categoria.Categorianro);
+            var resultado = await _Categoriaservice.Eliminar<CategoriaProductoDTO>(Categoria.CategoriaId);
 
             if (resultado.isExitoso)
             {

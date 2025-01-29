@@ -13,20 +13,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
+using SistemaFacturacion_Utilidad;
+using SistemaFacturacion_Model.DTOs;
 
 namespace SistemaFacturacion_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase
     {
         private readonly IAutorizacionService _autorizacionService;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly IMapper _mapper;
         protected APIResponse _response;
 
-        public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper, UserManager<IdentityUser> userManager = null)
+        public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper, UserManager<Usuario> userManager = null)
         {
             _autorizacionService = autorizacionService;
             _usuarioRepositorio = usuarioRepositorio;
@@ -95,7 +99,7 @@ namespace SistemaFacturacion_API.Controllers
 
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -137,7 +141,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 //Mapear objecto recibido por parametro
-                IdentityUser _UsuarioNuevo = new IdentityUser();
+                Usuario _UsuarioNuevo = new Usuario();
                 _UsuarioNuevo.Email = CreateDTO.DireccionEmail;
                 _UsuarioNuevo.UserName = CreateDTO.UserName;
 
@@ -166,8 +170,8 @@ namespace SistemaFacturacion_API.Controllers
             }
 
         }
-       
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("IniciarSesion")]
         public async Task<ActionResult<AutorizacionResponse>> IniciarSesion([FromBody] LoginDTO loginDto)
@@ -202,8 +206,9 @@ namespace SistemaFacturacion_API.Controllers
                 #endregion
 
                 //Se genera el token para devolver al usuario
-                var resultToken = _autorizacionService.GenerarToken(existingUser);
-                _response.Token = resultToken;
+                var resultToken = await _autorizacionService.GenerarTokenAsync(existingUser);
+                _response.Token = resultToken.Token;
+                _response.RefreshToken = resultToken.RefreshToken;
                 _response.Resultado = true;
 
                 return Ok(_response);
@@ -215,5 +220,48 @@ namespace SistemaFacturacion_API.Controllers
                 return BadRequest(_response);
             }        
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("RefreshToken")]
+        public async Task<ActionResult<AutorizacionResponse>> RefreshToken([FromBody] TokenRequest tokenrequest)
+        {
+            AutorizacionResponse _response = new AutorizacionResponse();
+            try
+            {
+                //Validar el estado del modelo
+                if (!ModelState.IsValid)
+                {
+                    _response.Resultado = false;
+                    _response.Mensaje = new List<string>() { "Parametros inválidos" };
+                    return BadRequest(_response);
+                }
+
+
+                var result = await _autorizacionService.VerificarTokenAsync(tokenrequest);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    _response.Resultado = false;
+                    _response.Mensaje = new List<string>() { "Parametros inválidos" };
+                    return BadRequest(_response);
+
+                }
+
+                var DbUser = await _userManager.FindByIdAsync(result);
+
+                _response = await _autorizacionService.GenerarTokenAsync(DbUser);
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Resultado = false;
+                _response.Mensaje = new List<string>() { ex.Message.ToString() };
+                return BadRequest(_response);
+            }
+        }
+
+       
     }
 }

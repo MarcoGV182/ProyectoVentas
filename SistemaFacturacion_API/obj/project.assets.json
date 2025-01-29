@@ -1377,6 +1377,16 @@
         "runtime": {
           "bin/placeholder/SistemaFacturacion_Model.dll": {}
         }
+      },
+      "SistemaFacturacion_Utilidad/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/SistemaFacturacion_Utilidad.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SistemaFacturacion_Utilidad.dll": {}
+        }
       }
     }
   },
@@ -3797,6 +3807,11 @@
       "type": "project",
       "path": "../SistemaFacturacion_Model/SistemaFacturacion_Model.csproj",
       "msbuildProject": "../SistemaFacturacion_Model/SistemaFacturacion_Model.csproj"
+    },
+    "SistemaFacturacion_Utilidad/1.0.0": {
+      "type": "project",
+      "path": "../SistemaFacturacion_Utilidad/SistemaFacturacion_Utilidad.csproj",
+      "msbuildProject": "../SistemaFacturacion_Utilidad/SistemaFacturacion_Utilidad.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3812,6 +3827,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.7",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 8.0.4",
       "SistemaFacturacion_Model >= 1.0.0",
+      "SistemaFacturacion_Utilidad >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.7.0",
       "System.IdentityModel.Tokens.Jwt >= 8.0.1"
     ]
@@ -3850,6 +3866,9 @@
           "projectReferences": {
             "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_Model\\SistemaFacturacion_Model.csproj": {
               "projectPath": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_Model\\SistemaFacturacion_Model.csproj"
+            },
+            "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_Utilidad\\SistemaFacturacion_Utilidad.csproj": {
+              "projectPath": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_Utilidad\\SistemaFacturacion_Utilidad.csproj"
             }
           }
         }

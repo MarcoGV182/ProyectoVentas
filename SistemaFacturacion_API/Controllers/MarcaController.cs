@@ -8,12 +8,14 @@ using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_Utilidad;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    //[Authorize
     public class MarcaController : ControllerBase
     {
         private readonly ILogger<MarcaController> _logger;

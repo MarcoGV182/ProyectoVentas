@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PresentacionController : ControllerBase
     {
         private readonly ILogger<PresentacionController> _logger;

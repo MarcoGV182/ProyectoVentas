@@ -5,7 +5,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class UnidadMedidaDTO
     {      
-        public short UnidadmedidaId { get; set; }
+        public short UnidadMedidaId { get; set; }
 
         public string Descripcion { get; set; }
     }
