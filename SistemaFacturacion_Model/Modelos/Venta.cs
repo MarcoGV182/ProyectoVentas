@@ -18,6 +18,8 @@ namespace SistemaFacturacion_Model.Modelos
         public int ColaboradorId { get; set; }
         public Colaborador Vendedor { get; set; }
         public string Observacion { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalIVA { get; set; }
         public short TimbradoId { get; set; }
         [ForeignKey(nameof(TimbradoId))]
         public Timbrado Timbrado { get; set; }

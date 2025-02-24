@@ -15,8 +15,8 @@ namespace SistemaFacturacion_Model.Modelos
         [Required]
         public string Descripcion { get; set; }
 
-        public double Porcentajeiva { get; set; } = 0;
+        public decimal Porcentajeiva { get; set; } = 0;
 
-        public double Baseimponible { get; set; } = 0;
+        public decimal Baseimponible { get; set; } = 0;
     }
 }

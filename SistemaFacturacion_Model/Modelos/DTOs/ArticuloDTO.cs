@@ -20,7 +20,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public DateTime? Fecharegistro { get; set; }
         public DateTime? Fechaultactualizacion { get; set; }
         [Required(ErrorMessage = "Favor seleccione el Impuesto del Producto")]
-        public TipoImpuesto TipoImpuesto { get; set; }
+        public TipoImpuestoDTO TipoImpuesto { get; set; }
         //public ICollection<PrecioPromocional> PreciosPromocionales { get; set; }
     }
 }

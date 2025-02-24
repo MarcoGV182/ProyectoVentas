@@ -1,5 +1,4 @@
 ﻿@page "/ventas"
-@using SistemaFacturacion_Model.Modelos
 @using MudBlazor
 @inject ISnackbar _Snackbar
 @inject IVentaService _VentaService
@@ -21,7 +20,6 @@
                         Buscar Cliente
                     </MudButton>
                 </MudItem>
-
 
                 <MudItem xs="12" sm="4">
                     <MudNumericField Label="Establecimiento" @bind-Value="@venta.Establecimiento" 
@@ -97,8 +95,8 @@
     private List<DetalleVentaCreateDTO> detalles = new List<DetalleVentaCreateDTO>();
     private List<ClienteDTO> clientes = new List<ClienteDTO>();
     private ClienteDTO clienteSeleccionado = null;
-    private List<Colaborador> colaboradores = new List<Colaborador>();
-    private List<ArticuloDTO> articulos = new List<ArticuloDTO>();    
+    private List<ArticuloDTO> articulos = new List<ArticuloDTO>();
+    private Shared utilidades = new Shared();
     private string ClienteFormateado =>
     clienteSeleccionado != null
         ? $"{clienteSeleccionado.Apellido}, {clienteSeleccionado.Nombre} ({clienteSeleccionado.PersonaId})"
@@ -111,6 +109,7 @@
         if (articuloSeleccionado != null)
         {
             detalle.PrecioBase = articuloSeleccionado.PrecioBase;
+            detalle.TipoimpuestoId = articuloSeleccionado.TipoImpuesto.TipoimpuestoId;
             CalcularTotales(); // Actualizar los totales
         }
     }
@@ -144,8 +143,20 @@
     {
         foreach (var detalle in detalles)
         {
+            var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
             detalle.Total = detalle.Cantidad * (decimal)detalle.PrecioBase;
-            // Aquí agregar cálculos de impuestos según sea necesario
+            detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
+                                                                 articuloSeleccionado.TipoImpuesto.Porcentajeiva,
+                                                                 articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                 "GRAV");
+            detalle.ImporteIVA = utilidades.CalcularImpuesto(detalle.Total,
+                                                             articuloSeleccionado.TipoImpuesto.Porcentajeiva,
+                                                             articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                             "IVA");
+            detalle.ImporteExento = utilidades.CalcularImpuesto(detalle.Total,
+                                                             articuloSeleccionado.TipoImpuesto.Porcentajeiva,
+                                                                articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                "EXEN");
         }
     }
 

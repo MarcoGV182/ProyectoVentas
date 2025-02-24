@@ -14,11 +14,11 @@ namespace SistemaFacturacion_Model.Modelos
         public decimal Cantidad { get; set; }
         public double Precio { get; set; } = 0;
         [Required]
-        public short? TipoimpuestoNro { get; set; }
-        [ForeignKey(nameof(TipoimpuestoNro))]
+        public short? TipoimpuestoId { get; set; }
+        [ForeignKey(nameof(TipoimpuestoId))]
         public TipoImpuesto TipoImpuesto { get; set; }
-        public int Articulonro { get; set; }
-        [ForeignKey(nameof(Articulonro))]
+        public int ArticuloId { get; set; }
+        [ForeignKey(nameof(ArticuloId))]
         public Articulo Articulo { get; set; }
         public decimal ImporteIVA { get; set; } = 0;
         public decimal ImporteGravado { get; set; } = 0;
