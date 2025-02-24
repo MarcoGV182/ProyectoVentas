@@ -1,4 +1,7 @@
 ﻿using Blazored.LocalStorage;
+using SistemaFacturacion_WebAssembly.Services;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace SistemaFacturacion_WebAssembly.Models
@@ -6,25 +9,41 @@ namespace SistemaFacturacion_WebAssembly.Models
     public class AuthTokenHandler : DelegatingHandler
     {
         private readonly ILocalStorageService _localStorageService;
+        private readonly UsuarioEstadoService _userStateService;
 
-        public AuthTokenHandler(ILocalStorageService localStorageService)
+        public AuthTokenHandler(ILocalStorageService localStorageService, UsuarioEstadoService userStateService)
         {
             _localStorageService = localStorageService;
+            _userStateService = userStateService;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            // Obtiene el token desde el almacenamiento local
-            var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
+            var accessToken = _userStateService.Token ?? await _localStorageService.GetItemAsync<string>("accessToken");
 
             if (!string.IsNullOrEmpty(accessToken))
             {
-                // Agrega el token al encabezado Authorization
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.ReadJwtToken(accessToken);
+
+                if (token.ValidTo < DateTime.UtcNow) // Token expirado
+                {
+                    await _localStorageService.RemoveItemAsync("accessToken");
+                    throw new UnauthorizedAccessException("El token ha expirado.");
+                }
+
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
 
-            // Continúa la solicitud
-            return await base.SendAsync(request, cancellationToken);
+            var response = await base.SendAsync(request, cancellationToken);
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _localStorageService.RemoveItemAsync("accessToken");
+                throw new UnauthorizedAccessException("Acceso no autorizado.");
+            }
+
+            return response;
         }
     }
 

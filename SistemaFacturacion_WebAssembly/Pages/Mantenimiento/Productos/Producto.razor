@@ -104,6 +104,11 @@
                                Fecha Vencimiento
                             </MudTableSortLabel>
                         </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Estado)">
+                                Estado
+                            </MudTableSortLabel>
+                        </MudTh>
                         <MudTh>Acciones</MudTh>
                         <MudTh></MudTh>
                     </HeaderContent>
@@ -121,6 +126,7 @@
                         <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "": productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
+                        <MudTd DataLabel="Estado">@((productoRow.Estado == "A") ? "Activo" : "Inactivo")</MudTd>
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary" 
                                 StartIcon="@Icons.Material.Filled.Edit"

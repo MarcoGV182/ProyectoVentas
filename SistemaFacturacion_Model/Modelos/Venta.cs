@@ -25,7 +25,7 @@ namespace SistemaFacturacion_Model.Modelos
         public string EsAutoimprenta { get; set; }
         [MaxLength(8)]
         public string Estado { get; set; }
-        public DateTime FechaRegistro { get; set; }
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
         public short UsuarioIdRegistro { get; set; }       
         public DateTime? FechaModificacion { get; set; }
         public short? UsuarioIdModificacion { get; set; }       

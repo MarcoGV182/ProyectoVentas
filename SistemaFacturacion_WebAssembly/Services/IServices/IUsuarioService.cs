@@ -1,5 +1,4 @@
-﻿using SistemaFacturacion_Model.DTOs;
-using SistemaFacturacion_Model.Modelos.Custom;
+﻿using SistemaFacturacion_Model.Modelos.Custom;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Models;

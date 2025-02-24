@@ -22,16 +22,18 @@
         <MudPaper Class="pa-4" Style="height: auto; overflow-y: auto;">
             <EditForm Model="producto" OnValidSubmit="Guardar">
                 <DataAnnotationsValidator />
-                <MudGrid Spacing="2">
 
-                    <!-- Campo 0: Código -->
-                    @if (producto.ArticuloId > 0)
-                    {
+                <!-- Campo 0: Código -->
+                @if (producto.ArticuloId > 0)
+                {
+                    <MudGrid Spacing="4">
                         <MudItem xs="12" md="6">
                             <MudInput Value="@producto.ArticuloId" Disabled="true" />
                         </MudItem>
-                    }
+                    </MudGrid>
+                }
 
+                <MudGrid Spacing="2">
                     <!-- Campo 1: Descripción -->
                     <MudItem xs="12" md="6">
                         <MudTextField Label="Descripción" @bind-Value="@producto.Descripcion" For="@(() => producto.Descripcion)"/>

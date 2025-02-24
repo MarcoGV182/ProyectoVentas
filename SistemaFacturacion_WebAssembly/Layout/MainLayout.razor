@@ -1,6 +1,9 @@
 ﻿@inherits LayoutComponentBase
 @inject SweetAlertService Swal;
 @inject NavigationManager _navigationManager
+@inject ILocalStorageService _localStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UsuarioEstadoService UserStateService
 
 
 <MudThemeProvider />
@@ -12,6 +15,11 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
+        <!-- Mostrar el nombre del usuario -->
+        @if (UserStateService.CurrentUser != null)
+        {
+            <MudText Typo="Typo.body1" Class="mr-3">Bienvenido, @UserStateService.CurrentUser.UserName</MudText>
+        }
         <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" OnClick="CerrarSesion" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
@@ -48,7 +56,10 @@
 
         if (result.IsConfirmed)
         {
-            _navigationManager.NavigateTo("/");
+            await _localStorageService.RemoveItemAsync("accessToken");
+            UserStateService.ClearState();
+            ((CustomAuthStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+            _navigationManager.NavigateTo("/login");           
         }
     }
 }

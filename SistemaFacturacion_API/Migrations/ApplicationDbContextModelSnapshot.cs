@@ -891,10 +891,10 @@ namespace SistemaFacturacion_API.Migrations
                 {
                     b.HasBaseType("SistemaFacturacion_Model.Modelos.Articulo");
 
-                    b.Property<short>("TipoServicoNro")
+                    b.Property<short>("TipoServicioId")
                         .HasColumnType("smallint");
 
-                    b.HasIndex("TipoServicoNro");
+                    b.HasIndex("TipoServicioId");
 
                     b.ToTable("articulo");
 
@@ -1119,7 +1119,7 @@ namespace SistemaFacturacion_API.Migrations
                 {
                     b.HasOne("SistemaFacturacion_Model.Modelos.TipoServicio", "TipoServicio")
                         .WithMany()
-                        .HasForeignKey("TipoServicoNro")
+                        .HasForeignKey("TipoServicioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

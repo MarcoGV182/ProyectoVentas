@@ -1,7 +1,10 @@
 ﻿@page "/"
+@page "/login"
 @inject NavigationManager _navigationManager
 @inject IUsuarioService _usuarioServicio
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UsuarioEstadoService UserStateService
 
 @layout LoginLayout
 
@@ -87,6 +90,14 @@
         {   
             // Almacenar el token en local storage
             await _localStorage.SetItemAsync("accessToken", result.Token);
+
+            // Guardar los datos del usuario en el servicio de estado
+            UserStateService.SetCurrentUser(result.Usuario);
+            UserStateService.SetToken(result.Token);
+
+            // Notificar al AuthenticationStateProvider que el estado ha cambiado
+            ((CustomAuthStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(result.Token);
+
             _navigationManager.NavigateTo("/producto");
         }   
         else

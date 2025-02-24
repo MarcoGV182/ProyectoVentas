@@ -1,0 +1,170 @@
+﻿@inject IServicioService _servicioService
+@inject ITipoImpuestoService _tipoImpuestoService
+@inject ITipoServicioService _tipoServicioService
+@inject ISnackbar _snackBar
+
+<MudDialog Style="width:400px">
+    <DialogContent>
+        <MudContainer Style="max-height: 400; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_servicio" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <MudTextField @bind-Value="@_servicio.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_servicio.Descripcion)" />
+
+                <MudNumericField @bind-Value="@_servicio.PrecioBase"
+                              Class="mb-3"
+                              Label="Precio"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentText="Gs"
+                                 For="@(()=>_servicio.PrecioBase)" />
+
+                <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                    @if (ListaImpuestos.Any())
+                    {
+                        foreach (var rol in ListaImpuestos)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Tipo Servicio" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TipoServicioDTO" @bind-Value="tipoServicioSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                    @if (ListaTipoServicio.Any())
+                    {
+                        foreach (var rol in ListaTipoServicio)
+                        {
+                            <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudTextField @bind-Value="@_servicio.Observacion"
+                                 Class="mb-3"
+                                 Label="Observación"
+                                 Variant="Variant.Outlined"
+                                 Adornment="Adornment.End"
+                                 AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_servicio.Observacion)" />
+
+                <MudSelect Label="Estado" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" @bind-Value="_servicio.Estado"
+                           For="@(()=>_servicio.Estado)">
+                    <MudSelectItem Value="@("A")">Activo</MudSelectItem>
+                    <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
+                </MudSelect>
+                                              
+
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public ServicioDTO _servicio { get; set; } = new ServicioDTO();
+
+    public List<TipoServicioDTO> ListaTipoServicio { get; set; } = new List<TipoServicioDTO>();
+    public TipoServicioDTO tipoServicioSeleccionado { get; set; }
+
+    public List<TipoImpuestoDTO> ListaImpuestos { get; set; } = new List<TipoImpuestoDTO>();
+    public TipoImpuestoDTO impuestoSeleccionado { get; set; }    
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(_servicio.ArticuloId);
+        await ObtenerListados();
+
+        if (_servicio.ArticuloId != 0)
+        {
+            try
+            {
+                tipoServicioSeleccionado = _servicio.TipoServicio == null ? null : ListaTipoServicio.FirstOrDefault(p => p.TipoServicioId == _servicio.TipoServicio.TipoServicioId);
+                impuestoSeleccionado = _servicio.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoId == _servicio.TipoImpuesto.TipoimpuestoId);
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+           
+        }
+    }    
+
+    private async Task ObtenerListados()
+    {
+        try
+        {
+            var result = await _tipoServicioService.ObtenerTodos<List<TipoServicioDTO>>();
+            if (result.isExitoso)
+            {
+                ListaTipoServicio = (List<TipoServicioDTO>)result.Resultado;
+            }
+
+            result = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            if (result.isExitoso)
+            {
+                ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
+            }
+        }
+        catch (Exception ex)
+        {            
+            throw ex;
+        }
+        
+    }
+
+
+
+    private async Task Guardar()
+    {                
+        string _mensaje = "";
+        bool _resultado;
+
+        ServicioCreateDTO _editRegistro = new ServicioCreateDTO();
+        _editRegistro.Descripcion = _servicio.Descripcion;
+        _editRegistro.PrecioBase = _servicio.PrecioBase;
+        _editRegistro.Observacion = _servicio.Observacion;
+        _editRegistro.Estado = _servicio.Estado;
+        _editRegistro.TipoServicioId = tipoServicioSeleccionado != null ? tipoServicioSeleccionado.TipoServicioId : null;
+        _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+
+        if (_servicio.ArticuloId != 0)
+        {
+            var response = await _servicioService.Actualizar<ServicioDTO>(_servicio.ArticuloId, _editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {
+            var response = await _servicioService.Crear<ServicioDTO>(_editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

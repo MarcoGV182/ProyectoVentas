@@ -776,6 +776,9 @@
         }
       },
       "SistemaFacturacion_Utilidad/1.0.0": {
+        "dependencies": {
+          "System.IdentityModel.Tokens.Jwt": "8.0.1"
+        },
         "runtime": {
           "SistemaFacturacion_Utilidad.dll": {
             "assemblyVersion": "1.0.0",

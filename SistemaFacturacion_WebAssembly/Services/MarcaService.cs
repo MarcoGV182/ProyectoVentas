@@ -3,7 +3,6 @@ using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Newtonsoft.Json;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 using System;
 using System.Net.Http;

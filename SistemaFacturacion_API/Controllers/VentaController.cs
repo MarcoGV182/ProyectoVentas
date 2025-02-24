@@ -38,10 +38,10 @@ namespace SistemaFacturacion_API.Controllers
             //_logger.LogInformation("Obteniendo datos de las Ventas");
             try
             {
-                IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
+                IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
-                //_response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);
+                _response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);
 
                 return Ok(_response);
             }
@@ -130,7 +130,6 @@ namespace SistemaFacturacion_API.Controllers
 
                 //Parseo del DTO a la clase
                 var _Venta = _mapper.Map<Venta>(CreateDTO);
-                _Venta.FechaRegistro = DateTime.Now;
 
                 //Parseo del DTO a la clase
                 var _DetalleVenta = _mapper.Map<IEnumerable<DetalleVenta>>(CreateDTO.DetalleVenta);

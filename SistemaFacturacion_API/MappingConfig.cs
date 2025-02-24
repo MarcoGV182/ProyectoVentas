@@ -17,7 +17,7 @@ namespace SistemaFacturacion_API
             .ReverseMap();
 
             //Servicio
-            CreateMap<Servicio, ServicioDTO>().ForMember(dest => dest.ServicioId, opt => opt.MapFrom(src => src.ArticuloId)).ReverseMap();
+            CreateMap<Servicio, ServicioDTO>().ForMember(dest => dest.ArticuloId, opt => opt.MapFrom(src => src.ArticuloId)).ReverseMap();
             CreateMap<Servicio, ServicioCreateDTO>().ReverseMap();
 
 
@@ -59,7 +59,12 @@ namespace SistemaFacturacion_API
             CreateMap<Ciudad, CiudadDTO>().ReverseMap();
             CreateMap<Ciudad, CiudadCreateDTO>().ReverseMap();
 
+            //TipoDocumentoIdentidad,
             CreateMap<TipoDocumentoIdentidad, TablaMenorCreateDTO>().ReverseMap();
+
+            //Cliente,
+            CreateMap<Persona, ClienteDTO>().ReverseMap();
+            CreateMap<Persona, ClienteCreateDTO>().ReverseMap();
 
         }
     }

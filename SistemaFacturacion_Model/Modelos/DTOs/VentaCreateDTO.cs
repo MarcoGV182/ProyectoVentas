@@ -5,7 +5,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class VentaCreateDTO
     {
-        public int NroVenta { get; set; } 
+        public int Id { get; set; } 
         public string NroFactura { get; set; }
         public short Establecimiento { get; set; }
         public short PuntoExpedicion { get; set; }
@@ -17,7 +17,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public short TimbradoId { get; set; } 
         public string EsAutoimprenta { get; set; }
         public string Estado { get; set; }
-        public DateTime FechaRegistro { get; set; }
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
         public short UsuarioIdRegistro { get; set; }
         public short EmpresaId { get; set; }       
         public IEnumerable<DetalleVentaCreateDTO> DetalleVenta { get; set; }

@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
 using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_Model.DTOs;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -210,6 +209,13 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Token = resultToken.Token;
                 _response.RefreshToken = resultToken.RefreshToken;
                 _response.Resultado = true;
+                _response.Usuario = new UsuarioResponse()
+                {
+                    Id = existingUser.Id,
+                    Email = existingUser.Email,
+                    UserName = existingUser.UserName,
+                    ColaboradorId = existingUser.ColaboradorId
+                };
 
                 return Ok(_response);
             }

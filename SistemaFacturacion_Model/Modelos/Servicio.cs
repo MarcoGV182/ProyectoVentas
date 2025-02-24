@@ -4,8 +4,8 @@ namespace SistemaFacturacion_Model.Modelos
 {   
     public class Servicio:Articulo
     {
-        public short TipoServicoNro { get; set; }
-        [ForeignKey(nameof(TipoServicoNro))]
+        public short TipoServicioId { get; set; }
+        [ForeignKey(nameof(TipoServicioId))]
         public TipoServicio TipoServicio { get; set; }
     }
 }

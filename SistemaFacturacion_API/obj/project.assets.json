@@ -1381,6 +1381,9 @@
       "SistemaFacturacion_Utilidad/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "System.IdentityModel.Tokens.Jwt": "8.0.1"
+        },
         "compile": {
           "bin/placeholder/SistemaFacturacion_Utilidad.dll": {}
         },
@@ -3959,7 +3962,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

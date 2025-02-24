@@ -2,8 +2,8 @@
 
 namespace SistemaFacturacion_API.Repositorio.IRepositorio
 {
-    public interface ICiudadRepositorio: IRepositorioGenerico<Ciudad>
+    public interface IClienteRepositorio: IRepositorioGenerico<Persona>
     {
-        Task<Ciudad> Actualizar(Ciudad entidad);
+        Task<Persona> Actualizar(Persona entidad);
     }
 }

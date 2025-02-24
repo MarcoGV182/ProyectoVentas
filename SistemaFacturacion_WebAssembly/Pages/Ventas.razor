@@ -1,0 +1,191 @@
+﻿@page "/ventas"
+@using SistemaFacturacion_Model.Modelos
+@using MudBlazor
+@inject ISnackbar _Snackbar
+@inject IVentaService _VentaService
+@inject IClienteService _ClienteService
+@inject IArticuloService _ArticuloService
+@inject IDialogService _DialogService
+
+<MudForm @ref="_form">
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h5">Nueva Venta</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudGrid>
+                <!-- Sección de datos principales -->
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Cliente" Value="ClienteFormateado" Disabled="true" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AbrirModalBuscarCliente">
+                        Buscar Cliente
+                    </MudButton>
+                </MudItem>
+
+
+                <MudItem xs="12" sm="4">
+                    <MudNumericField Label="Establecimiento" @bind-Value="@venta.Establecimiento" 
+                    Required="true" Immediate="true"/>
+                </MudItem>
+
+                <MudItem xs="12" sm="4">
+                    <MudNumericField Label="Punto Expedición" @bind-Value="@venta.PuntoExpedicion" 
+                    Required="true" Immediate="true"/>
+                </MudItem>
+
+                <MudItem xs="12" sm="4">
+                    <MudSelect Label="Timbrado" @bind-Value="@venta.TimbradoId">
+                        <!-- Aquí cargarías los timbrados disponibles -->
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+
+            <!-- Sección de detalles de venta -->
+            <MudText Typo="Typo.h6" Class="mt-4">Detalles de Venta</MudText>
+
+            <MudTable Items="@detalles" Hover="true" Class="mt-2">
+                <HeaderContent>
+                    <MudTh>Artículo</MudTh>
+                    <MudTh>Cantidad</MudTh>
+                    <MudTh>Precio</MudTh>
+                    <MudTh>Total</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudSelect T="int" @bind-Value="@context.ArticuloId" @bind-Value:after="() => AsignarPrecioBase(context)">
+                            @foreach (var art in articulos)
+                            {   
+                                <MudSelectItem Value="@art.ArticuloId">@art.Descripcion</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudTd>
+                    <MudTd>
+                        <MudNumericField @bind-Value="@context.Cantidad" Immediate="true"
+                        OnValueChanged="(_ => CalcularTotales())" />
+                    </MudTd>
+                    <MudTd>
+                        <MudNumericField @bind-Value="@context.PrecioBase" Immediate="true"
+                        OnValueChanged="(_ => CalcularTotales())" />
+                    </MudTd>
+                    <MudTd>@(context.Cantidad * (decimal)context.PrecioBase)</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" 
+                        OnClick="() => RemoveDetail(context)" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" 
+            Class="mt-2" OnClick="AddDetail">
+                Agregar Artículo
+            </MudButton>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" 
+            OnClick="Submit">Guardar Venta</MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" 
+            Href="/ventas">Cancelar</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudForm>
+
+@code {
+    private MudForm _form;
+    private VentaCreateDTO venta = new VentaCreateDTO();
+    private List<DetalleVentaCreateDTO> detalles = new List<DetalleVentaCreateDTO>();
+    private List<ClienteDTO> clientes = new List<ClienteDTO>();
+    private ClienteDTO clienteSeleccionado = null;
+    private List<Colaborador> colaboradores = new List<Colaborador>();
+    private List<ArticuloDTO> articulos = new List<ArticuloDTO>();    
+    private string ClienteFormateado =>
+    clienteSeleccionado != null
+        ? $"{clienteSeleccionado.Apellido}, {clienteSeleccionado.Nombre} ({clienteSeleccionado.PersonaId})"
+        : string.Empty;
+
+
+    private void AsignarPrecioBase(DetalleVentaCreateDTO detalle)
+    {
+        var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+        if (articuloSeleccionado != null)
+        {
+            detalle.PrecioBase = articuloSeleccionado.PrecioBase;
+            CalcularTotales(); // Actualizar los totales
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {  
+        //colaboradores = await ColaboradorService.GetColaboradores();
+        articulos = await _ArticuloService.ObtenerTodos();
+    }
+
+    private void AddDetail()
+    {
+        detalles.Add(new DetalleVentaCreateDTO
+        {
+            NroItem = detalles.Count + 1
+        });
+    }
+
+    private void RemoveDetail(DetalleVentaCreateDTO detail)
+    {
+        detalles.Remove(detail);
+        StateHasChanged();
+    }
+
+    private void CalcularTotales()
+    {
+        foreach (var detalle in detalles)
+        {
+            detalle.Total = detalle.Cantidad * (decimal)detalle.PrecioBase;
+            // Aquí agregar cálculos de impuestos según sea necesario
+        }
+    }
+
+    private async Task Submit()
+    {
+        await _form.Validate();
+        
+        if (_form.IsValid)
+        {
+            try 
+            {
+                venta.DetalleVenta = detalles;
+                await _VentaService.RegistrarVenta<VentaDTO>(venta);
+                _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
+                ResetForm();
+            }
+            catch (Exception ex)
+            {
+                _Snackbar.Add($"Error al registrar: {ex.Message}", Severity.Error);
+            }
+        }
+    }
+
+    private async Task AbrirModalBuscarCliente()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = _DialogService.Show<MdBuscarCliente>("Buscar Cliente", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            clienteSeleccionado = (ClienteDTO)result.Data;
+            venta.ClienteId = clienteSeleccionado.PersonaId;
+        }
+    }
+
+    private void ResetForm()
+    {
+        venta = new VentaCreateDTO();
+        detalles.Clear();
+        _form.ResetValidation();
+    }
+}

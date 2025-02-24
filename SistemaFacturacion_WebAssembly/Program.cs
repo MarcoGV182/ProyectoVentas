@@ -7,6 +7,9 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using MudBlazor.Services;
 using Blazored.LocalStorage;
 using SistemaFacturacion_WebAssembly.Models;
+using Microsoft.AspNetCore.Components.Authorization;
+using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Cliente;
+using static SistemaFacturacion_WebAssembly.Services.UsuarioEstadoService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -24,6 +27,7 @@ builder.Services.AddHttpClient("Facturacion", client =>
 builder.Services.AddTransient<AuthTokenHandler>();
 
 //Inyectar dependencias
+builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<ITipoImpuestoService, TipoImpuestoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
@@ -32,9 +36,20 @@ builder.Services.AddScoped<IPresentacionService, PresentacionService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IUnidadMedidaService, UnidadMedidaService>();
 builder.Services.AddScoped<ITipoServicioService, TipoServicioService>();
+builder.Services.AddScoped<IServicioService, ServicioService>();
+builder.Services.AddScoped<ITipoDocIdentidadService, TipoDocIdentidadService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<ICiudadService, CiudadService>();
+builder.Services.AddScoped<IArticuloService, ArticuloService>();
+builder.Services.AddScoped<IVentaService, VentaService>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<UsuarioEstadoService>();
 
 builder.Services.AddMudServices();
 builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredLocalStorage();
+
+
+builder.Services.AddAuthorizationCore(); // <- Necesario para manejar la autenticación
 
 await builder.Build().RunAsync();

@@ -21,7 +21,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using SistemaFacturacion_Utilidad;
 using System.Transactions;
 using SistemaFacturacion_API.Repositorio;
-using SistemaFacturacion_Model.DTOs;
 
 namespace SistemaFacturacion_API.Services
 {

@@ -1,0 +1,164 @@
+﻿@page "/tipoDocIdentidad"
+@attribute [Authorize]
+@inject ITipoDocIdentidadService _tipoDocIdentidadService
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject SweetAlertService Swal;
+
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+  <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento</MudText>
+
+   <MudPaper Elevation="3" Class="pa-4" Width="100%">
+       <MudGrid>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.Add"
+            Color="Color.Primary"
+            OnClick="AbrirNuevoRegistro">Nuevo registro</MudButton>
+        </MudItem>
+        <MudItem xs="12">
+             <MudTable 
+                Items="@listaRegistro"
+                Dense="true"
+                Striped="true" Bordered="true" 
+                Filter="new Func<TablaMenorDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                Loading="@_loading" LoadingProgressColor="Color.Info" >
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TipoServicioDTO, object>(x=> x.TipoServicioId)">
+                                Código
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TipoServicioDTO, object>(x=> x.Descripcion)">
+                                Descripción
+                            </MudTableSortLabel>
+                        </MudTh>                      
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="tiposervicioRow">
+                        <MudTd DataLabel="Codigo">@tiposervicioRow.Id</MudTd>
+                        <MudTd DataLabel="Descripcion">@tiposervicioRow.Descripcion</MudTd>                        
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary" 
+                            StartIcon="@Icons.Material.Filled.Edit"
+                            Size="Size.Small" 
+                            IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarRegistro(tiposervicioRow))" />
+                            <MudFab 
+                            Color="Color.Error" 
+                            StartIcon="@Icons.Material.Filled.Delete" 
+                            Size="Size.Small" 
+                            IconSize="Size.Small"
+                                    OnClick="@(() => EliminarRegistro(tiposervicioRow))" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
+                    </PagerContent>
+                </MudTable>
+                
+        </MudItem>
+    </MudGrid>
+   </MudPaper>
+</MudContainer>
+@code {
+    List<TablaMenorDTO> listaRegistro = new List<TablaMenorDTO>();
+    private string searchString1 = "";
+    private TablaMenorDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerServicios()
+    {
+        var result = await _tipoDocIdentidadService.ObtenerTodos<List<TablaMenorDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaRegistro = (List<TablaMenorDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerServicios();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(TablaMenorDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(TablaMenorDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase);
+       
+        return matchesSearch1;
+    }
+
+    private void LimpiarFiltros()
+    {
+        searchString1 = string.Empty;
+    }
+
+    private async Task AbrirNuevoRegistro()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = await _dialogServicio.ShowAsync<MdTipoDocIdentidad>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerServicios();
+        }
+        //_navigationManager.NavigateTo($"/Servicio/ABM");
+    }
+
+    private async Task AbrirEditarRegistro(TablaMenorDTO Servicio)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_Servicio"] = Servicio };
+
+        var dialogo = _dialogServicio.Show<MdTipoDocIdentidad>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerServicios();
+        }
+        //_navigationManager.NavigateTo($"/Servicio/ABM/{Servicio.ArticuloId}");
+    }
+
+    private async Task EliminarRegistro(TablaMenorDTO item)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar la Servicio: {item.Descripcion}({item.Id})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _tipoDocIdentidadService.Eliminar<TablaMenorDTO>(item.Id);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La Servicio fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerServicios();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

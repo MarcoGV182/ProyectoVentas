@@ -19,7 +19,7 @@ namespace SistemaFacturacion_Model.Modelos
         public DateTime? FechaNacimiento { get; set; }
         public string Observacion { get; set; }
         [Required]
-        public DateTime Fecharegistro { get; set; }
+        public DateTime Fecharegistro { get; set; } = DateTime.Now;
         public short? IdUsuario { get; set; }       
         public DateTime? Ultfechaactualizacion { get; set; }
         public short? IdUsuarioMod { get; set; }
