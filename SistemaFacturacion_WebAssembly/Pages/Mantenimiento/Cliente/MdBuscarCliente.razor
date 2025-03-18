@@ -1,0 +1,78 @@
+﻿@inject IClienteService _ClienteService
+@inject ISnackbar _snackBar
+
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField Label="Buscar por nombre o documento" @bind-Value="@criterioBusqueda" Immediate="true" @onkeydown="HandleKeyDown" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BuscarClientes">
+            Buscar
+        </MudButton>
+
+        @if (clientes.Any())
+        {
+            <MudTable Items="@clientes" Hover="true" Class="mt-4">
+                <HeaderContent>
+                    <MudTh>Nombre</MudTh>
+                    <MudTh>Documento</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.Nombre</MudTd>
+                    <MudTd>@context.Nrodocumento</MudTd>
+                    <MudTd>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => SeleccionarCliente(context)">
+                            Seleccionar
+                        </MudButton>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Class="mt-4">El Cliente ingresado no existe</MudText>
+        }
+
+
+    </DialogContent>
+</MudDialog>
+
+@code {
+    private List<ClienteDTO> clientes = new List<ClienteDTO>();
+    private string criterioBusqueda;
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private async Task BuscarClientes()
+    {
+        if (!string.IsNullOrEmpty(criterioBusqueda))
+        {
+            // Cargar datos necesarios
+            var result = await _ClienteService.ObtenerTodos<List<ClienteDTO>>();
+            if (result.isExitoso)
+            {
+                var listaClientes = (List<ClienteDTO>)result.Resultado;
+
+                clientes = listaClientes.Where(c => c.Nombre.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) ||
+                        c.Apellido.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) ||
+                        c.Nrodocumento.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+            }            
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key.ToUpper() == "ENTER")
+        {
+            await BuscarClientes();
+        }
+    }
+
+    private void SeleccionarCliente(ClienteDTO cliente)
+    {
+        MudDialog.Close(DialogResult.Ok(cliente));
+    }
+
+
+}

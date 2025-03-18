@@ -1,4 +1,4 @@
-﻿using SistemaFacturacion_API.Modelos;
+﻿using SistemaFacturacion_Model.Modelos;
 
 namespace SistemaFacturacion_API.Repositorio.IRepositorio
 {

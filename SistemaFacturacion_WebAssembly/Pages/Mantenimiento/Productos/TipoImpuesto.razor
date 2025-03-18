@@ -37,7 +37,7 @@
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="tipoImpuestoRow">
-                        <MudTd DataLabel="Codigo">@tipoImpuestoRow.TipoimpuestoNro</MudTd>
+                        <MudTd DataLabel="Codigo">@tipoImpuestoRow.TipoimpuestoId</MudTd>
                         <MudTd DataLabel="Descripcion">@tipoImpuestoRow.Descripcion</MudTd>
                         <MudTd DataLabel="Base Imponible">@tipoImpuestoRow.Baseimponible</MudTd>
                         <MudTd DataLabel="Porcentaje">@tipoImpuestoRow.Porcentajeiva</MudTd>
@@ -55,7 +55,7 @@
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
 
@@ -130,7 +130,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar : {tipoimpuesto.Descripcion}({tipoimpuesto.TipoimpuestoNro})",
+                Text = $"Eliminar : {tipoimpuesto.Descripcion}({tipoimpuesto.TipoimpuestoId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -139,7 +139,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _tipoimpuestoservice.Eliminar<TipoImpuestoDTO>(tipoimpuesto.TipoimpuestoNro);
+            var resultado = await _tipoimpuestoservice.Eliminar<TipoImpuestoDTO>(tipoimpuesto.TipoimpuestoId);
 
             if (resultado.isExitoso)
             {

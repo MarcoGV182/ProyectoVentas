@@ -25,7 +25,7 @@ namespace SistemaFacturacion_API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SistemaFacturacion_API.Modelos.Villa", b =>
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Villa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

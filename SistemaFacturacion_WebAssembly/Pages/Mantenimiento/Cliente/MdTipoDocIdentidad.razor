@@ -1,0 +1,75 @@
+﻿@inject ITipoDocIdentidadService _tipoDocService
+@inject ISnackbar _snackBar
+
+<MudDialog Style="width:400px">
+    <DialogContent>
+        <MudContainer Style="max-height: 400; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_tipoDoc" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <MudTextField @bind-Value="@_tipoDoc.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_tipoDoc.Descripcion)" />
+
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public TablaMenorDTO _tipoDoc { get; set; } = new TablaMenorDTO();
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(_tipoDoc.Id);
+    }    
+
+
+    private async Task Guardar()
+    {                
+        string _mensaje = "";
+        bool _resultado;
+
+        TablaMenorCreateDTO _editRegistro = new TablaMenorCreateDTO();
+        _editRegistro.Descripcion = _tipoDoc.Descripcion;
+        
+
+        if (_tipoDoc.Id != 0)
+        {
+            var response = await _tipoDocService.Actualizar<TablaMenorDTO>(_tipoDoc.Id, _editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {
+            var response = await _tipoDocService.Crear<TablaMenorDTO>(_editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

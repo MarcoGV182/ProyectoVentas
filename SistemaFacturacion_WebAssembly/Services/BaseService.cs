@@ -8,12 +8,13 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using static SistemaFacturacion_Utilidad.DS;
 using System.Net.Http;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using System.Net.Http.Headers;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
     public class BaseService : IBaseService
-    {
-        public APIResponse responseModel { get; set; }
+    {        
         private readonly IHttpClientFactory _httpClientFactory;
 
         public BaseService(IHttpClientFactory httpClientFactory)
@@ -21,15 +22,16 @@ namespace SistemaFacturacion_WebAssembly.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<APIResponse> SendAsync<T>(APIRequest apiRequest)
-        {
-            responseModel = new APIResponse();
+        public async Task<T> SendAsync<T>(APIRequest apiRequest) where T: class, new()
+        {   
             try
             {
                 var client = _httpClientFactory.CreateClient("Facturacion");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
+
                 message.RequestUri = new Uri(apiRequest.URL, UriKind.RelativeOrAbsolute);
+
 
                 if (apiRequest.Datos != null)
                 {
@@ -58,47 +60,63 @@ namespace SistemaFacturacion_WebAssembly.Services
                 HttpResponseMessage apiResponse = await client.SendAsync(message);
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
 
-                // Deserializar el contenido a APIResponse
-                responseModel = JsonConvert.DeserializeObject<APIResponse>(apiContent);
-
-                // Crear una instancia de APIResponse
-                responseModel.StatusCode = apiResponse.StatusCode;
-                responseModel.isExitoso = apiResponse.IsSuccessStatusCode;
-
+                
                 if (apiResponse.IsSuccessStatusCode)
                 {
-                    // Si la solicitud fue exitosa, deserializa el contenido a T
-                    responseModel.Resultado = JsonConvert.DeserializeObject<T>(responseModel.Resultado.ToString());
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<T>(apiContent);
+                    }
+                    catch (JsonException)
+                    {
+                        throw new Exception("Error al deserializar la respuesta en el tipo especificado.");
+                    }
                 }
                 else
                 {
-                    responseModel.isExitoso = false;
-                    responseModel.ErrorMessages.Add(apiResponse.ReasonPhrase);
-
-                    try
+                    // Manejar errores de la API
+                    if (apiResponse.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        responseModel.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
+                        throw new UnauthorizedAccessException("El token JWT no es válido o ha expirado.");
                     }
-                    catch (Exception)
+                    else if (apiResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
-                        // Handle case where the response isn't deserializable into the expected type
-                        responseModel.ErrorMessages.Add("Error deserializando la respuesta de la API.");
+                        throw new UnauthorizedAccessException("El token JWT no tiene los permisos necesarios para esta operación.");
+                    }
+                    else
+                    {
+                        var errorResponse = new APIResponse
+                        {
+                            StatusCode = apiResponse.StatusCode,
+                            isExitoso = false,
+                            ErrorMessages = new List<string> { apiResponse.ReasonPhrase ?? "Error desconocido en la solicitud." }
+                        };
+
+                        try
+                        {
+                            errorResponse.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
+                        }
+                        catch (JsonException)
+                        {
+                            errorResponse.ErrorMessages.Add("Error al deserializar la respuesta de error.");
+                        }
+
+                        throw new Exception(JsonConvert.SerializeObject(errorResponse));
                     }
                 }
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new Exception($"Acceso no autorizado: {ex.Message}", ex);
+            }            
             catch (HttpRequestException ex)
             {
-                responseModel.isExitoso = false;
-                responseModel.ErrorMessages = new List<string> { ex.Message };
+                throw new Exception($"Error en la solicitud HTTP: {ex.Message}", ex);
             }
             catch (Exception ex)
             {
-                responseModel.isExitoso = false;
-                responseModel.ErrorMessages = new List<string> { "Ocurrió un error inesperado.", ex.Message };
+                throw new Exception("Ocurrió un error inesperado.", ex);
             }
-
-            
-            return responseModel;
         }
     }
 }

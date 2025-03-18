@@ -1,50 +1,52 @@
 ﻿@page "/"
+@page "/login"
 @inject NavigationManager _navigationManager
 @inject IUsuarioService _usuarioServicio
+@inject Blazored.LocalStorage.ILocalStorageService _localStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UsuarioEstadoService UserStateService
 
 @layout LoginLayout
 
 <EditForm Model="@usuarioLogin" OnValidSubmit="OnValidSubmit">
-
-    <DataAnnotationsValidator></DataAnnotationsValidator>
+<DataAnnotationsValidator/>
 
     <MudText Typo="Typo.h4" GutterBottom="true" Align="Align.Center">Bienvenido</MudText>
 
 
     <MudTextField T="string"
-                  @bind-Value="@usuarioLogin.Usuario"
-                  Label="Usuario"
+                  @bind-Value="@usuarioLogin.DireccionEmail"
+                  Label="Direccion de Email" 
                   Variant="Variant.Outlined"
-                  Class="my-6"
-                  For="@(() => usuarioLogin.Usuario)">
-    </MudTextField>
+                  For="@(() => usuarioLogin.DireccionEmail)" />
 
-    <MudTextField @bind-Value="@usuarioLogin.Clave"
-                  Label="Contraseña"
-                  Variant="Variant.Outlined"
+    <MudTextField Label="Contraseña" Variant="Variant.Outlined"
+                  @bind-Value="@usuarioLogin.Password" Class="mt-3"
                   InputType="@PasswordInput"
                   Adornment="Adornment.End"
                   AdornmentIcon="@PasswordInputIcon"
-                  OnAdornmentClick="TogglePasswordVisibility"
-                  For="@(() => usuarioLogin.Clave)" />
+                  AdornmentAriaLabel="Mostrar Password"
+                  For="@(() => usuarioLogin.Password)"
+                  OnAdornmentClick="TogglePasswordVisibility" />
 
     <MudButton Class="mt-5" 
-               Variant="Variant.Filled" 
-               Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large"
-               FullWidth="true"
-               Disabled="@disableButton">Iniciar Sesión</MudButton>
+    Variant="Variant.Filled" 
+    Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large"
+    FullWidth="true"
+    Disabled="@disableButton">Iniciar Sesión</MudButton>
 
-    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="@(myImageClass + " my-7")" />
+   <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="@(myImageClass + " my-7")" />
 </EditForm>
 
-<MudAlert Severity="Severity.Error" Class="@(myAlert + " mt-8 mud-width-full")" Style="max-width:500px;" Elevation="25">No se encontraron coincidencias</MudAlert>
+<MudAlert Severity="Severity.Error" Class="@(myAlert + " mt-8 mud-width-full")" Style="max-width:500px;" Elevation="25">@messageError</MudAlert>
 
 
 @code {
-    UsuarioLogin usuarioLogin = new UsuarioLogin();
+    LoginDTO usuarioLogin = new LoginDTO();
     string myImageClass { get; set; } = "d-none";
     string myAlert { get; set; } = "d-none";
     bool disableButton { get; set; } = false;
+    string messageError = "";
 
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
@@ -70,12 +72,37 @@
     {
         myImageClass = "d-block";
         disableButton = true;
-        var result = await _usuarioServicio.IniciarSesion<UsuarioDTO>(usuarioLogin);
+        AutorizacionResponse result = new AutorizacionResponse();
+        try
+        {
+            result = await _usuarioServicio.IniciarSesion(usuarioLogin);
+        }
+        catch (Exception ex)
+        {
+            messageError = ex.Message;
+            myImageClass = "d-none";
+            disableButton = false;
+            myAlert = "d-block";
+        }
 
-        if (result.isExitoso)
-            _navigationManager.NavigateTo("/marca");
+
+        if (result.Resultado) 
+        {   
+            // Almacenar el token en local storage
+            await _localStorage.SetItemAsync("accessToken", result.Token);
+
+            // Guardar los datos del usuario en el servicio de estado
+            UserStateService.SetCurrentUser(result.Usuario);
+            UserStateService.SetToken(result.Token);
+
+            // Notificar al AuthenticationStateProvider que el estado ha cambiado
+            ((CustomAuthStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(result.Token);
+
+            _navigationManager.NavigateTo("/producto");
+        }   
         else
         {
+            //messageError = "No se encontraron coincidencias";
             myImageClass = "d-none";
             disableButton = false;
             myAlert = "d-block";

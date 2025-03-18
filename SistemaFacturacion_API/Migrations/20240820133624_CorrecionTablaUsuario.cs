@@ -17,8 +17,8 @@ namespace SistemaFacturacion_API.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "Tiporoductonro",
-                table: "TipoProducto",
-                newName: "TipoProductonro");
+                table: "Categoria",
+                newName: "Categorianro");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Password",
@@ -75,8 +75,8 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Usuario");
 
             migrationBuilder.RenameColumn(
-                name: "TipoProductonro",
-                table: "TipoProducto",
+                name: "Categorianro",
+                table: "Categoria",
                 newName: "Tiporoductonro");
 
             migrationBuilder.AlterColumn<string>(

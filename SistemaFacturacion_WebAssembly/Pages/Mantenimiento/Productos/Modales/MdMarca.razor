@@ -40,19 +40,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_marca.Marcanro);
+        Console.WriteLine(_marca.MarcaId);
     }    
 
     private async Task Guardar()
     {        
-        TablaMenorDTO _nuevaMarca = new TablaMenorDTO();
+        MarcaCreateDTO _nuevaMarca = new MarcaCreateDTO();
         _nuevaMarca.Descripcion = _marca.Descripcion;
         string _mensaje = "";
         bool _resultado;
 
-        if (_marca.Marcanro != 0)
+        if (_marca.MarcaId != 0)
         {
-            var response = await _marcaService.Actualizar<MarcaDTO>(_marca.Marcanro, _nuevaMarca);
+            var response = await _marcaService.Actualizar<MarcaDTO>(_marca.MarcaId, _nuevaMarca);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }

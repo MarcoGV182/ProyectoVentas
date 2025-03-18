@@ -1,5 +1,6 @@
-﻿using SistemaFacturacion_WebAssembly.Models;
-using SistemaFacturacion_WebAssembly.Models.DTO;
+﻿using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Utilidad;
+
 
 namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
@@ -9,6 +10,6 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
         Task<APIResponse> Obtener<T>(int id);
         Task<APIResponse> Crear<T>(TipoImpuestoCreateDTO dto);
         Task<APIResponse> Eliminar<T>(int id);
-        Task<APIResponse> Actualizar<T>(int id,TipoImpuestoCreateDTO dto);
+        Task<APIResponse> Actualizar<T>(int id, TipoImpuestoCreateDTO dto);
     }
 }
