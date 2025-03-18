@@ -1,4 +1,5 @@
 ﻿@page "/marca"
+@attribute [Authorize]
 @inject IMarcaService _marcaservice
 @inject IDialogService _dialogServicio
 @inject ISnackbar _snackBar
@@ -6,69 +7,67 @@
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
 
-  <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Marcas de Productos</MudText>
+    <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Marcas de Productos</MudText>
 
-   <MudPaper Elevation="3" Class="pa-4" Width="100%">
-       <MudGrid>
-        <MudItem xs="12">
-            <MudButton Variant="Variant.Filled" 
-            StartIcon="@Icons.Material.Filled.Add"
-            Color="Color.Primary"
-            OnClick="AbrirNuevaMarca">
-                Nueva Marca</MudButton>
-        </MudItem>
-        <MudItem xs="12">
+    <MudPaper Elevation="3" Class="pa-4" Width="100%">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled" 
+                StartIcon="@Icons.Material.Filled.Add"
+                Color="Color.Primary"
+                OnClick="AbrirNuevaMarca">
+                    Nueva Marca</MudButton>
+            </MudItem>
+            <MudItem xs="12">
 
                 <MudTable 
-                    Items="@listaMarcas"
-                    Dense="true"
-                    Striped="true" Bordered="true" 
-                    Filter="new Func<MarcaDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
-                    Loading="@_loading" LoadingProgressColor="Color.Info" >
+                Items="@listaMarcas"
+                Dense="true"
+                Striped="true" Bordered="true" 
+                Filter="new Func<MarcaDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                Loading="@_loading" LoadingProgressColor="Color.Info" >
                     <ToolBarContent>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<MarcaDTO, object>(x=> x.Marcanro)">
+                            <MudTableSortLabel SortBy="new Func<MarcaDTO, object>(x=> x.MarcaId)">
                                 Código
                             </MudTableSortLabel>
-                         </MudTh>
+                        </MudTh>
                         <MudTh>
                             <MudTableSortLabel SortBy="new Func<MarcaDTO, object>(x=> x.Descripcion)">
                                 Descripción
                             </MudTableSortLabel>
-                         </MudTh>                      
+                        </MudTh>                      
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="marcaRow">
-                        <MudTd DataLabel="Codigo">@marcaRow.Marcanro</MudTd>
+                        <MudTd DataLabel="Codigo">@marcaRow.MarcaId</MudTd>
                         <MudTd DataLabel="Descripcion">@marcaRow.Descripcion</MudTd>                        
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary" 
-                                StartIcon="@Icons.Material.Filled.Edit"
-                                Size="Size.Small" 
-                                IconSize="Size.Small"
-                                    OnClick="@(() => AbrirEditarMarca(marcaRow))" />
+                            StartIcon="@Icons.Material.Filled.Edit"
+                            Size="Size.Small" 
+                            IconSize="Size.Small"
+                            OnClick="@(() => AbrirEditarMarca(marcaRow))" />
                             <MudFab 
-                                Color="Color.Error" 
-                                StartIcon="@Icons.Material.Filled.Delete" 
-                                Size="Size.Small" 
-                                IconSize="Size.Small"
-                                OnClick="@(() => EliminarMarca(marcaRow))"
+                            Color="Color.Error" 
+                            StartIcon="@Icons.Material.Filled.Delete" 
+                            Size="Size.Small" 
+                            IconSize="Size.Small"
+                            OnClick="@(() => EliminarMarca(marcaRow))"
                             />
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
-                        <MudTablePager />
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
                     </PagerContent>
                 </MudTable>
-
-
-        </MudItem>
-    </MudGrid>
-   </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
 
 </MudContainer>
 @code {
@@ -78,7 +77,7 @@
     private bool _loading = true;
 
     private async Task ObtenerMarcas()
-    {
+    {  
         var result = await _marcaservice.ObtenerTodos<List<MarcaDTO>>();
 
         if (result.isExitoso)
@@ -138,7 +137,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar la marca: {marca.Descripcion}({marca.Marcanro})",
+                Text = $"Eliminar la marca: {marca.Descripcion}({marca.MarcaId})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -147,7 +146,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.Marcanro);
+            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.MarcaId);
 
             if (resultado.isExitoso)
             {

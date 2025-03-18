@@ -51,7 +51,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(_tipoimpuesto.TipoimpuestoNro);
+        Console.WriteLine(_tipoimpuesto.TipoimpuestoId);
     }
 
 
@@ -70,9 +70,9 @@
         string _mensaje = "";
         bool _resultado;
 
-        if (_tipoimpuesto.TipoimpuestoNro != 0)
+        if (_tipoimpuesto.TipoimpuestoId != 0)
         {
-            var response = await _tipoImpuestoService.Actualizar<TipoImpuestoDTO>(_tipoimpuesto.TipoimpuestoNro, _nuevoimpuesto);
+            var response = await _tipoImpuestoService.Actualizar<TipoImpuestoDTO>(_tipoimpuesto.TipoimpuestoId, _nuevoimpuesto);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }

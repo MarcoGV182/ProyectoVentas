@@ -24,6 +24,8 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = D:\Visual Studio Proyectos\source\repos\SistemaFacturacionWeb\SistemaFacturacion_WebAssembly
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
 
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
@@ -37,8 +39,44 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0b3JpemFjaW9uXExvZ2luLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Autorizacion/RedirectToLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0b3JpemFjaW9uXFJlZGlyZWN0VG9Mb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Cliente/Cliente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xDbGllbnRlXENsaWVudGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Cliente/ClienteABM.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xDbGllbnRlXENsaWVudGVBQk0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Cliente/MdBuscarCliente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xDbGllbnRlXE1kQnVzY2FyQ2xpZW50ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Cliente/MdTipoDocIdentidad.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xDbGllbnRlXE1kVGlwb0RvY0lkZW50aWRhZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Cliente/TipoDocIdentidad.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xDbGllbnRlXFRpcG9Eb2NJZGVudGlkYWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/CategoriaProducto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcQ2F0ZWdvcmlhUHJvZHVjdG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/Marca.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTWFyY2EucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/MdBuscarProducto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTWRCdXNjYXJQcm9kdWN0by5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/Modales/MdCategoriaProducto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTW9kYWxlc1xNZENhdGVnb3JpYVByb2R1Y3RvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/Modales/MdMarca.razor]
@@ -57,10 +95,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTW9kYWxlc1xNZFRpcG9JbXB1ZXN0by5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/Modales/MdTipoProducto.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTW9kYWxlc1xNZFRpcG9Qcm9kdWN0by5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/Modales/MdUnidadMedida.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcTW9kYWxlc1xNZFVuaWRhZE1lZGlkYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -73,24 +107,44 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcUHJvZHVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/TipoImpuesto.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcVGlwb0ltcHVlc3RvLnJhem9y
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/ProductoABM.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcUHJvZHVjdG9BQk0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/TipoProducto.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcVGlwb1Byb2R1Y3RvLnJhem9y
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/TipoImpuesto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcVGlwb0ltcHVlc3RvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Productos/UnidadMedida.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xQcm9kdWN0b3NcVW5pZGFkTWVkaWRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Servicios/MdServicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xTZXJ2aWNpb3NcTWRTZXJ2aWNpby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Servicios/MdTipoServicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xTZXJ2aWNpb3NcTWRUaXBvU2VydmljaW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Servicios/Servicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xTZXJ2aWNpb3NcU2VydmljaW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Mantenimiento/Servicios/TipoServicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFudGVuaW1pZW50b1xTZXJ2aWNpb3NcVGlwb1NlcnZpY2lvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Timbrado.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGltYnJhZG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Usuario.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
+[D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/Pages/Ventas.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmVudGFzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio Proyectos/source/repos/SistemaFacturacionWeb/SistemaFacturacion_WebAssembly/_Imports.razor]

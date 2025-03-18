@@ -9,20 +9,8 @@
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
     },
     {
-      "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\obj\\Debug\\net8.0\\compressed\\u9k132dyqq.gz",
-      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
-    },
-    {
       "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\obj\\Debug\\net8.0\\scopedcss\\bundle\\SistemaFacturacion_WebAssembly.styles.css",
       "PackagePath": "staticwebassets\\SistemaFacturacion_WebAssembly.styles.css"
-    },
-    {
-      "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\obj\\Debug\\net8.0\\service-worker-assets.js",
-      "PackagePath": "staticwebassets\\service-worker-assets.js"
-    },
-    {
-      "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\obj\\Debug\\net8.0\\service-worker\\service-worker.published.js",
-      "PackagePath": "staticwebassets\\service-worker.js"
     },
     {
       "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\css\\app.css",
@@ -73,6 +61,10 @@
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
+      "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
       "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
@@ -99,6 +91,10 @@
     {
       "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SistemaFacturacion_WebAssembly.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SistemaFacturacion_WebAssembly.Microsoft.AspNetCore.StaticWebAssets.props",

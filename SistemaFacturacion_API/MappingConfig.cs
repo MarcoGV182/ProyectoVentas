@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Npgsql.PostgresTypes;
-using SistemaFacturacion_API.Modelos;
-using SistemaFacturacion_API.Modelos.DTO;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_Model.Modelos;
 
 namespace SistemaFacturacion_API
 {
@@ -17,7 +17,7 @@ namespace SistemaFacturacion_API
             .ReverseMap();
 
             //Servicio
-            CreateMap<Servicio, ServicioDTO>().ForMember(dest => dest.ServicioNro, opt => opt.MapFrom(src => src.Articulonro)).ReverseMap();
+            CreateMap<Servicio, ServicioDTO>().ForMember(dest => dest.ArticuloId, opt => opt.MapFrom(src => src.ArticuloId)).ReverseMap();
             CreateMap<Servicio, ServicioCreateDTO>().ReverseMap();
 
 
@@ -25,18 +25,18 @@ namespace SistemaFacturacion_API
             CreateMap<Marca, MarcaDTO>().ReverseMap();
             CreateMap<Marca, MarcaCreateDTO>().ReverseMap();
             //Usuario
-            CreateMap<Usuario, UsuarioCreateDTO>().ReverseMap();
+            //CreateMap<Usuario, UsuarioRegistroDTO>().ReverseMap();
             //Colaborador
             CreateMap<Colaborador, ColaboradorDTO>().ReverseMap();
             //Tipo Impuesto
             CreateMap<TipoImpuesto, TipoImpuestoDTO>().ReverseMap();
             CreateMap<TipoImpuesto, TipoImpuestoCreateDTO>().ReverseMap();
             //Tipo Producto
-            CreateMap<TipoProducto, TipoProductoCreateDTO>().ReverseMap();
-            CreateMap<TipoProducto, TipoProductoDTO>().ReverseMap();
+            CreateMap<CategoriaProducto, CategoriaProductoCreateDTO>().ReverseMap();
+            CreateMap<CategoriaProducto, CategoriaProductoDTO>().ReverseMap();
             //Tipo Servicio
             CreateMap<TipoServicio, TipoServicioDTO>().ReverseMap();
-            CreateMap<TipoServicio, TipoServicioCreateDTO>().ReverseMap();    
+            CreateMap<TipoServicio, TablaMenorCreateDTO>().ReverseMap();    
             //Presentacion
             CreateMap<Presentacion, PresentacionCreateDTO>().ReverseMap();
             CreateMap<Presentacion, PresentacionDTO>().ReverseMap();
@@ -54,6 +54,17 @@ namespace SistemaFacturacion_API
                 .ForMember(dest => dest.FechaInicioVigencia, opt => opt.MapFrom(src => src.FechaInicioVigencia.Date))
                 .ForMember(dest => dest.TipoTimbrado, opt => opt.MapFrom(src => src.TipoTimbrado.ToString()))
                 .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia.Date));
+
+            //Ciudad
+            CreateMap<Ciudad, CiudadDTO>().ReverseMap();
+            CreateMap<Ciudad, CiudadCreateDTO>().ReverseMap();
+
+            //TipoDocumentoIdentidad,
+            CreateMap<TipoDocumentoIdentidad, TablaMenorCreateDTO>().ReverseMap();
+
+            //Cliente,
+            CreateMap<Persona, ClienteDTO>().ReverseMap();
+            CreateMap<Persona, ClienteCreateDTO>().ReverseMap();
 
         }
     }

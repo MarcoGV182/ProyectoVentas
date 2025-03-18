@@ -39,7 +39,7 @@ namespace SistemaFacturacion_API.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<short>(
-                name: "TipoproductoId",
+                name: "CategoriaId",
                 table: "Producto",
                 type: "smallint",
                 nullable: true);
@@ -105,7 +105,7 @@ namespace SistemaFacturacion_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TipoProducto",
+                name: "Categoria",
                 columns: table => new
                 {
                     Tiporoductonro = table.Column<short>(type: "smallint", nullable: false)
@@ -114,7 +114,7 @@ namespace SistemaFacturacion_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TipoProducto", x => x.Tiporoductonro);
+                    table.PrimaryKey("PK_Categoria", x => x.Tiporoductonro);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,9 +184,9 @@ namespace SistemaFacturacion_API.Migrations
                 column: "PresentacionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Producto_TipoproductoId",
+                name: "IX_Producto_CategoriaId",
                 table: "Producto",
-                column: "TipoproductoId");
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Producto_Unidadmedidanro",
@@ -238,10 +238,10 @@ namespace SistemaFacturacion_API.Migrations
                 principalColumn: "Idpresentacion");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Producto_TipoProducto_TipoproductoId",
+                name: "FK_Producto_Categoria_CategoriaId",
                 table: "Producto",
-                column: "TipoproductoId",
-                principalTable: "TipoProducto",
+                column: "CategoriaId",
+                principalTable: "Categoria",
                 principalColumn: "Tiporoductonro");
 
             migrationBuilder.AddForeignKey(
@@ -272,7 +272,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Producto");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Producto_TipoProducto_TipoproductoId",
+                name: "FK_Producto_Categoria_CategoriaId",
                 table: "Producto");
 
             migrationBuilder.DropForeignKey(
@@ -289,7 +289,7 @@ namespace SistemaFacturacion_API.Migrations
                 name: "Stock");
 
             migrationBuilder.DropTable(
-                name: "TipoProducto");
+                name: "Categoria");
 
             migrationBuilder.DropTable(
                 name: "UnidadMedida");
@@ -306,7 +306,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Producto");
 
             migrationBuilder.DropIndex(
-                name: "IX_Producto_TipoproductoId",
+                name: "IX_Producto_CategoriaId",
                 table: "Producto");
 
             migrationBuilder.DropIndex(
@@ -326,7 +326,7 @@ namespace SistemaFacturacion_API.Migrations
                 table: "Producto");
 
             migrationBuilder.DropColumn(
-                name: "TipoproductoId",
+                name: "CategoriaId",
                 table: "Producto");
 
             migrationBuilder.DropColumn(

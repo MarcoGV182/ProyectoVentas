@@ -1,0 +1,234 @@
+﻿@page "/cliente"
+@attribute [Authorize]
+@inject IClienteService _Clienteservice
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject NavigationManager _navigationManager
+@inject SweetAlertService Swal; 
+
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Clientes</MudText>
+
+    <MudPaper Elevation="3" Class="pa-4" Width="100%">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           OnClick="AbrirNuevaCliente">
+                    Nuevo Cliente
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTable Items="@listaClientes"
+                          Dense="true"
+                          Striped="true" Bordered="true"
+                          Filter="new Func<ClienteDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                          Loading="@_loading" LoadingProgressColor="Color.Info">
+                    @* <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent> *@
+                    <ToolBarContent>
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar por Nombre" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString2" Placeholder="Buscar por Apellido" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString3" Placeholder="Buscar por Nro. Documento" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudSpacer />
+                        <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh Style="width: 5px;">
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.PersonaId)">
+                                Código
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Nombre)">
+                                Nombre
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Apellido)">
+                                Apellido
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.FechaNacimiento)">
+                                    Fecha de Nacimiento
+                                </MudTableSortLabel>
+                            </MudTh>
+
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.TipoDocumentoIdentidad.Descripcion)">
+                                Tipo Documento
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Nrodocumento)">
+                                Nro. Documento
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Correo)">
+                                Email
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Telefono)">
+                                Teléfono
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Ciudad.Descripcion)">
+                                Ciudad
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Direccion)">
+                                Dirección
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<ClienteDTO, object>(x=> x.Observacion)">
+                                Observación
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>Acciones</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="ClienteRow">
+                        <MudTd DataLabel="Codigo">@ClienteRow.PersonaId</MudTd>
+                        <MudTd DataLabel="Nombre">@ClienteRow.Nombre</MudTd>
+                        <MudTd DataLabel="Apellido">@ClienteRow.Apellido</MudTd>
+                        <MudTd DataLabel="FechaNacimiento">@((ClienteRow.FechaNacimiento == null) ? "" : ClienteRow.FechaNacimiento.Value.ToShortDateString())</MudTd>
+                        <MudTd DataLabel="TipoDocIdentidad">@((ClienteRow.TipoDocumentoIdentidad?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="NroDocumento">@ClienteRow.Nrodocumento</MudTd>
+                        <MudTd DataLabel="Correo">@ClienteRow.Correo</MudTd>
+                        <MudTd DataLabel="Telefono">@ClienteRow.Telefono</MudTd>
+                        <MudTd DataLabel="Ciudad">@((ClienteRow.Ciudad?.Descripcion) ?? "")</MudTd>
+                        <MudTd DataLabel="Direccion">@ClienteRow.Direccion</MudTd>
+                        <MudTd DataLabel="Observacion">@ClienteRow.Observacion</MudTd>
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarCliente(ClienteRow))" />
+                            <MudFab Color="Color.Error"
+                                    StartIcon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => EliminarCliente(ClienteRow))" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
+                    </PagerContent>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>
+@code {
+    List<ClienteDTO> listaClientes = new List<ClienteDTO>();
+    private string searchString1 = "";
+    private string searchString2 = "";
+    private string searchString3 = "";
+    private ClienteDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerClientes()
+    {
+        var result = await _Clienteservice.ObtenerTodos<List<ClienteDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaClientes = (List<ClienteDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerClientes();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(ClienteDTO element) => FilterFunc(element, searchString1, searchString2, searchString3);
+
+    private bool FilterFunc(ClienteDTO element, string searchString, string searchString_2, string searchString_3)
+    {
+        if (string.IsNullOrWhiteSpace(searchString) && string.IsNullOrWhiteSpace(searchString_2) && string.IsNullOrWhiteSpace(searchString_3))
+            return true;
+
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Nombre.Contains(searchString, StringComparison.OrdinalIgnoreCase);
+        var matchesSearch2 = string.IsNullOrWhiteSpace(searchString_2) || element.Apellido.Contains(searchString_2, StringComparison.OrdinalIgnoreCase);
+        var matchesSearch3 = string.IsNullOrWhiteSpace(searchString_3) || element.Nrodocumento.Contains(searchString_3, StringComparison.OrdinalIgnoreCase);
+
+        return matchesSearch1 && matchesSearch2 && matchesSearch3;
+    }
+
+    private void LimpiarFiltros()
+    {
+        searchString1 = string.Empty;
+        searchString2 = string.Empty;
+        searchString3 = string.Empty;
+    }
+
+    private async Task AbrirNuevaCliente()
+    {
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = await _dialogServicio.ShowAsync<MdCliente>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerClientes();
+        }*/
+        _navigationManager.NavigateTo($"/Cliente/ABM");
+    }
+
+    private async Task AbrirEditarCliente(ClienteDTO Cliente)
+    {
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_Cliente"] = Cliente };
+
+        var dialogo = _dialogServicio.Show<MdCliente>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerClientes();
+        }*/
+        _navigationManager.NavigateTo($"/Cliente/ABM/{Cliente.PersonaId}");
+    }
+
+    private async Task EliminarCliente(ClienteDTO Cliente)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar el Cliente: {Cliente.Nombre},{Cliente.Apellido})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _Clienteservice.Eliminar<ClienteDTO>(Cliente.PersonaId);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("El Cliente fue eliminado", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerClientes();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

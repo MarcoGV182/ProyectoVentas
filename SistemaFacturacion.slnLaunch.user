@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Nuevo perfil",
+    "Projects": [
+      {
+        "Path": "SistemaFacturacion_API\\SistemaFacturacion_API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SistemaFacturacion_WebAssembly\\SistemaFacturacion_WebAssembly.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

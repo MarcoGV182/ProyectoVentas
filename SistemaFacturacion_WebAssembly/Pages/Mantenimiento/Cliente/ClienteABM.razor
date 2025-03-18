@@ -1,0 +1,238 @@
+﻿@page "/cliente/ABM/{clienteId:int?}"
+@using MudBlazor
+@using System.Net.Http.Json
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@inject ISnackbar _snackBar
+@inject IClienteService _clienteService
+@inject ITipoDocIdentidadService _tipoDocService
+@inject ICiudadService _ciudadService
+
+<MudGrid Spacing="2">
+    <!-- Título -->
+    <MudItem xs="12">
+        <MudText Typo="Typo.h5" Class="mb-4">@Titulo</MudText>
+    </MudItem>
+
+    <!-- Contenedor del formulario -->
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="pa-4" Style="height: auto; overflow-y: auto;">
+            <EditForm Model="cliente" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <!-- Campo 0: Código -->
+                @if (cliente.PersonaId > 0)
+                {
+                    <MudGrid Spacing="4">
+                        <MudItem xs="12" md="6">
+                            <MudInput Value="@cliente.PersonaId" Disabled="true" />
+                        </MudItem>
+                    </MudGrid>                    
+                }
+
+
+                <MudGrid Spacing="2">
+                    <!-- Campo 1: Nombre -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Nombre" @bind-Value="@cliente.Nombre" For="@(() => cliente.Nombre)" />
+                    </MudItem>
+
+                    <!-- Campo 2: Apellido -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Apellido" @bind-Value="@cliente.Apellido" For="@(() => cliente.Apellido)" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField InputType="InputType.Date" Label="Fecha de Nac." @bind-Value="@cliente.FechaNacimiento" Format="yyyy-MM-dd" For="@(() => cliente.FechaNacimiento)" />
+                    </MudItem>
+                   
+
+                    <!-- Campo 3: Tipo Documento -->
+                    <MudItem xs="12" md="6">
+                        <MudSelect Label="Tipo Doc. Identidad" Variant="Variant.Outlined" Placeholder="Seleccione un tipo de Doc. Identidad" Class="mb-3" T="TablaMenorDTO" @bind-Value="tipoDocSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                            @if (ListaTipoDocumento.Any())
+                            {
+                                foreach (var rol in ListaTipoDocumento)
+                                {
+                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <!-- Campo 4: Nro Documento -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Nro. Documento" @bind-Value="@cliente.Nrodocumento" For="@(() => cliente.Nrodocumento)" />
+                    </MudItem>
+
+                    <!-- Campo 5: Nro Documento -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Correo" @bind-Value="@cliente.Correo" For="@(() => cliente.Correo)" />
+                    </MudItem>
+
+                    <!-- Campo 6: Telefono -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Teléfono" @bind-Value="@cliente.Telefono" For="@(() => cliente.Telefono)" />
+                    </MudItem>
+
+                    <!-- Campo 7: Ciudad -->
+                    <MudItem xs="12" md="6">
+                        <MudSelect Label="Ciudad" Variant="Variant.Outlined" Placeholder="Seleccione una ciudad" Class="mb-3" T="CiudadDTO" @bind-Value="ciudadSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                            @if (ListaCiudad.Any())
+                            {
+                                foreach (var rol in ListaCiudad)
+                                {
+                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <!-- Campo 8: Dirección -->
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Dirección" @bind-Value="@cliente.Direccion" For="@(() => cliente.Direccion)" />
+                    </MudItem>                   
+
+                    <!-- Campo 13: Observación -->
+                    <MudItem xs="12">
+                        <MudTextField Label="Observación" Variant="Variant.Outlined" Lines="3" @bind-Value="@cliente.Observacion" For="@(() => cliente.Observacion)" Class="mb-3" />
+                    </MudItem>
+
+                </MudGrid>
+
+                <!-- Botones -->
+                <MudItem xs="12">
+                    <MudPaper Class="pa-4 mt-4">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="Cancelar">Cancelar</MudButton>
+                    </MudPaper>
+                </MudItem>
+
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+
+
+
+@code {
+    private string Titulo;
+    private MudForm form;
+    private ClienteDTO cliente = new ClienteDTO();
+
+    public List<TablaMenorDTO> ListaTipoDocumento { get; set; } = new List<TablaMenorDTO>();
+    public TablaMenorDTO tipoDocSeleccionada { get; set; }
+
+    public List<CiudadDTO> ListaCiudad { get; set; } = new List<CiudadDTO>();
+    public CiudadDTO ciudadSeleccionada { get; set; }    
+
+    [Parameter]
+    public int? ClienteId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(cliente.PersonaId);
+        await ObtenerListados();
+
+        if (ClienteId == null)
+            Titulo = "Registrar nuevo Cliente";
+        else
+            Titulo = "Actualizar Cliente";
+
+
+        try
+        {
+            tipoDocSeleccionada = cliente.TipoDocumentoIdentidad == null ? null : ListaTipoDocumento.FirstOrDefault(p => p.Id == cliente.TipoDocumentoIdentidad.Id);
+            ciudadSeleccionada = cliente.Ciudad == null ? null : ListaCiudad.FirstOrDefault(p => p.CiudadId == cliente.Ciudad.CiudadId);
+        }
+        catch (Exception ex)
+        {
+            _snackBar.Add($"Error al obtener los datos: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/Cliente");
+    }
+
+    private async Task ObtenerListados()
+    {
+        try
+        {
+            if (ClienteId.HasValue)
+            {
+                var resultProduct = await _clienteService.Obtener<ClienteDTO>(ClienteId.Value);
+                if (resultProduct.isExitoso)
+                {
+                    cliente = (ClienteDTO)resultProduct.Resultado;
+                }
+            }
+
+            var result = await _ciudadService.ObtenerTodos<List<CiudadDTO>>();
+            if (result.isExitoso)
+            {
+                ListaCiudad = (List<CiudadDTO>)result.Resultado!;
+            }
+
+            result = await _tipoDocService.ObtenerTodos<List<TablaMenorDTO>>();
+            if (result.isExitoso)
+            {
+                ListaTipoDocumento = (List<TablaMenorDTO>)result.Resultado!;
+            }
+        }
+        catch (Exception ex)
+        {
+            _snackBar.Add($"Error al obtener los datos: {ex.Message}", Severity.Error);
+        }
+
+    }
+
+    private async Task Guardar()
+    {
+        string _mensaje = "";
+        bool _resultado;
+
+        ClienteCreateDTO _registro = new ClienteCreateDTO
+            {
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                Observacion = cliente.Observacion,
+                CiudadId = ciudadSeleccionada != null ? ciudadSeleccionada.CiudadId : null,
+                TipoDocumentoIdentidadId = tipoDocSeleccionada != null ? tipoDocSeleccionada.Id : null,
+                Correo = cliente.Correo,
+                Telefono = cliente.Telefono,
+                Direccion = cliente.Direccion,
+                FechaNacimiento = cliente.FechaNacimiento,
+                Nrodocumento = cliente.Nrodocumento
+
+            };
+
+        if (cliente.PersonaId != 0)
+        {
+            
+
+            var response = await _clienteService.Actualizar<ClienteDTO>(cliente.PersonaId, _registro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {
+            
+
+            var response = await _clienteService.Crear<ClienteDTO>(_registro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            Navigation.NavigateTo("/Cliente");
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

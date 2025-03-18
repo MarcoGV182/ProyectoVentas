@@ -1,18 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ProductoController : Controller
     {
         private readonly ILogger<ProductoController> _logger;
@@ -36,7 +38,7 @@ namespace SistemaFacturacion_API.Controllers
             //_logger.LogInformation("Obteniendo datos de las Productos");
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto,UnidadMedida");
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
@@ -72,7 +74,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
 
-                var producto = await _ProductoRepositorio.Obtener(p => p.Articulonro == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,TipoProducto,UnidadMedida");
+                var producto = await _ProductoRepositorio.Obtener(p => p.ArticuloId == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
 
                 if (producto == null)
                 {
@@ -134,7 +136,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _producto;
 
 
-                return CreatedAtRoute("GetProductosById", new { id = _producto.Articulonro }, _response);
+                return CreatedAtRoute("GetProductosById", new { id = _producto.ArticuloId }, _response);
             }
             catch (Exception ex)
             {
@@ -163,7 +165,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var producto = await _ProductoRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                var producto = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
                 if (producto == null)
                 {
                     _response.isExitoso = false;
@@ -172,7 +174,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 Producto modelo = _mapper.Map<Producto>(productoUpdatedto);
-                modelo.Articulonro = id;
+                modelo.ArticuloId = id;
                 modelo.Fechaultactualizacion = DateTime.Now;
 
                 await _ProductoRepositorio.Actualizar(modelo);
@@ -208,7 +210,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _ProductoRepositorio.Obtener(c => c.Articulonro == id, tracked: false);
+                var marca = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
                 if (marca == null)
                 {
                     _response.isExitoso = false;

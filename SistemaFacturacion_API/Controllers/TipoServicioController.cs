@@ -1,19 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Modelos.DTO;
-using SistemaFacturacion_API.Modelos;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_API.Datos;
+using SistemaFacturacion_Model.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using Microsoft.AspNetCore.Http.HttpResults;
+using SistemaFacturacion_Utilidad;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TipoServicioController : ControllerBase
     {
         private readonly ILogger<TipoServicioController> _logger;
@@ -69,7 +71,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                     
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(p => p.TipoServicoNro == id);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(p => p.TipoServicioId == id);
 
                 if (TipoServicio == null) 
                 {
@@ -97,7 +99,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTipoServicio([FromBody] TipoServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> CrearTipoServicio([FromBody] TablaMenorCreateDTO CreateDTO)
         {
             try
             {
@@ -124,7 +126,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.Resultado = _TipoServicio;
                 _response.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetTipoServicioById", new { id = _TipoServicio.TipoServicoNro }, _response);
+                return CreatedAtRoute("GetTipoServicioById", new { id = _TipoServicio.TipoServicioId }, _response);
             }
             catch (Exception ex)
             {
@@ -142,7 +144,7 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTipoServicio(int id,[FromBody] TipoServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> ActualizarTipoServicio(int id,[FromBody] TablaMenorCreateDTO CreateDTO)
         {
             try
             {
@@ -153,7 +155,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicoNro == id, tracked: false);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicioId == id, tracked: false);
                 if (TipoServicio == null)
                 {
                     _response.isExitoso = false;
@@ -162,7 +164,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 TipoServicio modelo = _mapper.Map<TipoServicio>(CreateDTO);
-                modelo.TipoServicoNro = (short)id;
+                modelo.TipoServicioId = (short)id;
 
                 await _TipoServicioRepositorio.Actualizar(modelo);               
 
@@ -196,7 +198,7 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicoNro == id, tracked: false);
+                var TipoServicio = await _TipoServicioRepositorio.Obtener(c => c.TipoServicioId == id, tracked: false);
                 if (TipoServicio == null)
                 {
                     _response.isExitoso = false;
