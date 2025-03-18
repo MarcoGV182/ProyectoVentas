@@ -3,6 +3,7 @@ using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Services;
+using SistemaFacturacion_Model.Modelos;
 
 namespace SistemaFacturacion_API
 {
@@ -37,6 +38,7 @@ namespace SistemaFacturacion_API
             services.AddScoped<ITipoDocumentoIdentidadRepositorio, TipoDocumentoIdentidadRepositorio>();
             services.AddScoped<IRefreshTokenRepositorio, RefreshTokenRepositorio>();
             services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
+            services.AddScoped<ITransaccionRepositorio<Venta,DetalleVenta>, TransaccionRepositorio<Venta, DetalleVenta>>();
         }
     }
 }

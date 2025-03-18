@@ -28,11 +28,11 @@ namespace SistemaFacturacion_Model.Modelos
         [MaxLength(8)]
         public string Estado { get; set; }
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
-        public short UsuarioIdRegistro { get; set; }       
+        public string UsuarioIdRegistro { get; set; }       
         public DateTime? FechaModificacion { get; set; }
-        public short? UsuarioIdModificacion { get; set; }       
+        public string UsuarioIdModificacion { get; set; }       
         public DateTime? FechaAnulacion { get; set; }
-        public short? UsuarioIdAnulacion { get; set; }       
+        public string UsuarioIdAnulacion { get; set; }       
         public short EmpresaId { get; set; }
         [ForeignKey(nameof(EmpresaId))]
         public Empresa Empresa { get; set; }

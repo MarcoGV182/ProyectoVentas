@@ -13,8 +13,7 @@ namespace SistemaFacturacion_Model.Modelos
         public string Numero { get; set; }
         [Required]
         public DateTime FechaInicioVigencia { get; set; }
-        public DateTime FechaFinVigencia { get; set; }
-       
+        public DateTime FechaFinVigencia { get; set; }       
         [Required]
         [MaxLength(15)]
         public string TipoTimbrado { get; set; }
