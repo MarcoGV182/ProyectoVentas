@@ -1,113 +1,211 @@
 ﻿@page "/ventas"
 @using MudBlazor
+@using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Cliente
+@using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Productos
 @inject ISnackbar _Snackbar
 @inject IVentaService _VentaService
 @inject IClienteService _ClienteService
 @inject IArticuloService _ArticuloService
+@inject ITimbradoService _timbradoService
 @inject IDialogService _DialogService
+@inject UsuarioEstadoService UserStateService
 
-<MudForm @ref="_form">
-    <MudCard>
-        <MudCardHeader>
-            <MudText Typo="Typo.h5">Nueva Venta</MudText>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudGrid>
-                <!-- Sección de datos principales -->
-                <MudItem xs="12" sm="6">
-                    <MudTextField Label="Cliente" Value="ClienteFormateado" Disabled="true" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AbrirModalBuscarCliente">
-                        Buscar Cliente
-                    </MudButton>
-                </MudItem>
+<MudGrid>
+    <!-- Cabecera del formulario -->
+    <MudItem xs="12">
+        <MudCard>
+            <MudCardHeader>
+                <MudText Typo="Typo.h5">Datos Cliente</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid>
+                    <!-- Código Cliente -->
+                    <MudItem xs="12" sm="4">
+                        <MudTextField Label="Cliente" Value="ClienteFormateado" Disabled="true" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AbrirModalBuscarCliente">
+                            Buscar Cliente
+                        </MudButton>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <MudTextField InputType="InputType.Date" Label="Fecha" @bind-Value="@venta.Fecha" Format="yyyy-MM-dd" For="@(() => venta.Fecha)" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>                   
+                    <MudItem xs="12" sm="2">
+                        <MudTextField InputType="InputType.Number" Label="Establecimiento" @bind-Value="@venta.Establecimiento" Format="000" Class="compact-field" For="@(() => venta.Establecimiento)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="2">
+                        <MudTextField InputType="InputType.Number" Label="Punto Exp." @bind-Value="@venta.PuntoExpedicion" Format="000" Class="compact-field" For="@(() => venta.PuntoExpedicion)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="2">
+                        <MudTextField InputType="InputType.Number" Label="Número" @bind-Value="@venta.Numero" Format="0000000" Class="compact-field" For="@(() => venta.Numero)" />
+                    </MudItem>
+                    <!-- Timbrado -->
+                    <MudItem xs="12" sm="2">
+                        <MudTextField Label="Timbrado"
+                        Value="timbradoSeleccionado.Numero"
+                        Format="0000000"
+                        Disabled="true"
+                        Class="compact-field" />
+                    </MudItem>
 
-                <MudItem xs="12" sm="4">
-                    <MudNumericField Label="Establecimiento" @bind-Value="@venta.Establecimiento" 
-                    Required="true" Immediate="true"/>
-                </MudItem>
+                    <MudItem xs="12" sm="3">
+                        <MudRadioGroup T= "bool" 
+                        Value="@esAutoimprenta"
+                        ValueChanged="@(async (value) => await OnTipoSeleccionado(value))">
+                            <MudRadio Value="true" Color="Color.Primary" Dense="true">Autoimprenta</MudRadio>
+                            <MudRadio Value="false" Color="Color.Secondary" Dense="false">Manual</MudRadio>
+                        </MudRadioGroup>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 
-                <MudItem xs="12" sm="4">
-                    <MudNumericField Label="Punto Expedición" @bind-Value="@venta.PuntoExpedicion" 
-                    Required="true" Immediate="true"/>
-                </MudItem>
+    <!-- Sección de detalles de venta -->
+    <MudItem xs="12" sm="8">
+        <MudCard Class="mt-4">
+            <MudCardHeader>
+                <MudText Typo="Typo.h5">Detalles de Venta</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <!-- Tabla de productos -->
+                <MudTable Items="@detalles" Hover="true" Class="mt-2">
+                    <HeaderContent>
+                        <MudTh>Nro</MudTh>
+                        <MudTh>Producto/Servicio</MudTh>
+                        <MudTh>Precio</MudTh>
+                        <MudTh>Cantidad</MudTh>
+                        <MudTh>Total</MudTh>
+                        <MudTh>Acciones</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <!-- item -->
+                        <MudTd>
+                            @context.NroItem
+                        </MudTd>
 
-                <MudItem xs="12" sm="4">
-                    <MudSelect Label="Timbrado" @bind-Value="@venta.TimbradoId">
-                        <!-- Aquí cargarías los timbrados disponibles -->
-                    </MudSelect>
-                </MudItem>
-            </MudGrid>
+                        <!-- Articulo -->
+                        <MudTd>
+                            <MudTextField Label="Artículo/Servicio"
+                            Variant="Variant.Outlined"
+                            @bind-Value="@context.DescripcionArticulo"
+                            Adornment="Adornment.End"
+                            ReadOnly="true" 
+                            Disabled="false" 
+                            AdornmentIcon="@Icons.Material.Filled.Search"
+                            OnAdornmentClick="() => AbrirModalBuscarArticulo(context)"
+                            Class="compact-field" />
+                        </MudTd>
 
-            <!-- Sección de detalles de venta -->
-            <MudText Typo="Typo.h6" Class="mt-4">Detalles de Venta</MudText>
+                        <!-- Precio -->
+                        <MudTd>
+                            <MudNumericField @bind-Value="@context.PrecioBase"
+                            Immediate="true"
+                            @bind-Value:after="() => CalcularTotales()"/>
+                        </MudTd>
 
-            <MudTable Items="@detalles" Hover="true" Class="mt-2">
-                <HeaderContent>
-                    <MudTh>Artículo</MudTh>
-                    <MudTh>Cantidad</MudTh>
-                    <MudTh>Precio</MudTh>
-                    <MudTh>Total</MudTh>
-                    <MudTh>Acciones</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd>
-                        <MudSelect T="int" @bind-Value="@context.ArticuloId" @bind-Value:after="() => AsignarPrecioBase(context)">
-                            @foreach (var art in articulos)
-                            {   
-                                <MudSelectItem Value="@art.ArticuloId">@art.Descripcion</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudTd>
-                    <MudTd>
-                        <MudNumericField @bind-Value="@context.Cantidad" Immediate="true"
-                        OnValueChanged="(_ => CalcularTotales())" />
-                    </MudTd>
-                    <MudTd>
-                        <MudNumericField @bind-Value="@context.PrecioBase" Immediate="true"
-                        OnValueChanged="(_ => CalcularTotales())" />
-                    </MudTd>
-                    <MudTd>@(context.Cantidad * (decimal)context.PrecioBase)</MudTd>
-                    <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" 
-                        OnClick="() => RemoveDetail(context)" />
-                    </MudTd>
-                </RowTemplate>
-            </MudTable>
+                        <!-- Cantidad -->
+                        <MudTd>
+                            <MudNumericField @bind-Value="@context.Cantidad"
+                            Immediate="true"
+                            @bind-Value:after="() => CalcularTotales()" />
+                        </MudTd>
 
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" 
-            Class="mt-2" OnClick="AddDetail">
-                Agregar Artículo
-            </MudButton>
-        </MudCardContent>
+                        <!-- Total -->
+                        <MudTd>
+                            @((context.Cantidad * context.PrecioBase).ToString("N0"))
+                        </MudTd>
 
-        <MudCardActions>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" 
-            OnClick="Submit">Guardar Venta</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Secondary" 
-            Href="/ventas">Cancelar</MudButton>
-        </MudCardActions>
-    </MudCard>
-</MudForm>
+                        <!-- Acciones -->
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                            OnClick="() => EliminarDetalle(context)"
+                            Size="Size.Small" />
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+
+                <!-- Botón para agregar producto -->
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AgregarDetalle" Class="mt-2">
+                    Agregar Producto
+                </MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Sección de totales y botones de acción -->
+    <MudItem xs="12" sm="4">
+        <MudCard Class="mt-4">
+            <MudCardHeader>
+                <MudText Typo="Typo.h5">Totales</MudText>
+            </MudCardHeader>
+            <MudCardContent>               
+
+                <!-- Total Impuestos -->
+                <MudText Typo="Typo.h6">Total IVA: @totalIva.ToString("N0")</MudText>
+
+                <!-- Total Impuestos -->
+                <MudText Typo="Typo.h6">Total Gravado: @totalgravado.ToString("N0")</MudText>
+
+                <!-- Total a Pagar -->
+                <MudText Typo="Typo.h6">Total a Pagar: @TotalPagar.ToString("N0")</MudText>
+
+                <!-- Botones de acción -->
+                <MudGrid Class="mt-4">
+                    <MudItem xs="12">
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ResetForm" FullWidth="true">
+                            Cancelar
+                        </MudButton>
+                    </MudItem>
+                    <MudItem xs="12" Class="mt-2">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" FullWidth="true">
+                            Generar Venta
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    /* CSS personalizado */
+    .compact-field .mud-input {
+    max-width: 150px; /* Ancho máximo para los campos */
+    }
+
+    .compact-field .mud-input-control {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    }
+</style>
 
 @code {
-    private MudForm _form;
     private VentaCreateDTO venta = new VentaCreateDTO();
     private List<DetalleVentaCreateDTO> detalles = new List<DetalleVentaCreateDTO>();
     private List<ClienteDTO> clientes = new List<ClienteDTO>();
     private ClienteDTO clienteSeleccionado = null;
+    private ArticuloDTO articuloSeleccionado = null;
+    private TimbradoDTO timbradoSeleccionado = new TimbradoDTO();
     private List<ArticuloDTO> articulos = new List<ArticuloDTO>();
     private Shared utilidades = new Shared();
+    private decimal TotalPagar = 0;
+    private decimal totalIva = 0;
+    private decimal totalgravado = 0;
+    private bool esAutoimprenta = true;
     private string ClienteFormateado =>
     clienteSeleccionado != null
         ? $"{clienteSeleccionado.Apellido}, {clienteSeleccionado.Nombre} ({clienteSeleccionado.PersonaId})"
-        : string.Empty;
+        : string.Empty;    
 
 
     private void AsignarPrecioBase(DetalleVentaCreateDTO detalle)
-    {
-        var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+    {   
         if (articuloSeleccionado != null)
         {
+            detalle.ArticuloId = articuloSeleccionado.ArticuloId;
             detalle.PrecioBase = articuloSeleccionado.PrecioBase;
             detalle.TipoimpuestoId = articuloSeleccionado.TipoImpuesto.TipoimpuestoId;
             CalcularTotales(); // Actualizar los totales
@@ -117,6 +215,7 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadData();
+        await BuscarTimbrado();
     }
 
     private async Task LoadData()
@@ -125,58 +224,89 @@
         articulos = await _ArticuloService.ObtenerTodos();
     }
 
-    private void AddDetail()
+    private void AgregarDetalle()
     {
         detalles.Add(new DetalleVentaCreateDTO
         {
             NroItem = detalles.Count + 1
         });
+        articuloSeleccionado = null;
     }
 
-    private void RemoveDetail(DetalleVentaCreateDTO detail)
+    private void EliminarDetalle(DetalleVentaCreateDTO detail)
     {
         detalles.Remove(detail);
         StateHasChanged();
     }
 
+    private async Task OnTipoSeleccionado(bool nuevoValor)
+    {
+        esAutoimprenta = nuevoValor;
+        await BuscarTimbrado();
+    }
+
+
     private void CalcularTotales()
     {
-        foreach (var detalle in detalles)
+        try
         {
-            var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
-            detalle.Total = detalle.Cantidad * (decimal)detalle.PrecioBase;
-            detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
+            foreach (var detalle in detalles)
+            {
+                var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+                detalle.Total = detalle.Cantidad * (decimal)detalle.PrecioBase;
+                detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
+                                                                     articuloSeleccionado.TipoImpuesto.Porcentajeiva,
+                                                                     articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                     "GRAVADO");
+                detalle.ImporteIVA = utilidades.CalcularImpuesto(detalle.Total,
                                                                  articuloSeleccionado.TipoImpuesto.Porcentajeiva,
                                                                  articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
-                                                                 "GRAV");
-            detalle.ImporteIVA = utilidades.CalcularImpuesto(detalle.Total,
-                                                             articuloSeleccionado.TipoImpuesto.Porcentajeiva,
-                                                             articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
-                                                             "IVA");
-            detalle.ImporteExento = utilidades.CalcularImpuesto(detalle.Total,
-                                                             articuloSeleccionado.TipoImpuesto.Porcentajeiva,
-                                                                articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
-                                                                "EXEN");
+                                                                 "IVA");
+                detalle.ImporteExento = utilidades.CalcularImpuesto(detalle.Total,
+                                                                 articuloSeleccionado.TipoImpuesto.Porcentajeiva,
+                                                                    articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                    "EXENTO");
+            }            
         }
+        catch (Exception)
+        {   
+
+        }
+        finally
+        {
+            TotalPagar = detalles.Sum(c => c.Total);
+            totalIva = detalles.Sum(c => c.ImporteIVA);
+            totalgravado = detalles.Sum(c => c.ImporteGravado);        
+        }    
     }
 
     private async Task Submit()
     {
-        await _form.Validate();
-        
-        if (_form.IsValid)
+        try
         {
-            try 
+            #region Validaciones
+
+            if (detalles == null || detalles.Count() == 0)
             {
-                venta.DetalleVenta = detalles;
-                await _VentaService.RegistrarVenta<VentaDTO>(venta);
-                _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
-                ResetForm();
+                _Snackbar.Add("No existen registros en el detalle", Severity.Error);
+                return;
             }
-            catch (Exception ex)
-            {
-                _Snackbar.Add($"Error al registrar: {ex.Message}", Severity.Error);
-            }
+            #endregion
+            
+
+
+            venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
+            venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
+            venta.DetalleVenta = detalles;
+            venta.Total = detalles.Sum(s => s.Total);
+            venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);
+            await _VentaService.RegistrarVenta<VentaDTO>(venta);
+            _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
+            ResetForm();
+        }
+        catch (Exception ex)
+        {
+            _Snackbar.Add($"Error al registrar: {ex.Message}", Severity.Error);
         }
     }
 
@@ -193,10 +323,75 @@
         }
     }
 
+    private async Task AbrirModalBuscarArticulo(DetalleVentaCreateDTO detalle)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = _DialogService.Show<MdBuscarProducto>("Buscar Articulo/Servicio", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            articuloSeleccionado = (ArticuloDTO)result.Data;
+            detalle.DescripcionArticulo = articuloSeleccionado != null ? $"{articuloSeleccionado.Descripcion}({articuloSeleccionado.ArticuloId})" : string.Empty;
+            AsignarPrecioBase(detalle);
+        }
+    }
+
+    private async Task BuscarTimbrado()
+    {       
+        try
+        {
+            // Ejemplo de llamada a servicio
+            var resultado = await _timbradoService.ObtenerTodos<List<TimbradoDTO>>();
+
+            if (resultado.isExitoso)
+            {
+                var listaTimbrado = (List<TimbradoDTO>)resultado.Resultado;
+                var TipoTimbradoActual = esAutoimprenta ? "Autoimprenta" : "Manual";
+
+                if (!listaTimbrado.Any())
+                {
+                    _Snackbar.Add("No se encontraron timbrados", Severity.Warning);
+                    return;
+                }
+
+                var timbradoEncontrado = listaTimbrado.Where(c => c.TipoTimbrado.Equals(TipoTimbradoActual) && c.Estado == "A").FirstOrDefault();
+                if (timbradoEncontrado != null)
+                {
+                    timbradoSeleccionado = timbradoEncontrado;
+                    venta.TimbradoId = timbradoEncontrado.TimbradoId;
+                }
+                else
+                {
+                    _Snackbar.Add("No se encontraron timbrados", Severity.Warning);
+                    timbradoSeleccionado = new TimbradoDTO();
+                    return;
+                }
+
+
+            }
+            else
+            {                
+                _Snackbar.Add("No se encontraron timbrados", Severity.Warning);
+                timbradoSeleccionado = new TimbradoDTO();
+                return;
+            }
+
+           
+        }
+        catch (Exception ex)
+        {
+            _Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+        finally
+        {            
+            StateHasChanged();
+        }
+    }
+
     private void ResetForm()
     {
         venta = new VentaCreateDTO();
         detalles.Clear();
-        _form.ResetValidation();
     }
 }

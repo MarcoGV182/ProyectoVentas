@@ -20,134 +20,138 @@
             OnClick="AbrirNuevaproducto">
                 Nuevo producto</MudButton>
         </MudItem>
-        <MudItem xs="12">
-                <MudTable 
-                    Items="@listaproductos"
-                    Dense="true"
-                    Striped="true" Bordered="true" 
-                    Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
-                    Loading="@_loading" LoadingProgressColor="Color.Info" >
-                    @* <ToolBarContent>
+            @if (isLoading)
+            {
+                <MudProgressCircular Height="40px" Width="100%" Class="mt-2" Color="Color.Primary" Indeterminate="true" />
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudTable Items="@listaproductos"
+                              Dense="true"
+                              Striped="true" Bordered="true"
+                              Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                              Loading="@_loading" LoadingProgressColor="Color.Info">
+                        @* <ToolBarContent>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                     </ToolBarContent> *@
-                    <ToolBarContent>
-                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        <MudTextField @bind-Value="searchString2" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        <MudTextField @bind-Value="searchString3" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        <MudSpacer />
-                        <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
-                    </ToolBarContent>
-                    <HeaderContent >
-                        <MudTh Style="width: 5px;">
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.ArticuloId)">
-                                Código
-                            </MudTableSortLabel>
-                         </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Codigobarra)">
-                                Código de Barras
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Descripcion)">
-                                Descripción
-                            </MudTableSortLabel>
-                         </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.TipoImpuesto.Descripcion)">
-                                Impuesto
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Categoria.Descripcion)">
-                                Categoria
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Marca.Descripcion)">
-                                Marca
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioBase)">
-                                Precio
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioCompra)">
-                                Precio Compra
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockminimo)">
-                                Stock Mínimo
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockactual)">
-                                Stock Actual
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Presentacion.Descripcion)">
-                                Presentación
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.UnidadMedida.Descripcion)">
-                                Unidad Medida
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.FechaVencimiento)">
-                               Fecha Vencimiento
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>
-                            <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Estado)">
-                                Estado
-                            </MudTableSortLabel>
-                        </MudTh>
-                        <MudTh>Acciones</MudTh>
-                        <MudTh></MudTh>
-                    </HeaderContent>
-                    <RowTemplate Context="productoRow">
-                        <MudTd DataLabel="Codigo">@productoRow.ArticuloId</MudTd>
-                        <MudTd DataLabel="Cod. de Barras">@productoRow.Codigobarra</MudTd>
-                        <MudTd DataLabel="Descripcion">@productoRow.Descripcion</MudTd>
-                        <MudTd DataLabel="Impuesto">@productoRow.TipoImpuesto.Descripcion</MudTd>
-                        <MudTd DataLabel="Categoria">@((productoRow.Categoria?.Descripcion) ?? "")</MudTd>
-                        <MudTd DataLabel="Marca">@((productoRow.Marca?.Descripcion) ?? "")</MudTd>
-                        <MudTd DataLabel="Precio">@productoRow.PrecioBase.ToString("N0")</MudTd>
-                        <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
-                        <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
-                        <MudTd DataLabel="Stock">@productoRow.Stockactual</MudTd>
-                        <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
-                        <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
-                        <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "": productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
-                        <MudTd DataLabel="Estado">@((productoRow.Estado == "A") ? "Activo" : "Inactivo")</MudTd>
-                        <MudTd DataLabel="">
-                            <MudFab Color="Color.Primary" 
-                                StartIcon="@Icons.Material.Filled.Edit"
-                                Size="Size.Small" 
-                                IconSize="Size.Small"
-                                    OnClick="@(() => AbrirEditarproducto(productoRow))" />
-                            <MudFab 
-                                Color="Color.Error" 
-                                StartIcon="@Icons.Material.Filled.Delete" 
-                                Size="Size.Small" 
-                                IconSize="Size.Small"
-                                OnClick="@(() => Eliminarproducto(productoRow))"
-                            />
-                        </MudTd>
-                    </RowTemplate>
-                    <PagerContent>
-                        <MudTablePager RowsPerPageString="Filas por Página:" />
-                    </PagerContent>
-                </MudTable>
-        </MudItem>
-    </MudGrid>
+                        <ToolBarContent>
+                            <MudTextField @bind-Value="searchString1" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchString2" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchString3" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudSpacer />
+                            <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
+                        </ToolBarContent>
+                        <HeaderContent>
+                            <MudTh Style="width: 5px;">
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.ArticuloId)">
+                                    Código
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Codigobarra)">
+                                    Código de Barras
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Descripcion)">
+                                    Descripción
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.TipoImpuesto.Descripcion)">
+                                    Impuesto
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Categoria.Descripcion)">
+                                    Categoria
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Marca.Descripcion)">
+                                    Marca
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioBase)">
+                                    Precio
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.PrecioCompra)">
+                                    Precio Compra
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockminimo)">
+                                    Stock Mínimo
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockactual)">
+                                    Stock Actual
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Presentacion.Descripcion)">
+                                    Presentación
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.UnidadMedida.Descripcion)">
+                                    Unidad Medida
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.FechaVencimiento)">
+                                    Fecha Vencimiento
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Estado)">
+                                    Estado
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>Acciones</MudTh>
+                            <MudTh></MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="productoRow">
+                            <MudTd DataLabel="Codigo">@productoRow.ArticuloId</MudTd>
+                            <MudTd DataLabel="Cod. de Barras">@productoRow.Codigobarra</MudTd>
+                            <MudTd DataLabel="Descripcion">@productoRow.Descripcion</MudTd>
+                            <MudTd DataLabel="Impuesto">@productoRow.TipoImpuesto.Descripcion</MudTd>
+                            <MudTd DataLabel="Categoria">@((productoRow.Categoria?.Descripcion) ?? "")</MudTd>
+                            <MudTd DataLabel="Marca">@((productoRow.Marca?.Descripcion) ?? "")</MudTd>
+                            <MudTd DataLabel="Precio">@productoRow.PrecioBase.ToString("N0")</MudTd>
+                            <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
+                            <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
+                            <MudTd DataLabel="Stock">@productoRow.Stockactual</MudTd>
+                            <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
+                            <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
+                            <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "" : productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
+                            <MudTd DataLabel="Estado">@((productoRow.Estado == "A") ? "Activo" : "Inactivo")</MudTd>
+                            <MudTd DataLabel="">
+                                <MudFab Color="Color.Primary"
+                                        StartIcon="@Icons.Material.Filled.Edit"
+                                        Size="Size.Small"
+                                        IconSize="Size.Small"
+                                        OnClick="@(() => AbrirEditarproducto(productoRow))" />
+                                <MudFab Color="Color.Error"
+                                        StartIcon="@Icons.Material.Filled.Delete"
+                                        Size="Size.Small"
+                                        IconSize="Size.Small"
+                                        OnClick="@(() => Eliminarproducto(productoRow))" />
+                            </MudTd>
+                        </RowTemplate>
+                        <PagerContent>
+                            <MudTablePager RowsPerPageString="Filas por Página:" />
+                        </PagerContent>
+                    </MudTable>
+                </MudItem>
+            }
+        </MudGrid>
    </MudPaper>
 </MudContainer>
 @code {
@@ -157,15 +161,31 @@
     private string searchString3 = "";
     private ProductoDTO selectedItem1 = null;
     private bool _loading = true;
+    private bool isLoading = false;
 
     private async Task Obtenerproductos()
     {
-        var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
-
-        if (result.isExitoso)
+        try
         {
-            listaproductos = (List<ProductoDTO>)result.Resultado!;
+            isLoading = true;
+            StateHasChanged(); // Fuerza actualización UI
+
+            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
+
+            if (result.isExitoso)
+            {
+                listaproductos = (List<ProductoDTO>)result.Resultado!;
+            }
         }
+        catch (Exception ex)
+        {            
+            _snackBar.Add($"Error al cargar artículos: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }      
     }
 
 

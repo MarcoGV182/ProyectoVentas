@@ -1,0 +1,118 @@
+﻿@inject IArticuloService _articuloService
+@inject ISnackbar _snackBar
+
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField Label="Buscar por Descripcion o documento" @bind-Value="@criterioBusqueda" Immediate="true" @onkeydown="HandleKeyDown" />
+        <MudRadioGroup @bind-Value="SelectedOption">
+            <MudRadio Value="@("Producto")" Color="Color.Primary">Producto</MudRadio>
+            <MudRadio Value="@("Servicio")" Color="Color.Secondary">Servicio</MudRadio>
+        </MudRadioGroup>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BuscarProducto" Disabled="@isLoading">
+            Buscar
+        </MudButton>
+
+        @if (isLoading)
+        {
+            <div class="d-flex justify-center mt-4">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Large" />
+                <MudText Class="ml-2">Cargando lista...</MudText>
+            </div>
+        }
+        else if (articulos.Any())
+        {
+            <MudTable Items="@articulos" Hover="true" Class="mt-4">
+                <HeaderContent>
+                    <MudTh>Descripcion</MudTh>
+                    <MudTh>Precio</MudTh>
+                    <MudTh>Impuesto</MudTh>
+                    <MudTh>Estado</MudTh>
+                    <MudTh>Tipo</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.Descripcion</MudTd>
+                    <MudTd>@context.PrecioBase</MudTd>
+                    <MudTd>@context.TipoImpuesto.Descripcion</MudTd>
+                    <MudTd>@context.Estado</MudTd>
+                    <MudTd>@context.TipoArticulo</MudTd>
+                    <MudTd>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => SeleccionarArticulo(context)">
+                            Seleccionar
+                        </MudButton>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Class="mt-4">El Articulo ingresado no existe</MudText>
+        }
+
+
+    </DialogContent>
+</MudDialog>
+
+@code {
+    private List<ArticuloDTO> articulos = new List<ArticuloDTO>();
+    private string criterioBusqueda;
+    private bool isLoading = false;
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+    public string SelectedOption { get; set; } = "Producto";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await BuscarProducto();
+    }
+
+    private async Task BuscarProducto()
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged(); // Fuerza actualización UI
+
+            var result = await _articuloService.ObtenerTodos();
+            if (!string.IsNullOrEmpty(criterioBusqueda))
+            {
+                // Cargar datos necesarios
+                articulos = result.Where(c => c.Descripcion.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) &&
+                            c.TipoArticulo.ToString() == SelectedOption)
+                            .ToList();
+            }
+            else
+            {
+                articulos = result.Where(c => c.TipoArticulo.ToString() == SelectedOption)
+                            .ToList();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _snackBar.Add($"Error al cargar artículos: {ex.Message}", Severity.Error);
+        }finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+      
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key.ToUpper() == "ENTER")
+        {
+            await BuscarProducto();
+        }
+    }
+
+    private void SeleccionarArticulo(ArticuloDTO articulo)
+    {
+        MudDialog.Close(DialogResult.Ok(articulo));
+    }
+
+
+}

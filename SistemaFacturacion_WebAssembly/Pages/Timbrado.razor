@@ -1,0 +1,176 @@
+﻿@page "/timbrado"
+@inject ITimbradoService _timbradoService
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject SweetAlertService Swal;
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Timbrados</MudText>
+
+    <MudPaper Elevation="3" Class="pa-4" Width="100%">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           OnClick="CrearNuevoRegistro">
+                    Nuevo Registro
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+
+                <MudTable Items="@listaTimbrados"
+                          Dense="true"
+                          Striped="true" Bordered="true"
+                          Filter="new Func<TimbradoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                          Loading="@_loading" LoadingProgressColor="Color.Info">
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTd>
+                            <MudTableSortLabel SortBy="new Func<TimbradoDTO, object>(x=> x.TimbradoId)">
+                                Código
+                            </MudTableSortLabel>
+                        </MudTd>                        
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TimbradoDTO, object>(x=> x.Numero)">
+                                Número
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TimbradoDTO, object>(x=> x.FechaInicioVigencia)">
+                                Inicio Vigencia
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TimbradoDTO, object>(x=> x.FechaFinVigencia)">
+                                Fin Vigencia
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<TimbradoDTO, object>(x=> x.TipoTimbrado)">
+                                Tipo
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="TimbradoRow">
+                        <MudTd DataLabel="Codigo">@TimbradoRow.TimbradoId</MudTd>
+                        <MudTd DataLabel="Descripcion">@TimbradoRow.Numero</MudTd>
+                        <MudTd DataLabel="FechaInicioVigencia">@((TimbradoRow.FechaInicioVigencia == null) ? "" : TimbradoRow.FechaInicioVigencia.ToShortDateString())</MudTd>
+                        <MudTd DataLabel="FechaFinVigencia">@TimbradoRow.FechaFinVigencia</MudTd>
+                        <MudTd DataLabel="Tipo">@TimbradoRow.TipoTimbrado</MudTd>
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => EditarRegistro(TimbradoRow))" />
+                            <MudFab Color="Color.Error"
+                                    StartIcon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => EliminarRegistro(TimbradoRow))" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
+                    </PagerContent>
+                </MudTable>
+
+
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+</MudContainer>
+@code {
+    List<TimbradoDTO> listaTimbrados = new List<TimbradoDTO>();
+    private string searchString1 = "";
+    private TimbradoDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerTimbrado()
+    {
+        var result = await _timbradoService.ObtenerTodos<List<TimbradoDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaTimbrados = (List<TimbradoDTO>)result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerTimbrado();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(TimbradoDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(TimbradoDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Numero.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
+
+        return false;
+    }
+
+    private async Task CrearNuevoRegistro()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = _dialogServicio.Show<MdCategoriaProducto>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerTimbrado();
+        }
+    }
+
+    private async Task EditarRegistro(TimbradoDTO tipo)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_Categoria"] = tipo };
+
+        var dialogo = _dialogServicio.Show<MdCategoriaProducto>("Editar Registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerTimbrado();
+        }
+    }
+
+    private async Task EliminarRegistro(TimbradoDTO timbrado)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar : {timbrado.Numero}({timbrado.TimbradoId})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _timbradoService.Eliminar<TimbradoDTO>(timbrado.TimbradoId);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("El item fue eliminado", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerTimbrado();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",", resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

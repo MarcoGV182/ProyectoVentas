@@ -10,10 +10,21 @@ using SistemaFacturacion_WebAssembly.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Cliente;
 using static SistemaFacturacion_WebAssembly.Services.UsuarioEstadoService;
+using System.Globalization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+
+
+#region Agregar cultura predeterminada
+// Configurar la cultura predeterminada
+var cultureInfo = new CultureInfo("es-ES");
+cultureInfo.NumberFormat.NumberGroupSeparator = ".";
+cultureInfo.NumberFormat.NumberDecimalSeparator = ",";
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+#endregion
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
@@ -42,6 +53,7 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICiudadService, CiudadService>();
 builder.Services.AddScoped<IArticuloService, ArticuloService>();
 builder.Services.AddScoped<IVentaService, VentaService>();
+builder.Services.AddScoped<ITimbradoService, TimbradoService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<UsuarioEstadoService>();
 

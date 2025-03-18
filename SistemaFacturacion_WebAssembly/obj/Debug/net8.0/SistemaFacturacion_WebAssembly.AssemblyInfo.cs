@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SistemaFacturacion_WebAssembly")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2530c78df24a1b0b2eec1fab7d702d1d9df6f378")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54a3ed2dc59e0a2b5415d8cdd519b26d35b33251")]
 [assembly: System.Reflection.AssemblyProductAttribute("SistemaFacturacion_WebAssembly")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SistemaFacturacion_WebAssembly")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

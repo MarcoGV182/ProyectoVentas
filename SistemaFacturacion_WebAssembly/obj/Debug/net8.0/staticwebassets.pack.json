@@ -61,6 +61,10 @@
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
+      "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
       "Id": "D:\\Visual Studio Proyectos\\source\\repos\\SistemaFacturacionWeb\\SistemaFacturacion_WebAssembly\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
