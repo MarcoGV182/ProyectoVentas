@@ -120,6 +120,7 @@ namespace SistemaFacturacion_API.Controllers
                 _Servicio.Fecharegistro = DateTime.Now;
 
                 await _ServicioRepositorio.Crear(_Servicio);
+                await _ServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _Servicio;
@@ -166,6 +167,7 @@ namespace SistemaFacturacion_API.Controllers
                 modelo.ArticuloId = id;
 
                 await _ServicioRepositorio.Actualizar(modelo);
+                await _ServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -208,6 +210,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _ServicioRepositorio.Eliminar(Servicio);
+                await _ServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = Servicio;

@@ -119,6 +119,7 @@ namespace SistemaFacturacion_API.Controllers
                 _Categoria.Descripcion = CreateDTO.Descripcion;
 
                 await _CategoriaRepositorio.Crear(_Categoria);
+                await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _Categoria;
@@ -164,7 +165,8 @@ namespace SistemaFacturacion_API.Controllers
                 CategoriaProducto modelo = _mapper.Map<CategoriaProducto>(CreateDTO);
                 modelo.CategoriaId = (short)id;
 
-                await _CategoriaRepositorio.Actualizar(modelo);               
+                await _CategoriaRepositorio.Actualizar(modelo);
+                await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -205,6 +207,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _CategoriaRepositorio.Eliminar(Categoria);
+                await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = Categoria;

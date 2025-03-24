@@ -117,6 +117,8 @@ namespace SistemaFacturacion_API.Controllers
                 Persona modelo = _mapper.Map<Persona>(CreateDTO);
 
                 await _ClienteRepositorio.Crear(modelo);
+                await _ClienteRepositorio.Grabar();
+
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -162,7 +164,8 @@ namespace SistemaFacturacion_API.Controllers
                 Persona modelo = _mapper.Map<Persona>(CreateDTO);
                 modelo.PersonaId = id;
 
-                await _ClienteRepositorio.Actualizar(modelo);               
+                await _ClienteRepositorio.Actualizar(modelo);
+                await _ClienteRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -205,6 +208,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _ClienteRepositorio.Eliminar(Cliente);
+                await _ClienteRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = Cliente;

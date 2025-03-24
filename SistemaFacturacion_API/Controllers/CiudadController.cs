@@ -8,6 +8,7 @@ using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_Utilidad;
+using SistemaFacturacion_API.Repositorio;
 
 
 namespace SistemaFacturacion_API.Controllers
@@ -118,6 +119,7 @@ namespace SistemaFacturacion_API.Controllers
                 _ciudad.Descripcion = CreateDTO.Descripcion;
 
                 await _ciudadRepositorio.Crear(_ciudad);
+                await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _ciudad;
@@ -163,7 +165,8 @@ namespace SistemaFacturacion_API.Controllers
                 Ciudad modelo = _mapper.Map<Ciudad>(CreateDTO);
                 modelo.CiudadId = id;
 
-                await _ciudadRepositorio.Actualizar(modelo);               
+                await _ciudadRepositorio.Actualizar(modelo);
+                await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -206,6 +209,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _ciudadRepositorio.Eliminar(ciudad);
+                await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = ciudad;

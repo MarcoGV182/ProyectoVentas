@@ -119,6 +119,7 @@ namespace SistemaFacturacion_API.Controllers
                 _Presentacion.Descripcion = CreateDTO.Descripcion;
 
                 await _PresentacionRepositorio.Crear(_Presentacion);
+                await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _Presentacion;
@@ -164,7 +165,8 @@ namespace SistemaFacturacion_API.Controllers
                 Presentacion modelo = _mapper.Map<Presentacion>(CreateDTO);
                 modelo.PresentacionId = (short)id;
 
-                await _PresentacionRepositorio.Actualizar(modelo);               
+                await _PresentacionRepositorio.Actualizar(modelo);
+                await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -205,6 +207,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _PresentacionRepositorio.Eliminar(Presentacion);
+                await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = Presentacion;

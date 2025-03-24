@@ -15,7 +15,7 @@ namespace SistemaFacturacion_Model.Modelos
         public int ClienteId { get; set; }
         public Persona Cliente { get; set; }
         public DateTime Fecha { get; set; }
-        public int ColaboradorId { get; set; }
+        public int? ColaboradorId { get; set; }
         public Colaborador Vendedor { get; set; }
         public string Observacion { get; set; }
         public decimal Total { get; set; }
@@ -33,7 +33,7 @@ namespace SistemaFacturacion_Model.Modelos
         public string UsuarioIdModificacion { get; set; }       
         public DateTime? FechaAnulacion { get; set; }
         public string UsuarioIdAnulacion { get; set; }       
-        public short EmpresaId { get; set; }
+        public short? EmpresaId { get; set; }
         [ForeignKey(nameof(EmpresaId))]
         public Empresa Empresa { get; set; }
         public IEnumerable<DetalleVenta> DetalleVenta { get; set; }

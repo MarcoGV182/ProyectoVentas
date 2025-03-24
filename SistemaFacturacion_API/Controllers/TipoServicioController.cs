@@ -121,6 +121,7 @@ namespace SistemaFacturacion_API.Controllers
                 _TipoServicio.Descripcion = CreateDTO.Descripcion;
 
                 await _TipoServicioRepositorio.Crear(_TipoServicio);
+                await _TipoServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _TipoServicio;
@@ -166,7 +167,8 @@ namespace SistemaFacturacion_API.Controllers
                 TipoServicio modelo = _mapper.Map<TipoServicio>(CreateDTO);
                 modelo.TipoServicioId = (short)id;
 
-                await _TipoServicioRepositorio.Actualizar(modelo);               
+                await _TipoServicioRepositorio.Actualizar(modelo);
+                await _TipoServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -207,6 +209,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _TipoServicioRepositorio.Eliminar(TipoServicio);
+                await _TipoServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = TipoServicio;

@@ -7,12 +7,12 @@ namespace SistemaFacturacion_Model.Modelos
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]        
         public int IdDetalle { get; set; }
-        public int NroVenta { get; set; }
-        [ForeignKey(nameof(NroVenta))]
+        public int VentaId { get; set; }
+        [ForeignKey(nameof(VentaId))]
         public Venta Venta { get; set; }
         public int NroItem { get; set; }
         public decimal Cantidad { get; set; }
-        public double Precio { get; set; } = 0;
+        public decimal Precio { get; set; } = 0;
         [Required]
         public short? TipoimpuestoId { get; set; }
         [ForeignKey(nameof(TipoimpuestoId))]

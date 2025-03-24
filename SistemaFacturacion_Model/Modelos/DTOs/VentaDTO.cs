@@ -23,8 +23,8 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public string EsAutoimprenta { get; set; }       
         public string Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
-        public short UsuarioIdRegistro { get; set; }        
+        public string UsuarioIdRegistro { get; set; }        
         public string Observacion { get; set; }
-        public IEnumerable<DetalleVenta> DetalleVenta { get; set; }
+        public IEnumerable<DetalleVentaDTO> DetalleVenta { get; set; }
     }
 }

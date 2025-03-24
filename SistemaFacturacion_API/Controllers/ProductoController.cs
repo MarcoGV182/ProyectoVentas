@@ -130,6 +130,7 @@ namespace SistemaFacturacion_API.Controllers
 
 
                 await _ProductoRepositorio.Crear(_producto);
+                await _ProductoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -178,6 +179,7 @@ namespace SistemaFacturacion_API.Controllers
                 modelo.Fechaultactualizacion = DateTime.Now;
 
                 await _ProductoRepositorio.Actualizar(modelo);
+                await _ProductoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -219,6 +221,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _ProductoRepositorio.Eliminar(marca);
+                await _ProductoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = marca;

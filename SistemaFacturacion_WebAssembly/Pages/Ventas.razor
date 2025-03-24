@@ -100,7 +100,7 @@
 
                         <!-- Precio -->
                         <MudTd>
-                            <MudNumericField @bind-Value="@context.PrecioBase"
+                            <MudNumericField @bind-Value="@context.Precio"
                             Immediate="true"
                             @bind-Value:after="() => CalcularTotales()"/>
                         </MudTd>
@@ -114,7 +114,7 @@
 
                         <!-- Total -->
                         <MudTd>
-                            @((context.Cantidad * context.PrecioBase).ToString("N0"))
+                            @((context.Cantidad * context.Precio).ToString("N0"))
                         </MudTd>
 
                         <!-- Acciones -->
@@ -206,7 +206,7 @@
         if (articuloSeleccionado != null)
         {
             detalle.ArticuloId = articuloSeleccionado.ArticuloId;
-            detalle.PrecioBase = articuloSeleccionado.PrecioBase;
+            detalle.Precio = articuloSeleccionado.PrecioBase;
             detalle.TipoimpuestoId = articuloSeleccionado.TipoImpuesto.TipoimpuestoId;
             CalcularTotales(); // Actualizar los totales
         }
@@ -226,6 +226,12 @@
 
     private void AgregarDetalle()
     {
+        #region Validaciones
+        if (!ValidacionesCompartidas())
+            return;
+        #endregion
+
+
         detalles.Add(new DetalleVentaCreateDTO
         {
             NroItem = detalles.Count + 1
@@ -253,7 +259,7 @@
             foreach (var detalle in detalles)
             {
                 var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
-                detalle.Total = detalle.Cantidad * (decimal)detalle.PrecioBase;
+                detalle.Total = detalle.Cantidad * (decimal)detalle.Precio;
                 detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
                                                                      articuloSeleccionado.TipoImpuesto.Porcentajeiva,
                                                                      articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
@@ -291,18 +297,33 @@
                 _Snackbar.Add("No existen registros en el detalle", Severity.Error);
                 return;
             }
+
+            if (!ValidacionesCompartidas())
+                return;
             #endregion
+
             
-
-
+            
+            venta.NroFactura = $"{venta.Establecimiento.ToString().PadLeft(3, '0')}-{venta.PuntoExpedicion.ToString().PadLeft(3, '0')}-{venta.Numero.ToString().PadLeft(7, '0')}";
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
             venta.DetalleVenta = detalles;
             venta.Total = detalles.Sum(s => s.Total);
             venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);
-            await _VentaService.RegistrarVenta<VentaDTO>(venta);
-            _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
-            ResetForm();
+            //venta.EmpresaId = 1;
+            var resultado = await _VentaService.RegistrarVenta<VentaDTO>(venta);
+
+            if (resultado.isExitoso)
+            {
+                _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
+                ResetForm();
+            }
+            else  
+            {
+                _Snackbar.Add($"Ocurrió un error: {resultado.ErrorMessages}", Severity.Success);
+                return;
+            }            
+          
         }
         catch (Exception ex)
         {
@@ -377,7 +398,7 @@
                 return;
             }
 
-           
+
         }
         catch (Exception ex)
         {
@@ -387,6 +408,25 @@
         {            
             StateHasChanged();
         }
+    }
+
+    private bool ValidacionesCompartidas()
+    {
+        var existeSinCantidad = detalles.Where(c => c.Cantidad == 0);
+        if (existeSinCantidad.Any())
+        {
+            _Snackbar.Add("La Cantidad no puede ser 0.\nFavor ingrese la cantidad!", Severity.Error);
+            return false;
+        }
+
+        var existeSinPrecio = detalles.Where(c => c.Precio == 0);
+        if (existeSinPrecio.Any())
+        {
+            _Snackbar.Add("Favor ingrese el precio!", Severity.Error);
+            return false;
+        }
+
+        return true;
     }
 
     private void ResetForm()

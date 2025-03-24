@@ -120,6 +120,7 @@ namespace SistemaFacturacion_API.Controllers
                 _UnidadMedida.Descripcion = CreateDTO.Descripcion;
 
                 await _UnidadMedidaRepositorio.Crear(_UnidadMedida);
+                await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _UnidadMedida;
@@ -165,7 +166,8 @@ namespace SistemaFacturacion_API.Controllers
                 UnidadMedida modelo = _mapper.Map<UnidadMedida>(CreateDTO);
                 modelo.UnidadMedidaId = (short)id;
 
-                await _UnidadMedidaRepositorio.Actualizar(modelo);               
+                await _UnidadMedidaRepositorio.Actualizar(modelo);
+                await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -208,6 +210,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _UnidadMedidaRepositorio.Eliminar(UnidadMedida);
+                await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = UnidadMedida;

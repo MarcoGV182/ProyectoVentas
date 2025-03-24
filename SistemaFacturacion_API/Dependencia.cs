@@ -38,7 +38,7 @@ namespace SistemaFacturacion_API
             services.AddScoped<ITipoDocumentoIdentidadRepositorio, TipoDocumentoIdentidadRepositorio>();
             services.AddScoped<IRefreshTokenRepositorio, RefreshTokenRepositorio>();
             services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
-            services.AddScoped<ITransaccionRepositorio<Venta,DetalleVenta>, TransaccionRepositorio<Venta, DetalleVenta>>();
+            services.AddScoped<IVentaRepositorio, VentaRepositorio>();
         }
     }
 }

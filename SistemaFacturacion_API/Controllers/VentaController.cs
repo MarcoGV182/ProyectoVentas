@@ -19,10 +19,10 @@ namespace SistemaFacturacion_API.Controllers
     {
         private readonly ILogger<VentaController> _logger;
         private readonly IMapper _mapper;
-        private readonly ITransaccionRepositorio<Venta,DetalleVenta> _VentaRepositorio;
+        private readonly IVentaRepositorio _VentaRepositorio;
         protected APIResponse _response;
 
-        public VentaController(ILogger<VentaController> logger, ITransaccionRepositorio<Venta, DetalleVenta> ventaRepositorio, IMapper mapper)
+        public VentaController(ILogger<VentaController> logger, IVentaRepositorio ventaRepositorio, IMapper mapper)
         {
             _logger = logger;
             _VentaRepositorio = ventaRepositorio;
@@ -131,11 +131,7 @@ namespace SistemaFacturacion_API.Controllers
                 //Parseo del DTO a la clase
                 var _Venta = _mapper.Map<Venta>(CreateDTO);
 
-                //Parseo del DTO a la clase
-                var _DetalleVenta = _mapper.Map<IEnumerable<DetalleVenta>>(CreateDTO.DetalleVenta);
-                _Venta.DetalleVenta = _DetalleVenta;
-
-                await _VentaRepositorio.Registrar(_Venta, _DetalleVenta);
+                await _VentaRepositorio.CreateVentaAsync(_Venta);
 
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;

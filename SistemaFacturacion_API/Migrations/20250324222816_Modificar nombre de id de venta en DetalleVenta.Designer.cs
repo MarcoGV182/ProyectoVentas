@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaFacturacion_API.Datos;
@@ -11,9 +12,11 @@ using SistemaFacturacion_API.Datos;
 namespace SistemaFacturacion_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324222816_Modificar nombre de id de venta en DetalleVenta")]
+    partial class ModificarnombredeiddeventaenDetalleVenta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -778,7 +781,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int?>("ColaboradorId")
                         .HasColumnType("integer");
 
-                    b.Property<short?>("EmpresaId")
+                    b.Property<short>("EmpresaId")
                         .HasColumnType("smallint");
 
                     b.Property<string>("EsAutoimprenta")
@@ -1073,7 +1076,9 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Empresa", "Empresa")
                         .WithMany()
-                        .HasForeignKey("EmpresaId");
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Timbrado", "Timbrado")
                         .WithMany()

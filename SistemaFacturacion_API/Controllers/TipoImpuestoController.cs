@@ -126,6 +126,7 @@ namespace SistemaFacturacion_API.Controllers
                 TipoImpuesto _tipoImpuesto = _mapper.Map<TipoImpuesto>(CreateDTO);
 
                 await _tipoImpuestoRepositorio.Crear(_tipoImpuesto);
+                await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _tipoImpuesto;
@@ -171,6 +172,7 @@ namespace SistemaFacturacion_API.Controllers
                 modelo.TipoimpuestoId = id;
 
                 await _tipoImpuestoRepositorio.Actualizar(modelo);
+                await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -215,6 +217,7 @@ namespace SistemaFacturacion_API.Controllers
                 #endregion
 
                 await _tipoImpuestoRepositorio.Eliminar(tipoImpuesto);
+                await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = tipoImpuesto;

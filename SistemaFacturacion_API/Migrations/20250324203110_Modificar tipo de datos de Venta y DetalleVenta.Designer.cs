@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaFacturacion_API.Datos;
@@ -11,9 +12,11 @@ using SistemaFacturacion_API.Datos;
 namespace SistemaFacturacion_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324203110_Modificar tipo de datos de Venta y DetalleVenta")]
+    partial class ModificartipodedatosdeVentayDetalleVenta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,6 +359,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int>("NroItem")
                         .HasColumnType("integer");
 
+                    b.Property<int>("NroVenta")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Precio")
                         .HasColumnType("numeric");
 
@@ -366,16 +372,13 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("VentaId")
-                        .HasColumnType("integer");
-
                     b.HasKey("IdDetalle");
 
                     b.HasIndex("ArticuloId");
 
-                    b.HasIndex("TipoimpuestoId");
+                    b.HasIndex("NroVenta");
 
-                    b.HasIndex("VentaId");
+                    b.HasIndex("TipoimpuestoId");
 
                     b.ToTable("detalleventa");
                 });
@@ -778,7 +781,7 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int?>("ColaboradorId")
                         .HasColumnType("integer");
 
-                    b.Property<short?>("EmpresaId")
+                    b.Property<short>("EmpresaId")
                         .HasColumnType("smallint");
 
                     b.Property<string>("EsAutoimprenta")
@@ -995,15 +998,15 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
-                        .WithMany()
-                        .HasForeignKey("TipoimpuestoId")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Venta", "Venta")
+                        .WithMany("DetalleVenta")
+                        .HasForeignKey("NroVenta")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Venta", "Venta")
-                        .WithMany("DetalleVenta")
-                        .HasForeignKey("VentaId")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
+                        .WithMany()
+                        .HasForeignKey("TipoimpuestoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1073,7 +1076,9 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Empresa", "Empresa")
                         .WithMany()
-                        .HasForeignKey("EmpresaId");
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Timbrado", "Timbrado")
                         .WithMany()

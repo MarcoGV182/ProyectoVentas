@@ -119,6 +119,7 @@ namespace SistemaFacturacion_API.Controllers
                 _marca.Descripcion = CreateDTO.Descripcion;
 
                 await _marcaRepositorio.Crear(_marca);
+                await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _marca;
@@ -164,7 +165,8 @@ namespace SistemaFacturacion_API.Controllers
                 Marca modelo = _mapper.Map<Marca>(CreateDTO);
                 modelo.MarcaId = id;
 
-                await _marcaRepositorio.Actualizar(modelo);               
+                await _marcaRepositorio.Actualizar(modelo);
+                await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -207,6 +209,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _marcaRepositorio.Eliminar(marca);
+                await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = marca;

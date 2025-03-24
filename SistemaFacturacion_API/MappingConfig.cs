@@ -66,6 +66,16 @@ namespace SistemaFacturacion_API
             CreateMap<Persona, ClienteDTO>().ReverseMap();
             CreateMap<Persona, ClienteCreateDTO>().ReverseMap();
 
+            //Venta
+            CreateMap<Venta, VentaDTO>().ReverseMap();
+            CreateMap<Venta, VentaCreateDTO>().ReverseMap();
+
+            //Detalle Venta
+            CreateMap<DetalleVenta, DetalleVentaDTO>().ReverseMap();
+            CreateMap<DetalleVenta, DetalleVentaCreateDTO>().ReverseMap();
+
+
+
         }
     }
 }

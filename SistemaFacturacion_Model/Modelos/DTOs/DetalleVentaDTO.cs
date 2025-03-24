@@ -11,7 +11,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
     public class DetalleVentaDTO
     {   
         public int IdDetalle { get; set; }
-        public int NroVenta { get; set; }
+        public int VentaId { get; set; }
         public Venta Venta { get; set; }
         public int NroItem { get; set; }
         public decimal Cantidad { get; set; }

@@ -120,6 +120,7 @@ namespace SistemaFacturacion_API.Controllers
                 _TipoDocumentoIdentidad.Descripcion = CreateDTO.Descripcion;
 
                 await _TipoDocumentoIdentidadRepositorio.Crear(_TipoDocumentoIdentidad);
+                await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _TipoDocumentoIdentidad;
@@ -165,7 +166,8 @@ namespace SistemaFacturacion_API.Controllers
                 TipoDocumentoIdentidad modelo = _mapper.Map<TipoDocumentoIdentidad>(CreateDTO);
                 modelo.Id = (short)id;
 
-                await _TipoDocumentoIdentidadRepositorio.Actualizar(modelo);               
+                await _TipoDocumentoIdentidadRepositorio.Actualizar(modelo);
+                await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -208,6 +210,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _TipoDocumentoIdentidadRepositorio.Eliminar(TipoDocumentoIdentidad);
+                await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = TipoDocumentoIdentidad;

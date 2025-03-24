@@ -117,6 +117,7 @@ namespace SistemaFacturacion_API.Controllers
                 var _Timbrado = _mapper.Map<Timbrado>(CreateDTO);
                 _Timbrado.Estado = "A";
                 await _TimbradoRepositorio.Crear(_Timbrado);
+                await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = _Timbrado;
@@ -162,7 +163,8 @@ namespace SistemaFacturacion_API.Controllers
                 Timbrado modelo = _mapper.Map<Timbrado>(CreateDTO);
                 modelo.TimbradoId = id;
 
-                await _TimbradoRepositorio.Actualizar(modelo);               
+                await _TimbradoRepositorio.Actualizar(modelo);
+                await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -205,6 +207,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
 
                 await _TimbradoRepositorio.Eliminar(Timbrado);
+                await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = Timbrado;
