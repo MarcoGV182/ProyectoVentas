@@ -15,9 +15,12 @@
 /SistemaFacturacion_WebAssembly/wwwroot/css/
 
 # Ignorar SistemaFacturacion_API Debug/net8.0/
+/SistemaFacturacion_API/obj/
 /SistemaFacturacion_API/obj/Debug/net8.0/
+/SistemaFacturacion_API/obj/Debug/net7.0/
 /SistemaFacturacion_API/bin/Debug/net8.0/
 
 # Ignorar SistemaFacturacion_Model Debug/net8.0/
+/SistemaFacturacion_Model/obj/
 /SistemaFacturacion_Model/bin/Debug/net8.0/
 /SistemaFacturacion_Model/obj/Debug/net8.0/
