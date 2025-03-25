@@ -83,6 +83,41 @@ namespace SistemaFacturacion_WebAssembly.Services
                     {
                         throw new UnauthorizedAccessException("El token JWT no tiene los permisos necesarios para esta operación.");
                     }
+                    else if (apiResponse.StatusCode == HttpStatusCode.BadRequest) // Manejo específico para BadRequest
+                    {
+                        try
+                        {
+                            // Deserializa directamente como APIResponse para obtener los mensajes de error estructurados
+                            var badRequestResponse = JsonConvert.DeserializeObject<T>(apiContent);
+
+                            if (badRequestResponse != null)
+                            {
+                                /*// Lanza una excepción con los mensajes de error del APIResponse
+                                throw new HttpRequestException(
+                                    $"{string.Join(", ", badRequestResponse.ErrorMessages)}",
+                                    null,
+                                    apiResponse.StatusCode
+                                );*/
+                                return badRequestResponse;
+                            }
+                            else
+                            {
+                                throw new HttpRequestException(
+                                    "Error en la solicitud: Respuesta no válida del servidor",
+                                    null,
+                                    apiResponse.StatusCode
+                                );
+                            }
+                        }
+                        catch (JsonException)
+                        {
+                            throw new HttpRequestException(
+                                "Error al procesar la respuesta de error del servidor",
+                                null,
+                                apiResponse.StatusCode
+                            );
+                        }
+                    }
                     else
                     {
                         var errorResponse = new APIResponse

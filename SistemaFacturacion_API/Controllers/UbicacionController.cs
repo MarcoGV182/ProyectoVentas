@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SistemaFacturacion_API.Repositorio;
-using SistemaFacturacion_API.Repositorio.IRepositorio;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using SistemaFacturacion_API.Repositorio.IRepositorio;
+using SistemaFacturacion_API.Repositorio;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
@@ -15,19 +16,17 @@ namespace SistemaFacturacion_API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ProductoController : Controller
+    public class UbicacionController : ControllerBase
     {
-        private readonly ILogger<ProductoController> _logger;
+        private readonly ILogger<UbicacionController> _logger;
         private readonly IMapper _mapper;
-        private readonly IProductoRepositorio _ProductoRepositorio;
-        private readonly IStockRepositorio _StockRepositorio;
+        private readonly IUbicacionRepositorio _UbicacionRepositorio;
         protected APIResponse _response;
 
-        public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio, IStockRepositorio StockRepositorio, IMapper mapper)
+        public UbicacionController(ILogger<UbicacionController> logger, IUbicacionRepositorio UbicacionRepositorio, IMapper mapper)
         {
             _logger = logger;
-            _ProductoRepositorio = productoRepositorio;
-            _StockRepositorio = StockRepositorio;
+            _UbicacionRepositorio = UbicacionRepositorio;
             _mapper = mapper;
             _response = new APIResponse();
         }
@@ -35,68 +34,60 @@ namespace SistemaFacturacion_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetProductos()
-        {
-            //_logger.LogInformation("Obteniendo datos de las Productos");
+        public async Task<ActionResult<APIResponse>> GetUbicacion()
+        {            
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
+                //_logger.LogInformation("Obteniendo lista de Ubicacions");
+                IEnumerable<Ubicacion> UbicacionList = await _UbicacionRepositorio.ObtenerTodos();
+
+                _response.Resultado = _mapper.Map<IEnumerable<Ubicacion>>(UbicacionList);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
-
-                return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.isExitoso = false;
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.ErrorMessages = new List<string>() { ex.ToString() };                
             }
-
             return _response;
-            
         }
 
 
-        [HttpGet("{id:int}", Name = "GetProductosById")]
+        [HttpGet("{id:int}", Name = "GetUbicacionById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetProductosById(int id)
+        public async Task<ActionResult<APIResponse>> GetUbicacionById(int id)
         {
-            _logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
-
+            //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
             try
             {
-                if (id == 0)
+                if (id == 0) 
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
+                    
 
+                var Ubicacion = await _UbicacionRepositorio.Obtener(p => p.UbicacionId == id);
 
-                var producto = await _ProductoRepositorio.Obtener(p => p.ArticuloId == id, tracked: false, incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
-
-                if (producto == null)
+                if (Ubicacion == null) 
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.NoContent;
                     return _response;
                 }
-
                 _response.isExitoso = true;
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _mapper.Map<ProductoDTO>(producto);
-
-               
+                _response.Resultado = Ubicacion;
             }
             catch (Exception ex)
             {
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.ErrorMessages = new List<string>() { ex.Message.ToString() };
             }
+
             return _response;
 
         }
@@ -106,18 +97,16 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearProducto([FromBody] ProductoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse>> CrearUbicacion([FromBody] UbicacionCreateDTO CreateDTO)
         {
             try
             {
-                if (_ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower()) == null)
+                var existeUbicacion = _UbicacionRepositorio.Obtener(v => v.Nombre.ToLower() == CreateDTO.Nombre.ToLower() &&
+                                                                         v.Direccion.ToLower() == CreateDTO.Direccion.ToLower());
+                if (existeUbicacion.Result != null)
                 {
-                    var mensajeError = "El producto con el mismo nombre ingresado ya existe";
-                    ModelState.AddModelError("ErrorMessages", mensajeError);
-                    _response.isExitoso = false;
-                    _response.ErrorMessages = new List<string>() { mensajeError };
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    return BadRequest(_response);
+                    ModelState.AddModelError("ErrorMessages", "La registro con el mismo Nombre y dirección ya existe");
+                    return BadRequest(ModelState);
                 }
 
                 if (CreateDTO == null)
@@ -127,60 +116,57 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var _producto = _mapper.Map<Producto>(CreateDTO);
-                _producto.Fecharegistro = DateTime.Now;
+                var _Ubicacion = _mapper.Map<Ubicacion>(CreateDTO);
 
-                await _ProductoRepositorio.Crear(_producto);
-                await _ProductoRepositorio.Grabar();
+                await _UbicacionRepositorio.Crear(_Ubicacion);
+                await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _producto;
+                _response.Resultado = _Ubicacion;
+                _response.StatusCode = HttpStatusCode.Created;
 
-
-                return CreatedAtRoute("GetProductosById", new { id = _producto.ArticuloId }, _response);
+                return CreatedAtRoute("GetUbicacionById", new { id = _Ubicacion.UbicacionId }, _response);
             }
             catch (Exception ex)
             {
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.ErrorMessages = new List<string>() { ex.Message};
+                return BadRequest(ex);
             }
-            return _response;
 
         }
 
 
 
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> UpdateProducto(int id, [FromBody] ProductoUpdateDTO productoUpdatedto)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> ActualizarUbicacion(int id,[FromBody] UbicacionCreateDTO CreateDTO)
         {
             try
             {
-                if (productoUpdatedto == null)
+                if (CreateDTO == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
 
-                var producto = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
-                if (producto == null)
+                var Ubicacion = await _UbicacionRepositorio.Obtener(c => c.UbicacionId == id, tracked: false);
+                if (Ubicacion == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                Producto modelo = _mapper.Map<Producto>(productoUpdatedto);
-                modelo.ArticuloId = id;
-                modelo.Fechaultactualizacion = DateTime.Now;
+                Ubicacion modelo = _mapper.Map<Ubicacion>(CreateDTO);
+                modelo.UbicacionId = (short)id;
 
-                await _ProductoRepositorio.Actualizar(modelo);
-                await _ProductoRepositorio.Grabar();
+                await _UbicacionRepositorio.Actualizar(modelo);
+                await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
                 _response.Resultado = modelo;
@@ -191,18 +177,17 @@ namespace SistemaFacturacion_API.Controllers
             catch (Exception ex)
             {
                 _response.isExitoso = false;
-                _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.ErrorMessages = new List<string>() { ex.Message };
+                _response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(_response);
             }
         }
 
 
-
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarProducto(int id)
+        public async Task<ActionResult<APIResponse>> EliminarUbicacion(int id)
         {
             try
             {
@@ -213,19 +198,19 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
-                if (marca == null)
+                var Ubicacion = await _UbicacionRepositorio.Obtener(c => c.UbicacionId == id, tracked: false);
+                if (Ubicacion == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                await _ProductoRepositorio.Eliminar(marca);
-                await _ProductoRepositorio.Grabar();
+                await _UbicacionRepositorio.Eliminar(Ubicacion);
+                await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = marca;
+                _response.Resultado = Ubicacion;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -233,7 +218,7 @@ namespace SistemaFacturacion_API.Controllers
             catch (Exception ex)
             {
                 _response.isExitoso = false;
-                _response.ErrorMessages = new List<string> { ex.Message };
+                _response.ErrorMessages = new List<string> { ex.Message, ex.InnerException.ToString() };
                 return BadRequest(_response);
             }
         }

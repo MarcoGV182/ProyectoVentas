@@ -74,8 +74,9 @@ namespace SistemaFacturacion_API
             CreateMap<DetalleVenta, DetalleVentaDTO>().ReverseMap();
             CreateMap<DetalleVenta, DetalleVentaCreateDTO>().ReverseMap();
 
-
-
+            //Ubicación
+            CreateMap<Ubicacion, UbicacionDTO>().ReverseMap();
+            CreateMap<Ubicacion, UbicacionCreateDTO>().ReverseMap();
         }
     }
 }

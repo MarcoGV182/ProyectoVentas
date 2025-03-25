@@ -27,7 +27,8 @@
                         </MudButton>
                     </MudItem>
                     <MudItem xs="12" sm="4">
-                        <MudTextField InputType="InputType.Date" Label="Fecha" @bind-Value="@venta.Fecha" Format="yyyy-MM-dd" For="@(() => venta.Fecha)" />
+                        @* <MudTextField InputType="InputType.Date" Label="Fecha" @bind-Value="@venta.Fecha" Format="yyyy-MM-dd" For="@(() => venta.Fecha)" /> *@
+                        <MudDatePicker Label="Fecha (dd/MM/yyyy)" Editable="true"  Date="@venta.Fecha" DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))"/>
                     </MudItem>
                 </MudGrid>
                 <MudGrid>                   
@@ -168,6 +169,21 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+
+    <MudItem xs="12">
+        <MudCard>           
+            <MudCardContent>
+                <MudGrid>
+                    <!-- Observacion -->
+                    <MudItem xs="12" sm="4">
+                        <MudTextField Label="Observacion" @bind-Value="@venta.Observacion" Lines="5" MaxLength=" 1000" HelperText="Aquí puede ingresar una observación en relación a la operación" Immediate="true" Variant="Variant.Filled" />
+                    </MudItem>                    
+                </MudGrid>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
 </MudGrid>
 
 <style>
@@ -201,6 +217,7 @@
         : string.Empty;    
 
 
+
     private void AsignarPrecioBase(DetalleVentaCreateDTO detalle)
     {   
         if (articuloSeleccionado != null)
@@ -219,7 +236,8 @@
     }
 
     private async Task LoadData()
-    {  
+    {
+        venta.Fecha = DateTime.Now;
         //colaboradores = await ColaboradorService.GetColaboradores();
         articulos = await _ArticuloService.ObtenerTodos();
     }
@@ -291,7 +309,6 @@
         try
         {
             #region Validaciones
-
             if (detalles == null || detalles.Count() == 0)
             {
                 _Snackbar.Add("No existen registros en el detalle", Severity.Error);
@@ -302,8 +319,7 @@
                 return;
             #endregion
 
-            
-            
+            #region Cargar Datos
             venta.NroFactura = $"{venta.Establecimiento.ToString().PadLeft(3, '0')}-{venta.PuntoExpedicion.ToString().PadLeft(3, '0')}-{venta.Numero.ToString().PadLeft(7, '0')}";
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
@@ -311,6 +327,8 @@
             venta.Total = detalles.Sum(s => s.Total);
             venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);
             //venta.EmpresaId = 1;
+            #endregion
+            
             var resultado = await _VentaService.RegistrarVenta<VentaDTO>(venta);
 
             if (resultado.isExitoso)
@@ -320,10 +338,10 @@
             }
             else  
             {
-                _Snackbar.Add($"Ocurrió un error: {resultado.ErrorMessages}", Severity.Success);
+                _Snackbar.Add($"Ocurrió un error: {string.Join(',',resultado.ErrorMessages)}", Severity.Error);
                 return;
             }            
-          
+
         }
         catch (Exception ex)
         {
@@ -415,14 +433,14 @@
         var existeSinCantidad = detalles.Where(c => c.Cantidad == 0);
         if (existeSinCantidad.Any())
         {
-            _Snackbar.Add("La Cantidad no puede ser 0.\nFavor ingrese la cantidad!", Severity.Error);
+            _Snackbar.Add("La Cantidad no puede ser 0.\nFavor ingrese la cantidad", Severity.Error);
             return false;
         }
 
         var existeSinPrecio = detalles.Where(c => c.Precio == 0);
         if (existeSinPrecio.Any())
         {
-            _Snackbar.Add("Favor ingrese el precio!", Severity.Error);
+            _Snackbar.Add("Favor ingrese el precio", Severity.Error);
             return false;
         }
 
@@ -432,6 +450,7 @@
     private void ResetForm()
     {
         venta = new VentaCreateDTO();
+        clienteSeleccionado = null;
         detalles.Clear();
     }
 }

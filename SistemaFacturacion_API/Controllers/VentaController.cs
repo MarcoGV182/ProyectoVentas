@@ -108,12 +108,14 @@ namespace SistemaFacturacion_API.Controllers
         {
             try
             {
-                if (_VentaRepositorio.Obtener(v => v.Establecimiento == CreateDTO.Establecimiento &&
+                var existe = _VentaRepositorio.Obtener(v => v.Establecimiento == CreateDTO.Establecimiento &&
                                                    v.PuntoExpedicion == CreateDTO.PuntoExpedicion &&
                                                    v.Numero == CreateDTO.Numero &&
-                                                   v.ClienteId == CreateDTO.ClienteId) == null)
+                                                   v.TimbradoId == CreateDTO.TimbradoId &&
+                                                   v.ClienteId == CreateDTO.ClienteId);
+                if (existe != null)
                 {
-                    var mensajeError = "La numeración de la factura ya existe para el mismo cliente";
+                    var mensajeError = "La numeración de la factura y timbrado ya existe para el mismo cliente";
                     ModelState.AddModelError("ErrorMessages", mensajeError);
                     _response.isExitoso = false;
                     _response.ErrorMessages = new List<string>() { mensajeError };
