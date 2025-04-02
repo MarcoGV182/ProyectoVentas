@@ -15,8 +15,10 @@ namespace SistemaFacturacion_Model.Modelos
         public int ClienteId { get; set; }
         public Persona Cliente { get; set; }
         public DateTime Fecha { get; set; }
+        public int? UbicacionId { get; set; }
+        public virtual Ubicacion Ubicacion { get; set; }
         public int? ColaboradorId { get; set; }
-        public Colaborador Vendedor { get; set; }
+        public virtual Colaborador Vendedor { get; set; }
         public string Observacion { get; set; }
         public decimal Total { get; set; }
         public decimal TotalIVA { get; set; }
@@ -36,7 +38,11 @@ namespace SistemaFacturacion_Model.Modelos
         public short? EmpresaId { get; set; }
         [ForeignKey(nameof(EmpresaId))]
         public Empresa Empresa { get; set; }
-        public IEnumerable<DetalleVenta> DetalleVenta { get; set; }
+        public ICollection<DetalleVenta> DetalleVenta { get; set; }
+
+        // Movimientos de stock relacionados (no mapeado a DB, solo para acceso)
+        [NotMapped]
+        public virtual ICollection<MovimientoStock> MovimientosStock { get; set; }
 
     }
 }

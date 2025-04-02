@@ -21,7 +21,6 @@ namespace SistemaFacturacion_API.Controllers
         private readonly IMapper _mapper;
         private readonly IProductoRepositorio _ProductoRepositorio;
         private readonly IStockRepositorio _StockRepositorio;
-        protected APIResponse _response;
 
         public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio, IStockRepositorio StockRepositorio, IMapper mapper)
         {
@@ -29,15 +28,15 @@ namespace SistemaFacturacion_API.Controllers
             _ProductoRepositorio = productoRepositorio;
             _StockRepositorio = StockRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetProductos()
+        public async Task<ActionResult<APIResponse<IEnumerable<ProductoDTO>>>> GetProductos()
         {
             //_logger.LogInformation("Obteniendo datos de las Productos");
+            var _response = new APIResponse<IEnumerable<ProductoDTO>>();
             try
             {
                 IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
@@ -58,14 +57,40 @@ namespace SistemaFacturacion_API.Controllers
             
         }
 
+        [HttpGet("Producto-por-ubicacion/{ubicacionid:int}", Name = "GetProductosByUbicacion")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse<IEnumerable<ProductoDTO>>>> GetProductosByUbicacion(int ubicacionid)
+        {
+            //_logger.LogInformation("Obteniendo datos de las Productos");
+            var _response = new APIResponse<IEnumerable<ProductoDTO>>();
+            try
+            {
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(c=>c.Stocks.Any(s=>s.UbicacionId == ubicacionid),incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
+                _response.isExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
+
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.isExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages = new List<string>() { ex.Message };
+            }
+
+            return _response;
+
+        }
+
 
         [HttpGet("{id:int}", Name = "GetProductosById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetProductosById(int id)
+        public async Task<ActionResult<APIResponse<ProductoDTO>>> GetProductosById(int id)
         {
             _logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
-
+            var _response = new APIResponse<ProductoDTO>();
             try
             {
                 if (id == 0)
@@ -106,8 +131,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearProducto([FromBody] ProductoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<Producto>>> CrearProducto([FromBody] ProductoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<Producto>();
             try
             {
                 if (_ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower()) == null)
@@ -156,8 +182,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> UpdateProducto(int id, [FromBody] ProductoUpdateDTO productoUpdatedto)
+        public async Task<ActionResult<APIResponse<Producto>>> UpdateProducto(int id, [FromBody] ProductoUpdateDTO productoUpdatedto)
         {
+            var _response = new APIResponse<Producto>();
             try
             {
                 if (productoUpdatedto == null)
@@ -202,8 +229,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarProducto(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarProducto(int id)
         {
+            var _response = new APIResponse<IEnumerable<ProductoDTO>>();
             try
             {
                 if (id == 0)
@@ -213,19 +241,19 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var marca = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
-                if (marca == null)
+                var producto = await _ProductoRepositorio.Obtener(c => c.ArticuloId == id, tracked: false);
+                if (producto == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                await _ProductoRepositorio.Eliminar(marca);
+                await _ProductoRepositorio.Eliminar(producto);
                 await _ProductoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = marca;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

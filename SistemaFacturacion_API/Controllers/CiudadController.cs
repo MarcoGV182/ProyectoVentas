@@ -21,21 +21,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<CiudadController> _logger;
         private readonly IMapper _mapper;
         private readonly ICiudadRepositorio _ciudadRepositorio;
-        protected APIResponse _response;
 
         public CiudadController(ILogger<CiudadController> logger, ICiudadRepositorio ciudadRepositorio, IMapper mapper)
         {
             _logger = logger;
             _ciudadRepositorio = ciudadRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetCiudad()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<CiudadDTO>>>> GetCiudad()
+        {      
+            var _response = new APIResponse<IEnumerable<CiudadDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Ciudads");
@@ -57,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetCiudadById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetCiudadById(int id)
+        public async Task<ActionResult<APIResponse<CiudadDTO>>> GetCiudadById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<CiudadDTO>();
             try
             {
                 if (id == 0) 
@@ -79,7 +79,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = ciudad;
+                _response.Resultado = _mapper.Map<CiudadDTO>(ciudad);
             }
             catch (Exception ex)
             {
@@ -97,8 +97,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearCiudad([FromBody] CiudadCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<CiudadDTO>>> CrearCiudad([FromBody] CiudadCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<CiudadDTO>();
             try
             {
                 var existeCiudad = _ciudadRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -122,7 +123,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _ciudad;
+                _response.Resultado = _mapper.Map<CiudadDTO>(_ciudad);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetCiudadById", new { id = _ciudad.CiudadId }, _response);
@@ -143,8 +144,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarCiudad(short id,[FromBody] CiudadCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarCiudad(short id,[FromBody] CiudadCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -169,7 +171,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -189,8 +191,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarCiudad(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarCiudad(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)
@@ -212,7 +215,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ciudadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = ciudad;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

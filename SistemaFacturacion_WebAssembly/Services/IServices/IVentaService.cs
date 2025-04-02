@@ -5,7 +5,7 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface IVentaService
     {
-        Task<APIResponse> ObtenerVentas<T>();
-        Task<APIResponse> RegistrarVenta<T>(VentaCreateDTO venta);
+        Task<APIResponse<T>> ObtenerVentas<T>();
+        Task<APIResponse<T>> RegistrarVenta<T>(VentaCreateDTO venta);
     }
 }

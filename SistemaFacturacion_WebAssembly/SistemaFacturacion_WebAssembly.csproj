@@ -5,7 +5,8 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest> 
-    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData> 
+    <UserSecretsId>7bca2da5-a03b-4a6f-bc6f-b835c5b9c7bc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

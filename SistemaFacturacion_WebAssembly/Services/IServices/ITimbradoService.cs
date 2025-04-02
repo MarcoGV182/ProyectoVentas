@@ -6,10 +6,10 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface ITimbradoService
     {
-        Task<APIResponse> ObtenerTodos<T>();
-        Task<APIResponse> Obtener<T>(int id);
-        Task<APIResponse> Crear<T>(TimbradoCreateDTO dto);
-        Task<APIResponse> Eliminar<T>(int id);
-        Task<APIResponse> Actualizar<T>(int id, TimbradoCreateDTO dto);
+        Task<APIResponse<T>> ObtenerTodos<T>();
+        Task<APIResponse<T>> Obtener<T>(int id);
+        Task<APIResponse<T>> Crear<T>(TimbradoCreateDTO dto);
+        Task<APIResponse<T>> Eliminar<T>(int id);
+        Task<APIResponse<T>> Actualizar<T>(int id, TimbradoCreateDTO dto);
     }
 }

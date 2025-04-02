@@ -196,34 +196,34 @@
     {
         try
         {
-            var result = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
-            if (result.isExitoso)
+            var marca = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
+            if (marca.isExitoso)
             {
-                ListaMarcas = (List<MarcaDTO>)result.Resultado!;
+                ListaMarcas = marca.Resultado;
             }
 
-            result = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
-            if (result.isExitoso)
+            var tipoImpuesto = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            if (tipoImpuesto.isExitoso)
             {
-                ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
+                ListaImpuestos = tipoImpuesto.Resultado;
             }
 
-            result = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
-            if (result.isExitoso)
+            var categoria = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
+            if (categoria.isExitoso)
             {
-                ListaCategoria = (List<CategoriaProductoDTO>)result.Resultado!;
+                ListaCategoria = categoria.Resultado;
             }
 
-            result = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
-            if (result.isExitoso)
+            var presentacion = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
+            if (presentacion.isExitoso)
             {
-                ListaPresentacion = (List<PresentacionDTO>)result.Resultado!;
+                ListaPresentacion = presentacion.Resultado;
             }
 
-            result = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
-            if (result.isExitoso)
+            var unidadMedida = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
+            if (unidadMedida.isExitoso)
             {
-                ListaUnidadMedida = (List<UnidadMedidaDTO>)result.Resultado!;
+                ListaUnidadMedida = unidadMedida.Resultado;
             }
         }
         catch (Exception ex)

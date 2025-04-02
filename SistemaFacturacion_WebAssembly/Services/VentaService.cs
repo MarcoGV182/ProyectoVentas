@@ -17,33 +17,31 @@ namespace SistemaFacturacion_WebAssembly.Services
         }
 
 
-        public async Task<APIResponse> ObtenerVentas<T>()
+        public async Task<APIResponse<T>> ObtenerVentas<T>()
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"api/Venta"
 
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+            
 
             return result;
         }
 
 
-        public async Task<APIResponse> RegistrarVenta<T>(VentaCreateDTO venta)
+        public async Task<APIResponse<T>> RegistrarVenta<T>(VentaCreateDTO venta)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.POST,
                 Datos = venta,
                 URL = $"api/Venta"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+           
 
             return result;
         }

@@ -28,10 +28,10 @@
             {
                 <MudItem xs="12">
                     <MudTable Items="@listaproductos"
-                              Dense="true"
-                              Striped="true" Bordered="true"
-                              Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
-                              Loading="@_loading" LoadingProgressColor="Color.Info">
+                    Dense="true"
+                    Striped="true" Bordered="true"
+                    Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                    Loading="@_loading" LoadingProgressColor="Color.Info">
                         @* <ToolBarContent>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -88,12 +88,7 @@
                                 <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockminimo)">
                                     Stock Mínimo
                                 </MudTableSortLabel>
-                            </MudTh>
-                            <MudTh>
-                                <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Stockactual)">
-                                    Stock Actual
-                                </MudTableSortLabel>
-                            </MudTh>
+                            </MudTh>                           
                             <MudTh>
                                 <MudTableSortLabel SortBy="new Func<ProductoDTO, object>(x=> x.Presentacion.Descripcion)">
                                     Presentación
@@ -127,22 +122,21 @@
                             <MudTd DataLabel="Precio">@productoRow.PrecioBase.ToString("N0")</MudTd>
                             <MudTd DataLabel="Costo">@productoRow.PrecioCompra.ToString("N0")</MudTd>
                             <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
-                            <MudTd DataLabel="Stock">@productoRow.Stockactual</MudTd>
                             <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
                             <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
                             <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "" : productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
                             <MudTd DataLabel="Estado">@((productoRow.Estado == "A") ? "Activo" : "Inactivo")</MudTd>
                             <MudTd DataLabel="">
                                 <MudFab Color="Color.Primary"
-                                        StartIcon="@Icons.Material.Filled.Edit"
-                                        Size="Size.Small"
-                                        IconSize="Size.Small"
-                                        OnClick="@(() => AbrirEditarproducto(productoRow))" />
+                                StartIcon="@Icons.Material.Filled.Edit"
+                                Size="Size.Small"
+                                IconSize="Size.Small"
+                                OnClick="@(() => AbrirEditarproducto(productoRow))" />
                                 <MudFab Color="Color.Error"
-                                        StartIcon="@Icons.Material.Filled.Delete"
-                                        Size="Size.Small"
-                                        IconSize="Size.Small"
-                                        OnClick="@(() => Eliminarproducto(productoRow))" />
+                                StartIcon="@Icons.Material.Filled.Delete"
+                                Size="Size.Small"
+                                IconSize="Size.Small"
+                                OnClick="@(() => Eliminarproducto(productoRow))" />
                             </MudTd>
                         </RowTemplate>
                         <PagerContent>
@@ -152,7 +146,7 @@
                 </MudItem>
             }
         </MudGrid>
-   </MudPaper>
+    </MudPaper>
 </MudContainer>
 @code {
     List<ProductoDTO> listaproductos = new List<ProductoDTO>();
@@ -162,6 +156,7 @@
     private ProductoDTO selectedItem1 = null;
     private bool _loading = true;
     private bool isLoading = false;
+    public int _ubicacion = 1;
 
     private async Task Obtenerproductos()
     {
@@ -170,7 +165,7 @@
             isLoading = true;
             StateHasChanged(); // Fuerza actualización UI
 
-            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
+            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>(_ubicacion);
 
             if (result.isExitoso)
             {

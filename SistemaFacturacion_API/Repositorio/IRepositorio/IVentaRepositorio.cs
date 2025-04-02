@@ -6,6 +6,6 @@ namespace SistemaFacturacion_API.Repositorio.IRepositorio
 {
     public interface IVentaRepositorio: IRepositorioGenerico<Venta>
     {
-        Task CreateVentaAsync(Venta venta);
+        Task<Venta> CreateVentaAsync(Venta venta);
     }
 }

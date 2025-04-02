@@ -5,10 +5,11 @@
 <MudDialog>
     <DialogContent>
         <MudTextField Label="Buscar por Descripcion o documento" @bind-Value="@criterioBusqueda" Immediate="true" @onkeydown="HandleKeyDown" />
-        <MudRadioGroup @bind-Value="SelectedOption">
+        <MudRadioGroup Value="@_SelectedOption" ValueChanged="@( (string v) => OnValueChanged(v))">
             <MudRadio Value="@("Producto")" Color="Color.Primary">Producto</MudRadio>
             <MudRadio Value="@("Servicio")" Color="Color.Secondary">Servicio</MudRadio>
         </MudRadioGroup>
+
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BuscarProducto" Disabled="@isLoading">
             Buscar
         </MudButton>
@@ -27,6 +28,10 @@
                     <MudTh>Descripcion</MudTh>
                     <MudTh>Precio</MudTh>
                     <MudTh>Impuesto</MudTh>
+                    @if (_SelectedOption.Equals("Producto"))
+                    {
+                        <MudTh>Existencia</MudTh>
+                    }
                     <MudTh>Estado</MudTh>
                     <MudTh>Tipo</MudTh>
                     <MudTh>Acciones</MudTh>
@@ -35,6 +40,11 @@
                     <MudTd>@context.Descripcion</MudTd>
                     <MudTd>@context.PrecioBase</MudTd>
                     <MudTd>@context.TipoImpuesto.Descripcion</MudTd>
+                    @if (_SelectedOption.Equals("Producto"))
+                    {
+                        <MudTd>@context.StockActual</MudTd>
+                    }
+                    
                     <MudTd>@context.Estado</MudTd>
                     <MudTd>@context.TipoArticulo</MudTd>
                     <MudTd>
@@ -60,7 +70,10 @@
     private bool isLoading = false;
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
-    public string SelectedOption { get; set; } = "Producto";
+    [Parameter]
+    public int _Ubicacion { get; set; }
+
+    private string _SelectedOption = "Producto"; // Valor por defecto
 
 
     protected override async Task OnInitializedAsync()
@@ -75,17 +88,17 @@
             isLoading = true;
             StateHasChanged(); // Fuerza actualización UI
 
-            var result = await _articuloService.ObtenerTodos();
+            var result = await _articuloService.ObtenerTodos(_Ubicacion);
             if (!string.IsNullOrEmpty(criterioBusqueda))
             {
                 // Cargar datos necesarios
                 articulos = result.Where(c => c.Descripcion.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) &&
-                            c.TipoArticulo.ToString() == SelectedOption)
+                            c.TipoArticulo.ToString() == _SelectedOption)
                             .ToList();
             }
             else
             {
-                articulos = result.Where(c => c.TipoArticulo.ToString() == SelectedOption)
+                articulos = result.Where(c => c.TipoArticulo.ToString() == _SelectedOption)
                             .ToList();
             }
 
@@ -99,6 +112,12 @@
             StateHasChanged();
         }
       
+    }
+
+    private async Task OnValueChanged(string newValue)
+    {
+        _SelectedOption = newValue;
+        await BuscarProducto();
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)

@@ -20,21 +20,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<ServicioController> _logger;
         private readonly IMapper _mapper;
         private readonly IServicioRepositorio _ServicioRepositorio;
-        protected APIResponse _response;
 
         public ServicioController(ILogger<ServicioController> logger, IServicioRepositorio ServicioRepositorio, IMapper mapper)
         {
             _logger = logger;
             _ServicioRepositorio = ServicioRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetServicios()
+        public async Task<ActionResult<APIResponse<IEnumerable<ServicioDTO>>>> GetServicios()
         {
+            var _response = new APIResponse<IEnumerable<ServicioDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Servicios");
@@ -57,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetServicioById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetServicioById(int id)
+        public async Task<ActionResult<APIResponse<ServicioDTO>>> GetServicioById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<ServicioDTO>();
             try
             {
                 if (id == 0)
@@ -80,7 +80,7 @@ namespace SistemaFacturacion_API.Controllers
                 }
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isExitoso = true;
-                _response.Resultado = Servicio;
+                _response.Resultado = _mapper.Map<ServicioDTO>(Servicio);
             }
             catch (Exception ex)
             {
@@ -98,8 +98,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearServicio([FromBody] ServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<ServicioDTO>>> CrearServicio([FromBody] ServicioCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<ServicioDTO>();
             try
             {
                 var existeServicio = _ServicioRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -123,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _Servicio;
+                _response.Resultado = _mapper.Map<ServicioDTO>(_Servicio);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetServicioById", new { id = _Servicio.ArticuloId }, _response);
@@ -144,8 +145,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarServicio(int id, [FromBody] ServicioCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarServicio(int id, [FromBody] ServicioCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -170,7 +172,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _ServicioRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -190,8 +192,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarServicio(int id)
+        public async Task<ActionResult<APIResponse<ServicioDTO>>> EliminarServicio(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)

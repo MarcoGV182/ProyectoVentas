@@ -33,23 +33,21 @@ namespace SistemaFacturacion_API.Repositorio
             if (!tracked)
                 query = query.AsNoTracking();
 
-            if (filtro != null)
-            {
-                query = query.Where(filtro);
-            }
-
             // Aplicar la inclusión de datos relacionados
             if (incluirPropiedades != null)
             {
-                foreach (var include in incluirPropiedades.Split(new char[] { ','}, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var include in incluirPropiedades.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(include);
                 }
             }
 
+            if (filtro != null)
+            {
+                query = query.Where(filtro);
+            }           
+
             var queryEF = query.ToQueryString();
-
-
 
             return await query.FirstOrDefaultAsync();
         }
@@ -60,12 +58,6 @@ namespace SistemaFacturacion_API.Repositorio
             {
                 IQueryable<T> query = _dbSet;
 
-
-                if (filtro != null)
-                {
-                    query = query.Where(filtro);
-                }
-
                 // Aplicar la inclusión de datos relacionados
                 if (incluirPropiedades != null)
                 {
@@ -74,6 +66,14 @@ namespace SistemaFacturacion_API.Repositorio
                         query = query.Include(include);
                     }
                 }
+
+
+                if (filtro != null)
+                {
+                    query = query.Where(filtro);
+                }
+
+                
                 var queryEF = query.ToQueryString();
 
 

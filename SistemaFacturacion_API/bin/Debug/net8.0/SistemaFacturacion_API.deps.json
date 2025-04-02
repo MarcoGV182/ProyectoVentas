@@ -770,7 +770,7 @@
       "SistemaFacturacion_Model/1.0.0": {
         "runtime": {
           "SistemaFacturacion_Model.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -781,7 +781,7 @@
         },
         "runtime": {
           "SistemaFacturacion_Utilidad.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }

@@ -230,34 +230,34 @@
 
 
 
-            var result = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
-            if (result.isExitoso)
+            var marcaResult = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
+            if (marcaResult.isExitoso)
             {
-                ListaMarcas = (List<MarcaDTO>)result.Resultado!;
+                ListaMarcas = marcaResult.Resultado;
             }
 
-            result = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
-            if (result.isExitoso)
+            var TipoImpuetoResult = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            if (TipoImpuetoResult.isExitoso)
             {
-                ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
+                ListaImpuestos = TipoImpuetoResult.Resultado;
             }
 
-            result = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
-            if (result.isExitoso)
+            var CategoriaResult = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
+            if (CategoriaResult.isExitoso)
             {
-                ListaCategoria = (List<CategoriaProductoDTO>)result.Resultado!;
+                ListaCategoria = CategoriaResult.Resultado;
             }
 
-            result = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
-            if (result.isExitoso)
+            var presentacionResult = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
+            if (presentacionResult.isExitoso)
             {
-                ListaPresentacion = (List<PresentacionDTO>)result.Resultado!;
+                ListaPresentacion = presentacionResult.Resultado;
             }
 
-            result = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
-            if (result.isExitoso)
+            var unidadMedidaResult = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
+            if (unidadMedidaResult.isExitoso)
             {
-                ListaUnidadMedida = (List<UnidadMedidaDTO>)result.Resultado!;
+                ListaUnidadMedida = unidadMedidaResult.Resultado;
             }
         }
         catch (Exception ex)

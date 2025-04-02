@@ -4,8 +4,8 @@
 /.vs/SistemaFacturacion/FileContentIndex/
 
 # Ignorar SistemaFacturacion_Utilidad Debug/net8.0/
-/SistemaFacturacion_Utilidad/bin/Debug/net8.0/
-/SistemaFacturacion_Utilidad/obj/Debug/net8.0/
+/SistemaFacturacion_Utilidad/obj/
+/SistemaFacturacion_Utilidad/bin/
 
 # Ignorar SistemaFacturacion_WebAssembly Debug/net8.0/
 /SistemaFacturacion_WebAssembly/obj/

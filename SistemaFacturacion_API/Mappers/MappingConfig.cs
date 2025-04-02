@@ -2,13 +2,35 @@
 using Npgsql.PostgresTypes;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_API.Mappers.Resolvers;
 
-namespace SistemaFacturacion_API
+namespace SistemaFacturacion_API.Mappers
 {
     public class MappingConfig:Profile
     {
         public MappingConfig()
         {
+            /*CreateMap<ArticuloDTO, Articulo>()
+            .Include<ArticuloDTO, Producto>()
+            .Include<ArticuloDTO, Servicio>()
+            .ConvertUsing((src, dest, context) =>
+            {
+                return src.TipoArticulo switch
+                {
+                    TipoArticulo.Producto => context.Mapper.Map<Producto>(src),
+                    TipoArticulo.Servicio => context.Mapper.Map<Servicio>(src),
+                    _ => throw new ArgumentException("TipoArticulo desconocido", nameof(src.TipoArticulo))
+                };
+            });
+
+
+            CreateMap<ArticuloDTO, Producto>()
+                .ForMember(dest => dest.TipoArticulo, opt => opt.MapFrom(src => TipoArticulo.Producto));
+
+            CreateMap<ArticuloDTO, Servicio>()
+                .ForMember(dest => dest.TipoArticulo, opt => opt.MapFrom(src => TipoArticulo.Servicio));
+            */
+
             //Producto
             CreateMap<Producto, ProductoDTO>().ReverseMap();
             CreateMap<Producto, ProductoCreateDTO>().ReverseMap();
@@ -68,11 +90,32 @@ namespace SistemaFacturacion_API
 
             //Venta
             CreateMap<Venta, VentaDTO>().ReverseMap();
-            CreateMap<Venta, VentaCreateDTO>().ReverseMap();
+            CreateMap<VentaCreateDTO, Venta>().ReverseMap();
+
+
 
             //Detalle Venta
             CreateMap<DetalleVenta, DetalleVentaDTO>().ReverseMap();
-            CreateMap<DetalleVenta, DetalleVentaCreateDTO>().ReverseMap();
+            CreateMap<DetalleVentaCreateDTO, DetalleVenta>()
+            .ForMember(dest => dest.IdDetalle, opt => opt.MapFrom(src => src.IdDetalle))
+            .ForMember(dest => dest.VentaId, opt => opt.MapFrom(src => src.NroVenta))
+            .ForMember(dest => dest.NroItem, opt => opt.MapFrom(src => src.NroItem))
+            .ForMember(dest => dest.Cantidad, opt => opt.MapFrom(src => src.Cantidad))
+            .ForMember(dest => dest.Precio, opt => opt.MapFrom(src => src.Precio))
+            .ForMember(dest => dest.TipoimpuestoId, opt => opt.MapFrom(src => src.TipoimpuestoId))
+            .ForMember(dest => dest.ImporteIVA, opt => opt.MapFrom(src => src.ImporteIVA))
+            .ForMember(dest => dest.ImporteGravado, opt => opt.MapFrom(src => src.ImporteGravado))
+            .ForMember(dest => dest.ImporteExento, opt => opt.MapFrom(src => src.ImporteExento))
+            .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.Total))
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom<ItemIdResolver>())
+            .ForMember(dest => dest.TipoItem, opt => opt.MapFrom(src => src.TipoItem))
+
+            // Ignorar las propiedades de navegación para evitar problemas de tracking
+            .ForMember(dest => dest.Venta, opt => opt.Ignore())
+            .ForMember(dest => dest.TipoImpuesto, opt => opt.Ignore());
+
+
+
 
             //Ubicación
             CreateMap<Ubicacion, UbicacionDTO>().ReverseMap();

@@ -20,21 +20,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<TipoImpuestoController> _logger;
         private readonly IMapper _mapper;
         private readonly ITipoImpuestoRepositorio _tipoImpuestoRepositorio;
-        protected APIResponse _response;
 
         public TipoImpuestoController(ILogger<TipoImpuestoController> logger, IMapper mapper, ITipoImpuestoRepositorio TIRepositorio)
         {
             _logger = logger;
             _mapper = mapper;
             _tipoImpuestoRepositorio = TIRepositorio;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> ObtenerTipoImpuesto()
+        public async Task<ActionResult<APIResponse<IEnumerable<TipoImpuestoDTO>>>> ObtenerTipoImpuesto()
         {
+            var _response = new APIResponse<IEnumerable<TipoImpuestoDTO>> { };
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Marcas");
@@ -58,9 +57,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "ObtenerTipoImpuestoById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> ObtenerTipoImpuestoById(int id)
+        public async Task<ActionResult<APIResponse<TipoImpuestoDTO>>> ObtenerTipoImpuestoById(int id)
         {
             _logger.LogInformation($"Obteniendo datos de los Tipos de Impuesto por id: {id}");
+            var _response = new APIResponse<TipoImpuestoDTO>();
 
             try
             {
@@ -102,8 +102,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTipoImpuesto([FromBody] TipoImpuestoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<TipoImpuestoDTO>>> CrearTipoImpuesto([FromBody] TipoImpuestoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<TipoImpuestoDTO>();
             try
             {
                 if (CreateDTO == null)
@@ -129,7 +130,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _tipoImpuesto;
+                _response.Resultado = _mapper.Map<TipoImpuestoDTO>(_tipoImpuesto); ;
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("ObtenerTipoImpuestoById", new { id = _tipoImpuesto.TipoimpuestoId }, _response);
@@ -149,8 +150,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTipoImpuesto(short id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarTipoImpuesto(short id, [FromBody] TipoImpuestoCreateDTO UpdateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (UpdateDTO == null)
@@ -175,7 +177,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -193,8 +195,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarTipoImpuesto(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarTipoImpuesto(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 #region Validaciones
@@ -220,7 +223,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _tipoImpuestoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = tipoImpuesto;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

@@ -21,21 +21,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<MarcaController> _logger;
         private readonly IMapper _mapper;
         private readonly IMarcaRepositorio _marcaRepositorio;
-        protected APIResponse _response;
 
         public MarcaController(ILogger<MarcaController> logger, IMarcaRepositorio marcaRepositorio, IMapper mapper)
         {
             _logger = logger;
             _marcaRepositorio = marcaRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetMarcas()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<MarcaDTO>>>> GetMarcas()
+        {          
+            var _response = new APIResponse<IEnumerable<MarcaDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Marcas");
@@ -57,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetMarcaById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetMarcaById(int id)
+        public async Task<ActionResult<APIResponse<MarcaDTO>>> GetMarcaById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<MarcaDTO>();
             try
             {
                 if (id == 0) 
@@ -79,7 +79,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = marca;
+                _response.Resultado = _mapper.Map<MarcaDTO>(marca);
             }
             catch (Exception ex)
             {
@@ -97,8 +97,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearMarca([FromBody] MarcaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<MarcaDTO>>> CrearMarca([FromBody] MarcaCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<MarcaDTO>();
             try
             {
                 var existeMarca = _marcaRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -122,7 +123,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _marca;
+                _response.Resultado = _mapper.Map<MarcaDTO>(_marca);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetMarcaById", new { id = _marca.MarcaId }, _response);
@@ -143,8 +144,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarMarca(int id,[FromBody] MarcaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<MarcaDTO>>> ActualizarMarca(int id,[FromBody] MarcaCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<MarcaDTO>();
             try
             {
                 if (CreateDTO == null)
@@ -169,7 +171,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = _mapper.Map<MarcaDTO>(modelo);
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -189,8 +191,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarMarca(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarMarca(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)
@@ -212,7 +215,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _marcaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = marca;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

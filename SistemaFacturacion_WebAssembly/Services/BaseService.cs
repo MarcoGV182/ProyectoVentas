@@ -120,7 +120,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                     }
                     else
                     {
-                        var errorResponse = new APIResponse
+                        var errorResponse = new APIResponse<T>
                         {
                             StatusCode = apiResponse.StatusCode,
                             isExitoso = false,

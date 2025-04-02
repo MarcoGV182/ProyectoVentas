@@ -9,6 +9,7 @@
 @inject ITimbradoService _timbradoService
 @inject IDialogService _DialogService
 @inject UsuarioEstadoService UserStateService
+@inject ILocalStorageService _localStorageService
 
 <MudGrid>
     <!-- Cabecera del formulario -->
@@ -221,8 +222,9 @@
     private void AsignarPrecioBase(DetalleVentaCreateDTO detalle)
     {   
         if (articuloSeleccionado != null)
-        {
-            detalle.ArticuloId = articuloSeleccionado.ArticuloId;
+        {           
+            detalle.ItemId = articuloSeleccionado.ArticuloId;
+            detalle.TipoItem = articuloSeleccionado.TipoArticulo;
             detalle.Precio = articuloSeleccionado.PrecioBase;
             detalle.TipoimpuestoId = articuloSeleccionado.TipoImpuesto.TipoimpuestoId;
             CalcularTotales(); // Actualizar los totales
@@ -239,7 +241,7 @@
     {
         venta.Fecha = DateTime.Now;
         //colaboradores = await ColaboradorService.GetColaboradores();
-        articulos = await _ArticuloService.ObtenerTodos();
+        //articulos = await _ArticuloService.ObtenerTodos();
     }
 
     private void AgregarDetalle()
@@ -276,7 +278,7 @@
         {
             foreach (var detalle in detalles)
             {
-                var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+                var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ItemId);
                 detalle.Total = detalle.Cantidad * (decimal)detalle.Precio;
                 detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
                                                                      articuloSeleccionado.TipoImpuesto.Porcentajeiva,
@@ -322,13 +324,23 @@
             #region Cargar Datos
             venta.NroFactura = $"{venta.Establecimiento.ToString().PadLeft(3, '0')}-{venta.PuntoExpedicion.ToString().PadLeft(3, '0')}-{venta.Numero.ToString().PadLeft(7, '0')}";
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
+
+            if (UserStateService.CurrentUser == null)
+            {
+                UserStateService = new UsuarioEstadoService();
+                var usuario = await _localStorageService.GetItemAsync<UsuarioResponse>("Usuario");
+                UserStateService.SetCurrentUser(usuario);
+            }
+
+
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
             venta.DetalleVenta = detalles;
             venta.Total = detalles.Sum(s => s.Total);
             venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);
+            venta.UbicacionId = 1;
             //venta.EmpresaId = 1;
             #endregion
-            
+
             var resultado = await _VentaService.RegistrarVenta<VentaDTO>(venta);
 
             if (resultado.isExitoso)
@@ -365,13 +377,14 @@
     private async Task AbrirModalBuscarArticulo(DetalleVentaCreateDTO detalle)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = _DialogService.Show<MdBuscarProducto>("Buscar Articulo/Servicio", options);
+        var parametros = new DialogParameters { ["_Ubicacion"] = 1 };
+        var dialog = _DialogService.Show<MdBuscarProducto>("Buscar Articulo/Servicio",parametros, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
         {
             articuloSeleccionado = (ArticuloDTO)result.Data;
-            detalle.DescripcionArticulo = articuloSeleccionado != null ? $"{articuloSeleccionado.Descripcion}({articuloSeleccionado.ArticuloId})" : string.Empty;
+            detalle.DescripcionArticulo = articuloSeleccionado != null ? $"{articuloSeleccionado.Descripcion}({articuloSeleccionado.ArticuloId})" : string.Empty;            
             AsignarPrecioBase(detalle);
         }
     }

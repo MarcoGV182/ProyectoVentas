@@ -33,6 +33,7 @@ namespace SistemaFacturacion_API.Datos
         public DbSet<DetalleVenta> DetalleVenta { get; set; }
         public DbSet<PrecioPromocional> PrecioPromocional { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<MovimientoStock> Movimientos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

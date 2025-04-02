@@ -21,27 +21,26 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<PresentacionController> _logger;
         private readonly IMapper _mapper;
         private readonly IPresentacionRepositorio _PresentacionRepositorio;
-        protected APIResponse _response;
 
         public PresentacionController(ILogger<PresentacionController> logger, IPresentacionRepositorio PresentacionRepositorio, IMapper mapper)
         {
             _logger = logger;
             _PresentacionRepositorio = PresentacionRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetPresentacion()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<PresentacionDTO>>>> GetPresentacion()
+        {
+            var _response = new APIResponse<IEnumerable<PresentacionDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Presentacions");
                 IEnumerable<Presentacion> PresentacionList = await _PresentacionRepositorio.ObtenerTodos();
 
-                _response.Resultado = _mapper.Map<IEnumerable<Presentacion>>(PresentacionList);
+                _response.Resultado = _mapper.Map<IEnumerable<PresentacionDTO>>(PresentacionList);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
             }
@@ -57,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetPresentacionById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetPresentacionById(int id)
+        public async Task<ActionResult<APIResponse<PresentacionDTO>>> GetPresentacionById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<PresentacionDTO>();
             try
             {
                 if (id == 0) 
@@ -79,7 +79,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = Presentacion;
+                _response.Resultado = _mapper.Map<PresentacionDTO>(Presentacion);
             }
             catch (Exception ex)
             {
@@ -97,8 +97,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearPresentacion([FromBody] PresentacionCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<PresentacionDTO>>> CrearPresentacion([FromBody] PresentacionCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<PresentacionDTO>();
             try
             {
                 var existePresentacion = _PresentacionRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -122,7 +123,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _Presentacion;
+                _response.Resultado = _mapper.Map<PresentacionDTO>(_Presentacion);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetPresentacionById", new { id = _Presentacion.PresentacionId }, _response);
@@ -143,8 +144,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarPresentacion(int id,[FromBody] PresentacionCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarPresentacion(int id,[FromBody] PresentacionCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -169,7 +171,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -187,8 +189,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarPresentacion(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarPresentacion(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)
@@ -210,7 +213,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _PresentacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = Presentacion;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

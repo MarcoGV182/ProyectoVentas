@@ -21,21 +21,21 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<CategoriaController> _logger;
         private readonly IMapper _mapper;
         private readonly ICategoriaProductoRepositorio _CategoriaRepositorio;
-        protected APIResponse _response;
 
         public CategoriaController(ILogger<CategoriaController> logger, ICategoriaProductoRepositorio CategoriaRepositorio, IMapper mapper)
         {
             _logger = logger;
             _CategoriaRepositorio = CategoriaRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
+            
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetCategoria()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<CategoriaProductoDTO>>>> GetCategoria()
+        {
+            var _response = new APIResponse<IEnumerable<CategoriaProductoDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Categorias");
@@ -57,9 +57,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetCategoriaById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetCategoriaById(int id)
+        public async Task<ActionResult<APIResponse<CategoriaProductoDTO>>> GetCategoriaById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<CategoriaProductoDTO>();
             try
             {
                 if (id == 0) 
@@ -79,7 +80,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = Categoria;
+                _response.Resultado = _mapper.Map<CategoriaProductoDTO>(Categoria);
             }
             catch (Exception ex)
             {
@@ -97,8 +98,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearCategoria([FromBody] CategoriaProductoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<CategoriaProductoDTO>>> CrearCategoria([FromBody] CategoriaProductoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<CategoriaProductoDTO>();
             try
             {
                 var existeCategoria = _CategoriaRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -122,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _Categoria;
+                _response.Resultado = _mapper.Map<CategoriaProductoDTO>(_Categoria);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetCategoriaById", new { id = _Categoria.CategoriaId }, _response);
@@ -143,8 +145,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarCategoria(int id,[FromBody] CategoriaProductoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<CategoriaProductoDTO>>> ActualizarCategoria(int id,[FromBody] CategoriaProductoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<CategoriaProductoDTO>();
             try
             {
                 if (CreateDTO == null)
@@ -162,14 +165,14 @@ namespace SistemaFacturacion_API.Controllers
                     return NotFound(_response);
                 }
 
-                CategoriaProducto modelo = _mapper.Map<CategoriaProducto>(CreateDTO);
+                var modelo = _mapper.Map<CategoriaProducto>(CreateDTO);
                 modelo.CategoriaId = (short)id;
 
                 await _CategoriaRepositorio.Actualizar(modelo);
                 await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = _mapper.Map<CategoriaProductoDTO>(modelo);
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -187,8 +190,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarCategoria(int id)
+        public async Task<ActionResult<APIResponse<CategoriaProductoDTO>>> EliminarCategoria(int id)
         {
+            var _response = new APIResponse<CategoriaProductoDTO>();
             try
             {
                 if (id == 0)
@@ -210,7 +214,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _CategoriaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = Categoria;
+                _response.Resultado = _mapper.Map<CategoriaProductoDTO>(Categoria);
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

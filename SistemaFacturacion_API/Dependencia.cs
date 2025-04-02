@@ -4,6 +4,9 @@ using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Services;
 using SistemaFacturacion_Model.Modelos;
+using SistemaFacturacion_API.Mappers;
+using AutoMapper;
+using SistemaFacturacion_Model.Modelos.DTOs;
 
 namespace SistemaFacturacion_API
 {
@@ -39,6 +42,8 @@ namespace SistemaFacturacion_API
             services.AddScoped<IRefreshTokenRepositorio, RefreshTokenRepositorio>();
             services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
             services.AddScoped<IVentaRepositorio, VentaRepositorio>();
+            services.AddScoped<IUbicacionRepositorio, UbicacionRepositorio>();
+            services.AddScoped<IStockRepositorio, StockRepositorio>();
         }
     }
 }

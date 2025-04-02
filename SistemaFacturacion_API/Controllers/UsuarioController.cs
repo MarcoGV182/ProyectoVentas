@@ -27,7 +27,6 @@ namespace SistemaFacturacion_API.Controllers
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly UserManager<Usuario> _userManager;
         private readonly IMapper _mapper;
-        protected APIResponse _response;
 
         public UsuarioController(IAutorizacionService autorizacionService, IUsuarioRepositorio usuarioRepositorio, IMapper mapper, UserManager<Usuario> userManager = null)
         {
@@ -39,10 +38,10 @@ namespace SistemaFacturacion_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetUsuario()
+        public async Task<ActionResult<APIResponse<UsuarioDTO>>> GetUsuario()
         {
             //_logger.LogInformation("Obteniendo datos del Usuario");
-            _response = new APIResponse();
+            var _response = new APIResponse<IEnumerable<UsuarioDTO>>();
             try 
             {
                 IEnumerable<IdentityUser> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
@@ -52,7 +51,7 @@ namespace SistemaFacturacion_API.Controllers
                     return NoContent();
                 }
 
-                _response.Resultado = UsuarioList;
+                _response.Resultado = _mapper.Map<IEnumerable<UsuarioDTO>>(UsuarioList);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -70,9 +69,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("id:string", Name = "GetUsuarioById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetUsuarioById(string id)
+        public async Task<ActionResult<APIResponse<UsuarioDTO>>> GetUsuarioById(string id)
         {
-            _response = new APIResponse();
+            var _response = new APIResponse<UsuarioDTO>();
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
             try
             {
@@ -84,7 +83,7 @@ namespace SistemaFacturacion_API.Controllers
                 if (UsuarioResult == null)
                     return NoContent();
 
-                _response.Resultado = UsuarioResult;
+                _response.Resultado = _mapper.Map<UsuarioDTO>(UsuarioResult);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -104,9 +103,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("Registrar")]
-        public async Task<ActionResult<APIResponse>> RegistrarUsuario([FromBody] UsuarioRegistroDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<UsuarioDTO>>> RegistrarUsuario([FromBody] UsuarioRegistroDTO CreateDTO)
         {
-               _response = new APIResponse();
+              var _response = new APIResponse<UsuarioDTO>();
             try
             {
                 //Validar el estado del modelo
@@ -157,7 +156,7 @@ namespace SistemaFacturacion_API.Controllers
 
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _UsuarioNuevo;
+                _response.Resultado = _mapper.Map<UsuarioDTO>(_UsuarioNuevo); ; ;
 
                 return CreatedAtRoute("GetUsuarioById", new { id = _UsuarioNuevo.Id }, _response);
             }

@@ -10,6 +10,7 @@ using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_Utilidad;
+using System.Xml.Linq;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -21,27 +22,26 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<UbicacionController> _logger;
         private readonly IMapper _mapper;
         private readonly IUbicacionRepositorio _UbicacionRepositorio;
-        protected APIResponse _response;
 
         public UbicacionController(ILogger<UbicacionController> logger, IUbicacionRepositorio UbicacionRepositorio, IMapper mapper)
         {
             _logger = logger;
             _UbicacionRepositorio = UbicacionRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetUbicacion()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<UbicacionDTO>>>> GetUbicacion()
+        {           
+            var _response = new APIResponse<IEnumerable<UbicacionDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Ubicacions");
                 IEnumerable<Ubicacion> UbicacionList = await _UbicacionRepositorio.ObtenerTodos();
 
-                _response.Resultado = _mapper.Map<IEnumerable<Ubicacion>>(UbicacionList);
+                _response.Resultado = _mapper.Map<IEnumerable<UbicacionDTO>>(UbicacionList);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
             }
@@ -57,9 +57,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetUbicacionById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetUbicacionById(int id)
+        public async Task<ActionResult<APIResponse<UbicacionDTO>>> GetUbicacionById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<UbicacionDTO>();
             try
             {
                 if (id == 0) 
@@ -79,7 +80,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = Ubicacion;
+                _response.Resultado = _mapper.Map<UbicacionDTO>(Ubicacion);
             }
             catch (Exception ex)
             {
@@ -97,8 +98,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearUbicacion([FromBody] UbicacionCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<UbicacionDTO>>> CrearUbicacion([FromBody] UbicacionCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<UbicacionDTO>();
             try
             {
                 var existeUbicacion = _UbicacionRepositorio.Obtener(v => v.Nombre.ToLower() == CreateDTO.Nombre.ToLower() &&
@@ -122,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _Ubicacion;
+                _response.Resultado = _mapper.Map<UbicacionDTO>(_Ubicacion);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetUbicacionById", new { id = _Ubicacion.UbicacionId }, _response);
@@ -143,8 +145,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarUbicacion(int id,[FromBody] UbicacionCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarUbicacion(int id,[FromBody] UbicacionCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -169,7 +172,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -187,8 +190,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarUbicacion(int id)
+        public async Task<ActionResult<APIResponse<UbicacionDTO>>> EliminarUbicacion(int id)
         {
+            var _response = new APIResponse<UbicacionDTO>();
             try
             {
                 if (id == 0)
@@ -210,7 +214,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UbicacionRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = Ubicacion;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

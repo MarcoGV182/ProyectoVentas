@@ -14,74 +14,68 @@ namespace SistemaFacturacion_WebAssembly.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<APIResponse> Obtener<T>(int id)
+        public async Task<APIResponse<T>> Obtener<T>(int id)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"api/Timbrado/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+           
 
             return result;
         }
 
-        public async Task<APIResponse> ObtenerTodos<T>()
+        public async Task<APIResponse<T>> ObtenerTodos<T>()
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"api/Timbrado"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+          
 
             return result;
         }
 
 
-        public async Task<APIResponse> Eliminar<T>(int id)
+        public async Task<APIResponse<T>> Eliminar<T>(int id)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
                 URL = $"api/Timbrado/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+         
 
             return result;
         }
 
-        public async Task<APIResponse> Crear<T>(TimbradoCreateDTO dto)
+        public async Task<APIResponse<T>> Crear<T>(TimbradoCreateDTO dto)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.POST,
                 Datos = dto,
                 URL = $"api/Timbrado"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+            
 
             return result;
         }
-        public async Task<APIResponse> Actualizar<T>(int id,TimbradoCreateDTO dto)
+        public async Task<APIResponse<T>> Actualizar<T>(int id,TimbradoCreateDTO dto)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
                 URL = $"api/Timbrado/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
 
             return result;
         }

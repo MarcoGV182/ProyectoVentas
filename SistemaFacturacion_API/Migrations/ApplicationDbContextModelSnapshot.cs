@@ -338,9 +338,6 @@ namespace SistemaFacturacion_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdDetalle"));
 
-                    b.Property<int>("ArticuloId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("Cantidad")
                         .HasColumnType("numeric");
 
@@ -353,11 +350,17 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<decimal>("ImporteIVA")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("NroItem")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("numeric");
+
+                    b.Property<int>("TipoItem")
+                        .HasColumnType("integer");
 
                     b.Property<short?>("TipoimpuestoId")
                         .IsRequired()
@@ -370,8 +373,6 @@ namespace SistemaFacturacion_API.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("IdDetalle");
-
-                    b.HasIndex("ArticuloId");
 
                     b.HasIndex("TipoimpuestoId");
 
@@ -456,6 +457,58 @@ namespace SistemaFacturacion_API.Migrations
                     b.HasKey("MarcaId");
 
                     b.ToTable("marca");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.MovimientoStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Comentarios")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentoReferencia")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("FechaMovimiento")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ReferenciaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StockId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TipoMovimiento")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UbicacionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("StockId");
+
+                    b.HasIndex("UbicacionId");
+
+                    b.ToTable("movimientos");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
@@ -726,11 +779,10 @@ namespace SistemaFacturacion_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UbicacionId"));
 
-                    b.Property<string>("Direccion")
-                        .HasColumnType("text");
+                    b.Property<bool>("Activa")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
+                    b.Property<string>("Direccion")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("FechaCreacion")
@@ -826,6 +878,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<decimal>("TotalIVA")
                         .HasColumnType("numeric");
 
+                    b.Property<int?>("UbicacionId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UsuarioIdAnulacion")
                         .HasColumnType("text");
 
@@ -844,6 +899,8 @@ namespace SistemaFacturacion_API.Migrations
                     b.HasIndex("EmpresaId");
 
                     b.HasIndex("TimbradoId");
+
+                    b.HasIndex("UbicacionId");
 
                     b.ToTable("venta");
                 });
@@ -870,9 +927,6 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.Property<decimal>("PrecioCompra")
                         .HasColumnType("numeric");
-
-                    b.Property<int>("Stockactual")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Stockminimo")
                         .HasColumnType("integer");
@@ -989,12 +1043,6 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.DetalleVenta", b =>
                 {
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Articulo", "Articulo")
-                        .WithMany()
-                        .HasForeignKey("ArticuloId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
                         .WithMany()
                         .HasForeignKey("TipoimpuestoId")
@@ -1007,11 +1055,32 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Articulo");
-
                     b.Navigation("TipoImpuesto");
 
                     b.Navigation("Venta");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.MovimientoStock", b =>
+                {
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Stock", null)
+                        .WithMany("Movimientos")
+                        .HasForeignKey("StockId");
+
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Ubicacion", "Ubicacion")
+                        .WithMany()
+                        .HasForeignKey("UbicacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producto");
+
+                    b.Navigation("Ubicacion");
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
@@ -1032,7 +1101,7 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.PrecioPromocional", b =>
                 {
                     b.HasOne("SistemaFacturacion_Model.Modelos.Articulo", "Articulo")
-                        .WithMany("PreciosPromocionales")
+                        .WithMany()
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1043,13 +1112,13 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
                 {
                     b.HasOne("SistemaFacturacion_Model.Modelos.Producto", "Producto")
-                        .WithMany()
+                        .WithMany("Stocks")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Ubicacion", "Ubicacion")
-                        .WithMany()
+                        .WithMany("Stocks")
                         .HasForeignKey("UbicacionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1081,11 +1150,17 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Ubicacion", "Ubicacion")
+                        .WithMany()
+                        .HasForeignKey("UbicacionId");
+
                     b.Navigation("Cliente");
 
                     b.Navigation("Empresa");
 
                     b.Navigation("Timbrado");
+
+                    b.Navigation("Ubicacion");
 
                     b.Navigation("Vendedor");
                 });
@@ -1128,11 +1203,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("TipoServicio");
                 });
 
-            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
-                {
-                    b.Navigation("PreciosPromocionales");
-                });
-
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
                 {
                     b.Navigation("Colaborador");
@@ -1143,6 +1213,16 @@ namespace SistemaFacturacion_API.Migrations
                     b.Navigation("Productos");
                 });
 
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
+                {
+                    b.Navigation("Movimientos");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Ubicacion", b =>
+                {
+                    b.Navigation("Stocks");
+                });
+
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.UnidadMedida", b =>
                 {
                     b.Navigation("Productos");
@@ -1151,6 +1231,11 @@ namespace SistemaFacturacion_API.Migrations
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Venta", b =>
                 {
                     b.Navigation("DetalleVenta");
+                });
+
+            modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
+                {
+                    b.Navigation("Stocks");
                 });
 #pragma warning restore 612, 618
         }

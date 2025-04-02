@@ -12,7 +12,8 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public decimal Precio { get; set; } = 0;       
         public short? TipoimpuestoId { get; set; }
         public string DescripcionArticulo { get; set; }
-        public int ArticuloId { get; set; }        
+        public int ItemId { get; set; }
+        public TipoArticulo TipoItem { get; set; } // Enum: Producto = 1, Servicio = 2
         public decimal ImporteIVA { get; set; } = 0;
         public decimal ImporteGravado { get; set; } = 0;
         public decimal ImporteExento { get; set; } = 0;

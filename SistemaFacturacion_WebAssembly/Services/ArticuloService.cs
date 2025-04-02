@@ -1,10 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using DocumentFormat.OpenXml.Office2016.Drawing.Command;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Productos;
 using SistemaFacturacion_WebAssembly.Pages.Mantenimiento.Servicios;
 using SistemaFacturacion_WebAssembly.Services.IServices;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
@@ -12,6 +17,7 @@ namespace SistemaFacturacion_WebAssembly.Services
     {
         private readonly IProductoService _productoService;
         private readonly IServicioService _servicioService;
+        
 
         public ArticuloService(IProductoService productoService, IServicioService servicioService) 
         {
@@ -23,28 +29,34 @@ namespace SistemaFacturacion_WebAssembly.Services
         {
             var producto = await _productoService.Obtener<ProductoDTO>(id);
             if (producto != null)
-                return (ProductoDTO)producto.Resultado;
+                return producto.Resultado;
 
             var servicio = await _servicioService.Obtener<ServicioDTO>(id);
-            return (ServicioDTO)servicio.Resultado;
+            return servicio.Resultado;
         }
 
-        public async Task<List<ArticuloDTO>> ObtenerTodos()
+        public async Task<List<ArticuloDTO>> ObtenerTodos(int ubicacion)
         {
             List<ProductoDTO> listaproductos = new List<ProductoDTO>();
             List<ServicioDTO> listaservicios = new List<ServicioDTO>();
 
 
-            var result = await _productoService.ObtenerTodos<List<ProductoDTO>>();
+            var result = await _productoService.ObtenerTodos<List<ProductoDTO>>(ubicacion);
             if (result.isExitoso)
-            {
-                listaproductos = (List<ProductoDTO>)result.Resultado!;
+            {   
+                listaproductos = result.Resultado;
+                foreach (var item in listaproductos)
+                {
+                    var apiResponse = await _productoService.ObtenerStock<StockDTO>(item.ArticuloId, ubicacion);
+
+                    item.StockActual = apiResponse.isExitoso ? apiResponse.Resultado?.Cantidad ?? 0 : 0;
+                }                
             }
 
-            result = await _servicioService.ObtenerTodos<List<ServicioDTO>>();
-            if (result.isExitoso)
+            var resultServicio = await _servicioService.ObtenerTodos<List<ServicioDTO>>();
+            if (resultServicio.isExitoso)
             {
-                listaservicios = (List<ServicioDTO>)result.Resultado!;
+                listaservicios = resultServicio.Resultado;
             }
 
 

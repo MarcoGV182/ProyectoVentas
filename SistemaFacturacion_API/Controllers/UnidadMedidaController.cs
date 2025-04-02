@@ -20,21 +20,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<UnidadMedidaController> _logger;
         private readonly IMapper _mapper;
         private readonly IUnidadMedidaRepositorio _UnidadMedidaRepositorio;
-        protected APIResponse _response;
 
         public UnidadMedidaController(ILogger<UnidadMedidaController> logger, IUnidadMedidaRepositorio UnidadMedidaRepositorio, IMapper mapper)
         {
             _logger = logger;
             _UnidadMedidaRepositorio = UnidadMedidaRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetUnidadMedidas()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<UnidadMedidaDTO>>>> GetUnidadMedidas()
+        {          
+            var _response = new APIResponse<IEnumerable<UnidadMedidaDTO>> { };
             try
             {
                 //_logger.LogInformation("Obteniendo lista de UnidadMedidas");
@@ -56,9 +55,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetUnidadMedidaById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetUnidadMedidaById(int id)
+        public async Task<ActionResult<APIResponse<UnidadMedidaDTO>>> GetUnidadMedidaById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<UnidadMedidaDTO>();
             try
             {
                 if (id == 0) 
@@ -80,7 +80,6 @@ namespace SistemaFacturacion_API.Controllers
 
                 _response.Resultado = _mapper.Map<UnidadMedidaDTO>(UnidadMedida);
                 _response.isExitoso = true;
-                _response.Resultado = UnidadMedida;
             }
             catch (Exception ex)
             {
@@ -98,8 +97,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearUnidadMedida([FromBody] UnidadMedidaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<UnidadMedidaDTO>>> CrearUnidadMedida([FromBody] UnidadMedidaCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<UnidadMedidaDTO>();
             try
             {
                 var existeUnidadMedida = _UnidadMedidaRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -123,7 +123,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _UnidadMedida;
+                _response.Resultado = _mapper.Map<UnidadMedidaDTO>(_UnidadMedida);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetUnidadMedidaById", new { id = _UnidadMedida.UnidadMedidaId }, _response);
@@ -144,8 +144,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarUnidadMedida(int id,[FromBody] UnidadMedidaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarUnidadMedida(int id,[FromBody] UnidadMedidaCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -170,7 +171,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -190,8 +191,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarUnidadMedida(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarUnidadMedida(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)
@@ -213,7 +215,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _UnidadMedidaRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = UnidadMedida;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

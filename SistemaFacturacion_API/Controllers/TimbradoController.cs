@@ -9,6 +9,7 @@ using System.Net;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_Utilidad;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -20,21 +21,20 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<TimbradoController> _logger;
         private readonly IMapper _mapper;
         private readonly ITimbradoRepositorio _TimbradoRepositorio;
-        protected APIResponse _response;
 
         public TimbradoController(ILogger<TimbradoController> logger, ITimbradoRepositorio TimbradoRepositorio, IMapper mapper)
         {
             _logger = logger;
             _TimbradoRepositorio = TimbradoRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetTimbrados()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<TimbradoDTO>>>> GetTimbrados()
+        {     
+            var _response = new APIResponse<IEnumerable<TimbradoDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de Timbrados");
@@ -56,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetTimbradoById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetTimbradoById(int id)
+        public async Task<ActionResult<APIResponse<TimbradoDTO>>> GetTimbradoById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<TimbradoDTO>();
             try
             {
                 if (id == 0) 
@@ -78,7 +79,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = Timbrado;
+                _response.Resultado = _mapper.Map<TimbradoDTO>(Timbrado);
             }
             catch (Exception ex)
             {
@@ -96,8 +97,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTimbrado([FromBody] TimbradoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<TimbradoDTO>>> CrearTimbrado([FromBody] TimbradoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<TimbradoDTO>();
             try
             {
                 var existeTimbrado = _TimbradoRepositorio.Obtener(v => v.Numero.ToLower() == CreateDTO.Numero.ToLower() && v.FechaInicioVigencia == CreateDTO.FechaInicioVigencia);
@@ -120,7 +122,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _Timbrado;
+                _response.Resultado = _mapper.Map<TimbradoDTO>(_Timbrado); 
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetTimbradoById", new { id = _Timbrado.TimbradoId }, _response);
@@ -141,8 +143,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTimbrado(short id,[FromBody] TimbradoCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarTimbrado(short id,[FromBody] TimbradoCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -167,7 +170,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -187,8 +190,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarTimbrado(int id)
+        public async Task<ActionResult<APIResponse<TimbradoDTO>>> EliminarTimbrado(int id)
         {
+            var _response = new APIResponse<TimbradoDTO>();
             try
             {
                 if (id == 0)
@@ -210,7 +214,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = Timbrado;
+                _response.Resultado = _mapper.Map<TimbradoDTO>(Timbrado); ;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);

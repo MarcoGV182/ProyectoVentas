@@ -12,6 +12,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public int Numero { get; set; }
         public int ClienteId { get; set; }
         public DateTime Fecha { get; set; } 
+        public int UbicacionId { get; set; }
         public int? ColaboradorId { get; set; }        
         public string Observacion { get; set; }
         public short TimbradoId { get; set; } 
@@ -22,6 +23,6 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public short? EmpresaId { get; set; }
         public decimal Total { get; set; }
         public decimal TotalIVA { get; set; }
-        public IEnumerable<DetalleVentaCreateDTO> DetalleVenta { get; set; }
+        public List<DetalleVentaCreateDTO> DetalleVenta { get; set; }
     }
 }

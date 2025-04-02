@@ -11,7 +11,7 @@ namespace SistemaFacturacion_Model.Modelos
         public int Cantidad { get; set; }       
         public int ProductoId { get; set; }
         public int UbicacionId { get; set; }
-        public DateTime? FechaActualizacion { get; set; }
+        public DateTime? FechaActualizacion { get; set; } = DateTime.Now;
 
 
 
@@ -20,6 +20,7 @@ namespace SistemaFacturacion_Model.Modelos
        
         [ForeignKey(nameof(UbicacionId))]
         public virtual Ubicacion Ubicacion { get; set; }
-       
+        public virtual ICollection<MovimientoStock> Movimientos { get; set; }
+
     }
 }

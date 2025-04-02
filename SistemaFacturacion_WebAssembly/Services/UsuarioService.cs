@@ -19,7 +19,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<APIResponse> Crear<T>(UsuarioRegistroDTO dto)
+        public async Task<APIResponse<T>> Crear<T>(UsuarioRegistroDTO dto)
         {
             var apiRequest = new APIRequest()
             {
@@ -28,15 +28,14 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Usuario"
             };
 
-            var result = await SendAsync<APIResponse>(apiRequest);
+            var result = await SendAsync<APIResponse<T>>(apiRequest);
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+          
 
             return result;
         }
 
-        public async Task<APIResponse> Actualizar<T>(int id,UsuarioRegistroDTO dto)
+        public async Task<APIResponse<T>> Actualizar<T>(int id,UsuarioRegistroDTO dto)
         {
             var apiRequest = new APIRequest()
             {
@@ -45,10 +44,9 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Usuario/{id}"
             };
 
-            var result = await SendAsync<APIResponse>(apiRequest);
+            var result = await SendAsync<APIResponse<T>>(apiRequest);
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+            
 
             return result;
         }
@@ -81,31 +79,27 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse> ObtenerTodos<T>()
+        public async Task<APIResponse<T>> ObtenerTodos<T>()
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"api/Usuario"
             });
-
-
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+           
 
             return result;
         }
 
-        public async Task<APIResponse> Eliminar<T>(int id)
+        public async Task<APIResponse<T>> Eliminar<T>(int id)
         {
-            var result = await SendAsync<APIResponse>(new APIRequest()
+            var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
                 URL = $"api/Usuario/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+          
 
             return result;
         }

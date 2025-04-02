@@ -5,10 +5,10 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface ICategoriaService
     {
-        Task<APIResponse> ObtenerTodos<T>();
-        Task<APIResponse> Obtener<T>(int id);
-        Task<APIResponse> Crear<T>(CategoriaProductoCreateDTO dto);
-        Task<APIResponse> Eliminar<T>(int id);
-        Task<APIResponse> Actualizar<T>(int id, CategoriaProductoCreateDTO dto);
+        Task<APIResponse<T>> ObtenerTodos<T>();
+        Task<APIResponse<T>> Obtener<T>(int id);
+        Task<APIResponse<T>> Crear<T>(CategoriaProductoCreateDTO dto);
+        Task<APIResponse<T>> Eliminar<T>(int id);
+        Task<APIResponse<T>> Actualizar<T>(int id, CategoriaProductoCreateDTO dto);
     }
 }

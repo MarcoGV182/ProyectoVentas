@@ -171,16 +171,16 @@
                 }
             }
 
-            var result = await _ciudadService.ObtenerTodos<List<CiudadDTO>>();
-            if (result.isExitoso)
+            var ciudadResult = await _ciudadService.ObtenerTodos<List<CiudadDTO>>();
+            if (ciudadResult.isExitoso)
             {
-                ListaCiudad = (List<CiudadDTO>)result.Resultado!;
+                ListaCiudad =  ciudadResult.Resultado!;
             }
 
-            result = await _tipoDocService.ObtenerTodos<List<TablaMenorDTO>>();
-            if (result.isExitoso)
+            var tipoDocResult = await _tipoDocService.ObtenerTodos<List<TablaMenorDTO>>();
+            if (tipoDocResult.isExitoso)
             {
-                ListaTipoDocumento = (List<TablaMenorDTO>)result.Resultado!;
+                ListaTipoDocumento = tipoDocResult.Resultado!;
             }
         }
         catch (Exception ex)

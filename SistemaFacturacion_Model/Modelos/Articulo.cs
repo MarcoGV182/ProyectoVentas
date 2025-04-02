@@ -7,6 +7,7 @@ namespace SistemaFacturacion_Model.Modelos
     [Table("articulo")]
     public abstract class Articulo
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ArticuloId { get; set; }
         [Required,MaxLength(100)]
         public string Descripcion { get; set; }
@@ -14,8 +15,8 @@ namespace SistemaFacturacion_Model.Modelos
         public decimal PrecioBase { get; set; }
         [MaxLength(150)]
         public string Observacion { get; set; }
-       
-        public string Estado { get; set; }
+
+        public string Estado { get; set; } = "A";
 
         public TipoArticulo TipoArticulo { get; set; }
 
@@ -29,12 +30,12 @@ namespace SistemaFacturacion_Model.Modelos
         [ForeignKey(nameof(TipoimpuestoId))]
         public TipoImpuesto TipoImpuesto { get; set; }
 
-        public ICollection<PrecioPromocional> PreciosPromocionales { get; set; }
+        //public ICollection<PrecioPromocional> PreciosPromocionales { get; set; }
     }
 
-    public enum TipoArticulo 
-    { 
-        Servicio,
-        Producto    
+    public enum TipoArticulo
+    {
+        Producto = 1,
+        Servicio = 2
     }
 }

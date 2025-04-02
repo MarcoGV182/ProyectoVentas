@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_Utilidad;
+using SistemaFacturacion_API.Migrations;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -20,22 +21,25 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<VentaController> _logger;
         private readonly IMapper _mapper;
         private readonly IVentaRepositorio _VentaRepositorio;
-        protected APIResponse _response;
+        private readonly IStockRepositorio _stockRepositorio;
+        private readonly ApplicationDbContext _context;
 
-        public VentaController(ILogger<VentaController> logger, IVentaRepositorio ventaRepositorio, IMapper mapper)
+        public VentaController(ILogger<VentaController> logger, IVentaRepositorio ventaRepositorio, IMapper mapper, IStockRepositorio stockRepositorio, ApplicationDbContext context)
         {
             _logger = logger;
             _VentaRepositorio = ventaRepositorio;
-            _mapper = mapper;
-            _response = new APIResponse();
+            _mapper = mapper;     
+            _stockRepositorio = stockRepositorio;
+            _context = context;
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetVentas()
+        public async Task<ActionResult<APIResponse<IEnumerable<VentaDTO>>>> GetVentas()
         {
             //_logger.LogInformation("Obteniendo datos de las Ventas");
+            var _response = new APIResponse<IEnumerable<VentaDTO>>();
             try
             {
                 IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
@@ -60,9 +64,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetVentasById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetVentasById(int id)
+        public async Task<ActionResult<APIResponse<VentaDTO>>> GetVentasById(int id)
         {
             _logger.LogInformation($"Obteniendo datos de las Ventas por id: {id}");
+            var _response = new APIResponse<VentaDTO>();
 
             /*try
             {
@@ -104,11 +109,12 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearVenta([FromBody] VentaCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<VentaDTO>>> CrearVenta([FromBody] VentaCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<VentaDTO>();
             try
             {
-                var existe = _VentaRepositorio.Obtener(v => v.Establecimiento == CreateDTO.Establecimiento &&
+                var existe = await _VentaRepositorio.Obtener(v => v.Establecimiento == CreateDTO.Establecimiento &&
                                                    v.PuntoExpedicion == CreateDTO.PuntoExpedicion &&
                                                    v.Numero == CreateDTO.Numero &&
                                                    v.TimbradoId == CreateDTO.TimbradoId &&
@@ -133,17 +139,41 @@ namespace SistemaFacturacion_API.Controllers
                 //Parseo del DTO a la clase
                 var _Venta = _mapper.Map<Venta>(CreateDTO);
 
-                await _VentaRepositorio.CreateVentaAsync(_Venta);
+                // Validar stock disponible para cada item
+                foreach (var item in _Venta.DetalleVenta)
+                {
+                    var articulo = await _context.Articulo
+                   .AsNoTracking()
+                   .FirstOrDefaultAsync(a => a.ArticuloId == item.ItemId);
+
+                    if (item.TipoItem == TipoArticulo.Servicio)
+                        continue;
+
+
+                    var disponible = await _stockRepositorio.ObtenerCantidadDisponibleAsync(item.ItemId, CreateDTO.UbicacionId);
+
+                    if (disponible < item.Cantidad)
+                    {
+                        _response.isExitoso = false;
+                        _response.ErrorMessages = new List<string>() { $"Stock insuficiente para el producto {articulo.Descripcion}({item.ItemId})" };
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        return BadRequest(_response);
+                    }
+                }
+
+                // Crear venta (esto ahora maneja todo el proceso completo)
+                var ventaCreada = await _VentaRepositorio.CreateVentaAsync(_Venta);
+
 
                 _response.isExitoso = true;
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _Venta;
+                _response.StatusCode = HttpStatusCode.Created;
+                _response.Resultado = _mapper.Map<VentaDTO>(ventaCreada);
 
 
                 return CreatedAtRoute("GetVentasById", new { id = _Venta.Id }, _response);
             }
             catch (Exception ex)
-            {
+            {   
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.ErrorMessages = new List<string>() { ex.Message };

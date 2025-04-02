@@ -5,7 +5,7 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 { 
     public interface IArticuloService
     {
-        Task<List<ArticuloDTO>> ObtenerTodos();
+        Task<List<ArticuloDTO>> ObtenerTodos(int ubicacion);
         Task<ArticuloDTO> Obtener(int id);        
     }
 }

@@ -7,8 +7,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
     {   
         [Required(ErrorMessage = "Favor ingrese el Precio del Producto")]       
         public string Codigobarra { get; set; }
-        public int Stockminimo { get; set; }
-        public int Stockactual { get; set; } = 0;
+        public int Stockminimo { get; set; }        
         public decimal PrecioCompra { get; set; } = 0;
         public DateTime? FechaVencimiento { get; set; }
         public Presentacion Presentacion { get; set; }        

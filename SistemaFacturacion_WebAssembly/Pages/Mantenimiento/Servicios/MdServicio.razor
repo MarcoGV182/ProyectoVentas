@@ -112,16 +112,16 @@
     {
         try
         {
-            var result = await _tipoServicioService.ObtenerTodos<List<TipoServicioDTO>>();
-            if (result.isExitoso)
+            var tipoServicioResult = await _tipoServicioService.ObtenerTodos<List<TipoServicioDTO>>();
+            if (tipoServicioResult.isExitoso)
             {
-                ListaTipoServicio = (List<TipoServicioDTO>)result.Resultado;
+                ListaTipoServicio = tipoServicioResult.Resultado;
             }
 
-            result = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
-            if (result.isExitoso)
+            var tipoImpuestoResult = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            if (tipoImpuestoResult.isExitoso)
             {
-                ListaImpuestos = (List<TipoImpuestoDTO>)result.Resultado!;
+                ListaImpuestos = tipoImpuestoResult.Resultado!;
             }
         }
         catch (Exception ex)

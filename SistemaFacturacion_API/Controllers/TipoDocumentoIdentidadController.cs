@@ -21,27 +21,26 @@ namespace SistemaFacturacion_API.Controllers
         private readonly ILogger<TipoDocumentoIdentidadController> _logger;
         private readonly IMapper _mapper;
         private readonly ITipoDocumentoIdentidadRepositorio _TipoDocumentoIdentidadRepositorio;
-        protected APIResponse _response;
 
         public TipoDocumentoIdentidadController(ILogger<TipoDocumentoIdentidadController> logger, ITipoDocumentoIdentidadRepositorio TipoDocumentoRepositorio, IMapper mapper)
         {
             _logger = logger;
             _TipoDocumentoIdentidadRepositorio = TipoDocumentoRepositorio;
             _mapper = mapper;
-            _response = new APIResponse();
         }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetTipoDocumentoIdentidad()
-        {            
+        public async Task<ActionResult<APIResponse<IEnumerable<TablaMenorDTO>>>> GetTipoDocumentoIdentidad()
+        {       
+            var _response = new APIResponse<IEnumerable<TablaMenorDTO>>();
             try
             {
                 //_logger.LogInformation("Obteniendo lista de TipoDocumentoIdentidads");
                 IEnumerable<TipoDocumentoIdentidad> TipoDocumentoIdentidadList = await _TipoDocumentoIdentidadRepositorio.ObtenerTodos();
 
-                _response.Resultado = TipoDocumentoIdentidadList;
+                _response.Resultado = _mapper.Map<IEnumerable<TablaMenorDTO>>(TipoDocumentoIdentidadList);
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
             }
@@ -57,9 +56,10 @@ namespace SistemaFacturacion_API.Controllers
         [HttpGet("{id:int}", Name = "GetTipoDocumentoIdentidadById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<APIResponse>> GetTipoDocumentoIdentidadById(int id)
+        public async Task<ActionResult<APIResponse<TablaMenorDTO>>> GetTipoDocumentoIdentidadById(int id)
         {
             //_logger.LogInformation($"Obteniendo datos de las Productos por id: {id}");
+            var _response = new APIResponse<TablaMenorDTO>();
             try
             {
                 if (id == 0) 
@@ -80,7 +80,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = TipoDocumentoIdentidad;
+                _response.Resultado =  _mapper.Map<TablaMenorDTO>(TipoDocumentoIdentidad);
             }
             catch (Exception ex)
             {
@@ -98,8 +98,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CrearTipoDocumentoIdentidad([FromBody] TablaMenorCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<TablaMenorDTO>>> CrearTipoDocumentoIdentidad([FromBody] TablaMenorCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<TablaMenorDTO>();
             try
             {
                 var existeTipoDocumentoIdentidad = _TipoDocumentoIdentidadRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
@@ -123,7 +124,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = _TipoDocumentoIdentidad;
+                _response.Resultado = _mapper.Map<TablaMenorDTO>(_TipoDocumentoIdentidad);
                 _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetTipoDocumentoIdentidadById", new { id = _TipoDocumentoIdentidad.Id }, _response);
@@ -144,8 +145,9 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ActualizarTipoDocumentoIdentidad(int id,[FromBody] TablaMenorCreateDTO CreateDTO)
+        public async Task<ActionResult<APIResponse<object>>> ActualizarTipoDocumentoIdentidad(int id,[FromBody] TablaMenorCreateDTO CreateDTO)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (CreateDTO == null)
@@ -170,7 +172,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = modelo;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
@@ -188,8 +190,9 @@ namespace SistemaFacturacion_API.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> EliminarTipoDocumentoIdentidad(int id)
+        public async Task<ActionResult<APIResponse<object>>> EliminarTipoDocumentoIdentidad(int id)
         {
+            var _response = new APIResponse<object>();
             try
             {
                 if (id == 0)
@@ -213,7 +216,7 @@ namespace SistemaFacturacion_API.Controllers
                 await _TipoDocumentoIdentidadRepositorio.Grabar();
 
                 _response.isExitoso = true;
-                _response.Resultado = TipoDocumentoIdentidad;
+                _response.Resultado = null;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
                 return Ok(_response);
