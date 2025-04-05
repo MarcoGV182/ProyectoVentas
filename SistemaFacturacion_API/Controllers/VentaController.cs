@@ -16,7 +16,7 @@ namespace SistemaFacturacion_API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class VentaController : Controller
+    public class VentaController : ControllerBase
     {
         private readonly ILogger<VentaController> _logger;
         private readonly IMapper _mapper;
@@ -45,19 +45,18 @@ namespace SistemaFacturacion_API.Controllers
                 IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);
-
-                return Ok(_response);
+                _response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);                
             }
             catch (Exception ex)
             {
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.ErrorMessages = new List<string>() { ex.Message };
+
+                return BadRequest(_response);
             }
 
-            return _response;
-            
+            return Ok(_response);
         }
 
 
@@ -177,8 +176,9 @@ namespace SistemaFacturacion_API.Controllers
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.ErrorMessages = new List<string>() { ex.Message };
+                return BadRequest(_response);
             }
-            return _response;
+        
 
         }
     }

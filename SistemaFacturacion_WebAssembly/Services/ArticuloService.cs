@@ -41,7 +41,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             List<ServicioDTO> listaservicios = new List<ServicioDTO>();
 
 
-            var result = await _productoService.ObtenerTodos<List<ProductoDTO>>(ubicacion);
+            var result = await _productoService.ObtenerTodos<List<ProductoDTO>>();
             if (result.isExitoso)
             {   
                 listaproductos = result.Resultado;

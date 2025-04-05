@@ -9,27 +9,28 @@ using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_Utilidad;
+using Microsoft.AspNetCore.Identity;
 
 namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ProductoController : Controller
+    public class ProductoController : ControllerBase
     {
         private readonly ILogger<ProductoController> _logger;
         private readonly IMapper _mapper;
         private readonly IProductoRepositorio _ProductoRepositorio;
-        private readonly IStockRepositorio _StockRepositorio;
+        private readonly UserManager<Usuario> _userManager;
         private readonly IUbicacionRepositorio _UbicacionRepositorio;
 
-        public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio, IStockRepositorio StockRepositorio, IMapper mapper, IUbicacionRepositorio ubicacionRepositorio)
+        public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio,IMapper mapper, IUbicacionRepositorio ubicacionRepositorio, UserManager<Usuario> userManager)
         {
             _logger = logger;
             _ProductoRepositorio = productoRepositorio;
-            _StockRepositorio = StockRepositorio;
             _mapper = mapper;
             _UbicacionRepositorio = ubicacionRepositorio;
+            _userManager = userManager;
         }
 
 
@@ -37,11 +38,33 @@ namespace SistemaFacturacion_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse<IEnumerable<ProductoDTO>>>> GetProductos()
         {
-            //_logger.LogInformation("Obteniendo datos de las Productos");
+            //_logger.LogInformation("Obteniendo datos de las Productos");        
             var _response = new APIResponse<IEnumerable<ProductoDTO>>();
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida");
+                var usuario = await _userManager.GetUserAsync(User); // Obtiene el usuario desde el token
+                if (usuario == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.Unauthorized;
+                    return Unauthorized(_response);
+                }
+                bool esAdmin = await _userManager.IsInRoleAsync(usuario, "ADMIN");
+
+                if (!esAdmin)
+                {
+                    var sucursalId = User.FindFirst("SucursalId")?.Value;
+                    IEnumerable<Producto> ProductoSucursal = await _ProductoRepositorio.ObtenerTodos(c=>c.Stocks.Any(s=>s.Ubicacion.SucursalId == Convert.ToInt32(sucursalId)),
+                                                                                                incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
+
+
+                    _response.isExitoso = true;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoSucursal);
+                    return Ok(_response);
+                }
+
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);
@@ -67,7 +90,29 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<IEnumerable<ProductoDTO>>();
             try
             {
-                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(c=>c.Stocks.Any(s=>s.UbicacionId == ubicacionid),incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
+                var usuario = await _userManager.GetUserAsync(User); // Obtiene el usuario desde el token
+                if (usuario == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.Unauthorized;
+                    return Unauthorized(_response);
+                }
+                bool esAdmin = await _userManager.IsInRoleAsync(usuario, "ADMIN");
+
+                if (!esAdmin)
+                {
+                    var sucursalId = User.FindFirst("SucursalId")?.Value;
+                    IEnumerable<Producto> ProductoSucursal = await _ProductoRepositorio.ObtenerTodos(c => c.Stocks.Any(s => s.Ubicacion.UbicacionId == ubicacionid),
+                                                                                                incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
+
+
+                    _response.isExitoso = true;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoSucursal);
+                    return Ok(_response);
+                }
+
+                IEnumerable<Producto> ProductoList = await _ProductoRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Marca,Presentacion,Categoria,UnidadMedida,Stocks");
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<ProductoDTO>>(ProductoList);

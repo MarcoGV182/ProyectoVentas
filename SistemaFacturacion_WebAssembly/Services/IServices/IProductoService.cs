@@ -5,7 +5,7 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 { 
     public interface IProductoService
     {
-        Task<APIResponse<T>> ObtenerTodos<T>(int Ubicacion);
+        Task<APIResponse<T>> ObtenerTodos<T>();
         Task<APIResponse<T>> Obtener<T>(int id);
         Task<APIResponse<T>> Crear<T>(ProductoCreateDTO dto);
         Task<APIResponse<T>> Actualizar<T>(int id, ProductoUpdateDTO dto);

@@ -1,0 +1,75 @@
+﻿@inject ICiudadService _ciudadService
+@inject ISnackbar _snackBar
+
+<MudDialog Style="width:400px">
+    <DialogContent>
+        <MudContainer Style="max-height: 400; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_Ciudad" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <MudTextField @bind-Value="@_Ciudad.Descripcion"
+                              Class="mb-3"
+                              Label="Descripcion"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Badge"
+                              For="@(()=>_Ciudad.Descripcion)" />
+
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public CiudadDTO _Ciudad { get; set; } = new CiudadDTO();
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(_Ciudad.CiudadId);
+    }    
+
+
+    private async Task Guardar()
+    {                
+        string _mensaje = "";
+        bool _resultado;
+
+        CiudadCreateDTO _editRegistro = new CiudadCreateDTO();
+        _editRegistro.Descripcion = _Ciudad.Descripcion;
+        
+
+        if (_Ciudad.CiudadId != 0)
+        {
+            var response = await _ciudadService.Actualizar<object>(_Ciudad.CiudadId, _editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {
+            var response = await _ciudadService.Crear<CiudadDTO>(_editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

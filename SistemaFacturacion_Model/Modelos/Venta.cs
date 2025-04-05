@@ -41,7 +41,7 @@ namespace SistemaFacturacion_Model.Modelos
         [NotMapped]
         public virtual ICollection<MovimientoStock> MovimientosStock { get; set; }
 
-        public int? SucursalId { get; set; }
+        public int SucursalId { get; set; }
 
         public virtual Sucursal Sucursal { get; set; }
     }

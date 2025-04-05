@@ -30,7 +30,7 @@ namespace SistemaFacturacion_WebAssembly.Services
 
             return result;
         }
-        public async Task<APIResponse<T>> Actualizar<T>(int id, CiudadDTO dto)
+        public async Task<APIResponse<T>> Actualizar<T>(int id, CiudadCreateDTO dto)
         {
             var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {

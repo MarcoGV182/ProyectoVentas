@@ -55,12 +55,12 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> ObtenerTodos<T>(int idUbicacion)
+        public async Task<APIResponse<T>> ObtenerTodos<T>()
         {
             var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
-                URL = $"{_productoURL}/api/Producto/Producto-por-ubicacion/{idUbicacion}"
+                URL = $"{_productoURL}/api/Producto"
             });
            
 

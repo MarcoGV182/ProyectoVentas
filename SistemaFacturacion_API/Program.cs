@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using SistemaFacturacion_API.Datos;
 using Microsoft.Extensions.Options;
 using SistemaFacturacion_Model.Modelos;
+using System.Security.Claims;
 
 string myCors = "AllowBlazor";
 
@@ -85,7 +86,9 @@ var tokenValidationParameters = new TokenValidationParameters()
     ValidateAudience = false,
     RequireExpirationTime = false,
     ValidateLifetime = true,
-    ClockSkew = TimeSpan.Zero
+    ClockSkew = TimeSpan.Zero,
+    NameClaimType = ClaimTypes.Name,
+    RoleClaimType = ClaimTypes.Role
 };
 builder.Services.AddSingleton(tokenValidationParameters);
 
@@ -103,16 +106,7 @@ builder.Services.AddAuthentication(config =>
 });
 #endregion
 
-//Configurar el IdentityUser
-builder.Services.AddDefaultIdentity<Usuario>(option =>
-{
-    option.SignIn.RequireConfirmedAccount = false;
-    option.Password.RequireDigit = false;       // No requiere un dígito
-    option.Password.RequiredLength = 0;         // Longitud mínima 0
-    option.Password.RequireNonAlphanumeric = false; // No requiere caracteres especiales
-    option.Password.RequireUppercase = false;   // No requiere mayúsculas
-    option.Password.RequireLowercase = false;// No requiere minúsculas
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

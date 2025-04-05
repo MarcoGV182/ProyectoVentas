@@ -7,6 +7,7 @@ using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Mappers;
 using AutoMapper;
 using SistemaFacturacion_Model.Modelos.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace SistemaFacturacion_API
 {
@@ -44,6 +45,21 @@ namespace SistemaFacturacion_API
             services.AddScoped<IVentaRepositorio, VentaRepositorio>();
             services.AddScoped<IUbicacionRepositorio, UbicacionRepositorio>();
             services.AddScoped<IStockRepositorio, StockRepositorio>();
+
+
+            //Configurar el IdentityUser
+            services.AddIdentity<Usuario, IdentityRole>(option =>
+            {
+                option.SignIn.RequireConfirmedAccount = false;
+                option.Password.RequireDigit = false;       // No requiere un dígito
+                option.Password.RequiredLength = 6;         // Longitud mínima 0
+                option.Password.RequireNonAlphanumeric = false; // No requiere caracteres especiales
+                option.Password.RequireUppercase = false;   // No requiere mayúsculas
+                option.Password.RequireLowercase = false;// No requiere minúsculas
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
         }
     }
 }

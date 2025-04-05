@@ -20,20 +20,21 @@ namespace SistemaFacturacion_Model.Modelos
         public string Observacion { get; set; }
         [Required]
         public DateTime Fecharegistro { get; set; } = DateTime.Now;
-        public short? IdUsuario { get; set; }       
+        public string UsuarioRegistro { get; set; }       
         public DateTime? Ultfechaactualizacion { get; set; }
-        public short? IdUsuarioMod { get; set; }
-        public short? IdTipoDocIdentidad { get; set; }
-        [ForeignKey(nameof(IdTipoDocIdentidad))]
-        public virtual TipoDocumentoIdentidad TipoDocumentoIdentidad { get; set; }
-
-        public short? IdCiudad { get; set; }
-        [ForeignKey(nameof(IdCiudad))]
-        public Ciudad Ciudad { get; set; }
-        // Relación con Colaborador
-        public virtual Colaborador Colaborador { get; set; }
-
+        public string UsuarioIdMod { get; set; }
+        public short? TipoDocIdentidadId { get; set; }
+        public short? CiudadId { get; set; }
         public int? SucursalId { get; set; }
+
+
+
+        [ForeignKey(nameof(TipoDocIdentidadId))]
+        public virtual TipoDocumentoIdentidad TipoDocumentoIdentidad { get; set; }
+        [ForeignKey(nameof(CiudadId))]
+        public virtual Ciudad Ciudad { get; set; }
+        // Relación con Colaborador
+        public virtual Colaborador Colaborador { get; set; }     
         public virtual Sucursal Sucursal { get; set; }
 
     }

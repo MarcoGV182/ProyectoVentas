@@ -14,5 +14,7 @@ namespace SistemaFacturacion_Model.Modelos
 
 
         public virtual Empresa Empresa { get; set; }
+
+        public virtual ICollection<Ubicacion> Ubicaciones { get; set; } = new List<Ubicacion>();
     }
 }

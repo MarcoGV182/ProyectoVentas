@@ -1,0 +1,168 @@
+﻿@page "/ciudad"
+@attribute [Authorize]
+@inject ICiudadService _Ciudadservice
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackBar
+@inject NavigationManager _navigationManager
+@inject SweetAlertService Swal;
+
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Mantenimiento de Ciudads</MudText>
+
+    <MudPaper Elevation="3" Class="pa-4" Width="100%">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           OnClick="AbrirNuevaCiudad">
+                    Nuevo Ciudad
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTable Items="@listaCiudads"
+                          Dense="true"
+                          Striped="true" Bordered="true"
+                          Filter="new Func<CiudadDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                          Loading="@_loading" LoadingProgressColor="Color.Info">
+                    @* <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent> *@
+                    <ToolBarContent>
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar por Nombre" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>                              <MudSpacer />
+                        <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh Style="width: 5px;">
+                            <MudTableSortLabel SortBy="new Func<CiudadDTO, object>(x=> x.CiudadId)">
+                                Código
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<CiudadDTO, object>(x=> x.Descripcion)">
+                                Nombre
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>Acciones</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="CiudadRow">
+                        <MudTd DataLabel="Codigo">@CiudadRow.CiudadId</MudTd>
+                        <MudTd DataLabel="Nombre">@CiudadRow.Descripcion</MudTd>                       
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => AbrirEditarCiudad(CiudadRow))" />
+                            <MudFab Color="Color.Error"
+                                    StartIcon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => EliminarCiudad(CiudadRow))" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
+                    </PagerContent>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>
+@code {
+    List<CiudadDTO> listaCiudads = new List<CiudadDTO>();
+    private string searchString1 = "";
+    private CiudadDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    private async Task ObtenerCiudades()
+    {
+        var result = await _Ciudadservice.ObtenerTodos<List<CiudadDTO>>();
+
+        if (result.isExitoso)
+        {
+            listaCiudads = result.Resultado!;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerCiudades();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(CiudadDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(CiudadDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString) )
+            return true;
+
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase);
+       
+
+        return matchesSearch1;
+    }
+
+    private void LimpiarFiltros()
+    {
+        searchString1 = string.Empty;
+    }
+
+    private async Task AbrirNuevaCiudad()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = await _dialogServicio.ShowAsync<MdCiudad>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerCiudades();
+        }                 
+    }
+
+    private async Task AbrirEditarCiudad(CiudadDTO Ciudad)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_Ciudad"] = Ciudad };
+
+        var dialogo = _dialogServicio.Show<MdCiudad>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerCiudades();
+        }                  
+    }
+
+    private async Task EliminarCiudad(CiudadDTO Ciudad)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Eliminar el registro: {Ciudad.Descripcion})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var resultado = await _Ciudadservice.Eliminar<CiudadDTO>(Ciudad.CiudadId);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La registro fue eliminado", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerCiudades();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",", resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+    }
+
+}

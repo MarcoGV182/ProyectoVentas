@@ -324,6 +324,7 @@
             venta.NroFactura = $"{venta.Establecimiento.ToString().PadLeft(3, '0')}-{venta.PuntoExpedicion.ToString().PadLeft(3, '0')}-{venta.Numero.ToString().PadLeft(7, '0')}";
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
+            venta.SucursalId = UserStateService.CurrentUser.SucursalId.Value;
             venta.DetalleVenta = detalles;
             venta.Total = detalles.Sum(s => s.Total);
             venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);

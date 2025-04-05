@@ -26,22 +26,22 @@ namespace SistemaFacturacion_API.Services
 {
     public class AutorizacionService : IAutorizacionService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<Usuario> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IRefreshTokenRepositorio _refreshTokenRepositorio;
         private readonly JWTConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
-        public AutorizacionService(ApplicationDbContext context, IConfiguration configuration, IOptions<JWTConfig> jwtConfig, IRefreshTokenRepositorio refreshTokenRepositorio, TokenValidationParameters tokenValidationParameters)
+        public AutorizacionService(ApplicationDbContext context, IConfiguration configuration, IOptions<JWTConfig> jwtConfig, IRefreshTokenRepositorio refreshTokenRepositorio, TokenValidationParameters tokenValidationParameters, UserManager<Usuario> userManager)
         {
-            _context = context;
             _configuration = configuration;
             _jwtConfig = jwtConfig.Value;
             _refreshTokenRepositorio = refreshTokenRepositorio;
             _tokenValidationParameters = tokenValidationParameters;
+            _userManager = userManager;
         }
 
-        public async Task<AutorizacionResponse> GenerarTokenAsync(IdentityUser user) 
+        public async Task<AutorizacionResponse> GenerarTokenAsync(Usuario user) 
         {
             try
             {
@@ -50,16 +50,26 @@ namespace SistemaFacturacion_API.Services
 
                 var credencialesToken = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256);
 
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim("SucursalId", user.SucursalId.GetValueOrDefault().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
+                };
+
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new ClaimsIdentity(new[]
-                    {
-                        new Claim("Id", user.Id),
-                        new Claim(JwtRegisteredClaimNames.Sub,user.Email),
-                        new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
-                    })),
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.Add(_jwtConfig.ExpireTime),
                     SigningCredentials = credencialesToken
                 };

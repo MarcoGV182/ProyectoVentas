@@ -156,7 +156,6 @@
     private ProductoDTO selectedItem1 = null;
     private bool _loading = true;
     private bool isLoading = false;
-    public int _ubicacion = 1;
 
     private async Task Obtenerproductos()
     {
@@ -165,7 +164,7 @@
             isLoading = true;
             StateHasChanged(); // Fuerza actualización UI
 
-            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>(_ubicacion);
+            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
 
             if (result.isExitoso)
             {

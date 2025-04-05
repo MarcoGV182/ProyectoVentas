@@ -15,9 +15,13 @@ namespace SistemaFacturacion_Model.Modelos
         public bool Activa { get; set; } = true; 
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
         public DateTime FechaModificacion { get; set; } = DateTime.Now;
+        public int SucursalId { get; set; }
 
         // Relación con stock
         public virtual ICollection<Stock> Stocks { get; set; }
+        // Relación con sucursal
+        [ForeignKey(nameof(SucursalId))]
+        public virtual Sucursal Sucursal { get; set; }
 
     }
 }

@@ -23,6 +23,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public short? EmpresaId { get; set; }
         public decimal Total { get; set; }
         public decimal TotalIVA { get; set; }
+        public int SucursalId { get; set; }
         public List<DetalleVentaCreateDTO> DetalleVenta { get; set; }
     }
 }
