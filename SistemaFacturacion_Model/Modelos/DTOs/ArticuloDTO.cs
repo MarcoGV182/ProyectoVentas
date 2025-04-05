@@ -13,6 +13,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public int ArticuloId { get; set; }
         [Required(ErrorMessage = "Favor ingrese la Descripcion")]
         public string Descripcion { get; set; }
+        [Required(ErrorMessage = "Favor ingrese el Precio")]
         public decimal PrecioBase { get; set; }
         public string Observacion { get; set; }
         public int StockActual { get; set; }

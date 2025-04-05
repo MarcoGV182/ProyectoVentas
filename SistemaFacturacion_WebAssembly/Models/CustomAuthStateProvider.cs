@@ -2,23 +2,26 @@
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using SistemaFacturacion_Model.Modelos.DTOs;
+using SistemaFacturacion_WebAssembly.Services;
 
 namespace SistemaFacturacion_WebAssembly.Models
 {
     public class CustomAuthStateProvider: AuthenticationStateProvider
     {
-        private readonly ILocalStorageService _localStorageService;
         private readonly AuthenticationState _anonymous;
+        private readonly UsuarioEstadoService _usuarioEstadoService;
 
-        public CustomAuthStateProvider(ILocalStorageService localStorage)
+        public CustomAuthStateProvider(UsuarioEstadoService usuarioEstadoService)
         {
-            _localStorageService = localStorage;
             _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            _usuarioEstadoService = usuarioEstadoService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await _localStorageService.GetItemAsync<string>("accessToken");
+            await _usuarioEstadoService.LoadStateAsync();
+            var token = _usuarioEstadoService.Token;
 
             if (string.IsNullOrEmpty(token))
             {
@@ -31,17 +34,21 @@ namespace SistemaFacturacion_WebAssembly.Models
             return new AuthenticationState(user);
         }
 
-        public void MarkUserAsAuthenticated(string token)
+        public async Task MarkUserAsAuthenticatedAsync(string token, UsuarioResponse user)
         {
-            var identity = new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "Bearer");
-            var user = new ClaimsPrincipal(identity);
+            await _usuarioEstadoService.SetTokenAsync(token);
+            await _usuarioEstadoService.SetCurrentUserAsync(user);
 
-            var authState = new AuthenticationState(user);
+            var identity = new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "Bearer");
+            var userPrincipal = new ClaimsPrincipal(identity);
+
+            var authState = new AuthenticationState(userPrincipal);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
 
-        public void MarkUserAsLoggedOut()
+        public async Task MarkUserAsLoggedOutAsync()
         {
+            await _usuarioEstadoService.ClearStateAsync();
             var authState = _anonymous;
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }

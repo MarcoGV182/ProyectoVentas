@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
 using SistemaFacturacion_Utilidad;
+using Microsoft.EntityFrameworkCore;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -44,7 +45,7 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<IEnumerable<UsuarioDTO>>();
             try 
             {
-                IEnumerable<IdentityUser> UsuarioList = await _usuarioRepositorio.ObtenerTodos();
+                IEnumerable<Usuario> UsuarioList = await _usuarioRepositorio.ObtenerUsuarios();
 
                 if (UsuarioList == null)
                 {

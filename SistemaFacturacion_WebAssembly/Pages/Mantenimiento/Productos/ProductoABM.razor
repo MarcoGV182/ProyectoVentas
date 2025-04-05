@@ -224,7 +224,7 @@
                 var resultProduct = await _productoService.Obtener<ProductoDTO>(ProductoId.Value);
                 if (resultProduct.isExitoso)
                 {
-                    producto = (ProductoDTO)resultProduct.Resultado;
+                    producto = resultProduct.Resultado;
                 }
             }
 
@@ -311,6 +311,9 @@
             _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
             _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+
+            var stockArticulo = new StockAddDTO { UbicacionId = 1 };
+            _nuevoRegistro.Stocks = new List<StockAddDTO> { stockArticulo };
 
             var response = await _productoService.Crear<ProductoDTO>(_nuevoRegistro);
             _resultado = response.isExitoso;

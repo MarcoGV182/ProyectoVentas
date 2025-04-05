@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SistemaFacturacion_API.Datos;
@@ -11,9 +12,11 @@ using SistemaFacturacion_API.Datos;
 namespace SistemaFacturacion_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404142053_Agregar relacion con Empresa a Sucursal")]
+    partial class AgregarrelacionconEmpresaaSucursal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,9 +265,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<decimal>("PrecioBase")
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("SucursalId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TipoArticulo")
                         .HasColumnType("integer");
 
@@ -272,8 +272,6 @@ namespace SistemaFacturacion_API.Migrations
                         .HasColumnType("smallint");
 
                     b.HasKey("ArticuloId");
-
-                    b.HasIndex("SucursalId");
 
                     b.HasIndex("TipoimpuestoId");
 
@@ -566,9 +564,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<string>("Observacion")
                         .HasColumnType("text");
 
-                    b.Property<int?>("SucursalId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Telefono")
                         .HasColumnType("text");
 
@@ -580,8 +575,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.HasIndex("IdCiudad");
 
                     b.HasIndex("IdTipoDocIdentidad");
-
-                    b.HasIndex("SucursalId");
 
                     b.ToTable("persona");
                 });
@@ -656,9 +649,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int>("RangoHasta")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SucursalId")
-                        .HasColumnType("integer");
-
                     b.Property<short>("TimbradoId")
                         .HasColumnType("smallint");
 
@@ -666,8 +656,6 @@ namespace SistemaFacturacion_API.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SucursalId");
 
                     b.HasIndex("TimbradoId");
 
@@ -910,6 +898,9 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<int?>("ColaboradorId")
                         .HasColumnType("integer");
 
+                    b.Property<short?>("EmpresaId")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("EsAutoimprenta")
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)");
@@ -946,9 +937,6 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<short>("PuntoExpedicion")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("SucursalId")
-                        .HasColumnType("integer");
-
                     b.Property<short>("TimbradoId")
                         .HasColumnType("smallint");
 
@@ -976,7 +964,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("ColaboradorId");
 
-                    b.HasIndex("SucursalId");
+                    b.HasIndex("EmpresaId");
 
                     b.HasIndex("TimbradoId");
 
@@ -1109,15 +1097,9 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Articulo", b =>
                 {
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Sucursal", "Sucursal")
-                        .WithMany()
-                        .HasForeignKey("SucursalId");
-
                     b.HasOne("SistemaFacturacion_Model.Modelos.TipoImpuesto", "TipoImpuesto")
                         .WithMany()
                         .HasForeignKey("TipoimpuestoId");
-
-                    b.Navigation("Sucursal");
 
                     b.Navigation("TipoImpuesto");
                 });
@@ -1185,13 +1167,7 @@ namespace SistemaFacturacion_API.Migrations
                         .WithMany()
                         .HasForeignKey("IdTipoDocIdentidad");
 
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Sucursal", "Sucursal")
-                        .WithMany()
-                        .HasForeignKey("SucursalId");
-
                     b.Navigation("Ciudad");
-
-                    b.Navigation("Sucursal");
 
                     b.Navigation("TipoDocumentoIdentidad");
                 });
@@ -1209,19 +1185,11 @@ namespace SistemaFacturacion_API.Migrations
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Rango_Timbrados", b =>
                 {
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Sucursal", "Sucursal")
-                        .WithMany()
-                        .HasForeignKey("SucursalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SistemaFacturacion_Model.Modelos.Timbrado", "Timbrado")
                         .WithMany("Rango_Timbrados")
                         .HasForeignKey("TimbradoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Sucursal");
 
                     b.Navigation("Timbrado");
                 });
@@ -1268,9 +1236,9 @@ namespace SistemaFacturacion_API.Migrations
                         .WithMany()
                         .HasForeignKey("ColaboradorId");
 
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Sucursal", "Sucursal")
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Empresa", "Empresa")
                         .WithMany()
-                        .HasForeignKey("SucursalId");
+                        .HasForeignKey("EmpresaId");
 
                     b.HasOne("SistemaFacturacion_Model.Modelos.Timbrado", "Timbrado")
                         .WithMany()
@@ -1284,7 +1252,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.Navigation("Cliente");
 
-                    b.Navigation("Sucursal");
+                    b.Navigation("Empresa");
 
                     b.Navigation("Timbrado");
 

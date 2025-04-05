@@ -20,6 +20,7 @@ namespace SistemaFacturacion_Model.Modelos
        
         [ForeignKey(nameof(UbicacionId))]
         public virtual Ubicacion Ubicacion { get; set; }
+
         public virtual ICollection<MovimientoStock> Movimientos { get; set; }
 
     }

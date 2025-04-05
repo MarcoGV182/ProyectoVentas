@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class ProductoDTO:ArticuloDTO
-    {   
-        [Required(ErrorMessage = "Favor ingrese el Precio del Producto")]       
+    {                
         public string Codigobarra { get; set; }
         public int Stockminimo { get; set; }        
         public decimal PrecioCompra { get; set; } = 0;

@@ -12,5 +12,6 @@ namespace SistemaFacturacion_API.Repositorio.IRepositorio
         Task RegistrarMovimientoAsync(MovimientoStock movimiento);
         Task<List<MovimientoStock>> ObtenerMovimientosPorProductoAsync(int productoId, DateTime? desde, DateTime? hasta);
         Task<List<MovimientoStock>> ObtenerMovimientosPorUbicacionAsync(int ubicacionId, DateTime? desde, DateTime? hasta);
+        Task Grabar();
     }
 }

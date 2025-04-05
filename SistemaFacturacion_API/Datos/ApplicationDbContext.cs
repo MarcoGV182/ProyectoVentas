@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SistemaFacturacion_Model.Modelos;
-
 namespace SistemaFacturacion_API.Datos
 {
-    public class ApplicationDbContext: IdentityDbContext<Usuario>
+    public class ApplicationDbContext : IdentityDbContext<Usuario>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
         {
@@ -22,7 +21,6 @@ namespace SistemaFacturacion_API.Datos
         public DbSet<Ubicacion> Ubicacion { get; set; }
         public DbSet<Persona> Persona { get; set; }
         public DbSet<Colaborador> Colaborador { get; set; }
-        //public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Servicio> Servicio { get; set; }
         public DbSet<TipoServicio> TipoServicio { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }
@@ -34,6 +32,8 @@ namespace SistemaFacturacion_API.Datos
         public DbSet<PrecioPromocional> PrecioPromocional { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<MovimientoStock> Movimientos { get; set; }
+        public DbSet<Rango_Timbrados> Rango_Timbrados { get; set; }
+        public DbSet<Sucursal> Sucursales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +65,14 @@ namespace SistemaFacturacion_API.Datos
                 .HasOne(u => u.Colaborador)
                 .WithOne()
                 .HasForeignKey<Usuario>(u => u.ColaboradorId);
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasMany(u => u.UserRoles)
+                      .WithOne()
+                      .HasForeignKey(ur => ur.UserId) // Usa "UserId" (no "UsuarioId")
+                      .IsRequired();
+            });
 
 
             modelBuilder.Entity<HistorialRefreshToken>()

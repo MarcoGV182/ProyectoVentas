@@ -2,6 +2,7 @@
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using System.Linq.Expressions;
+using System.Net;
 
 namespace SistemaFacturacion_API.Repositorio
 {
@@ -20,6 +21,16 @@ namespace SistemaFacturacion_API.Repositorio
             await Grabar();
             return entidad;
         }
-       
+
+        public async Task<bool> ValidarUbicacionActiva(int ubicacionId)
+        {
+            var ubicacion = await Obtener(c => c.UbicacionId == ubicacionId);
+            if (ubicacion == null || !ubicacion.Activa)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

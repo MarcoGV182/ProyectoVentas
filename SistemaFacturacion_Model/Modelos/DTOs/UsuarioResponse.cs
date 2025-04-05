@@ -12,5 +12,6 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public string Email { get; set; }
         public string UserName { get; set; }
         public int? ColaboradorId { get; set; }
+        public int? SucursalId { get; set; }
     }
 }

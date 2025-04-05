@@ -3,6 +3,7 @@ using Npgsql.PostgresTypes;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Mappers.Resolvers;
+using SistemaFacturacion_API.Datos;
 
 namespace SistemaFacturacion_API.Mappers
 {
@@ -41,6 +42,9 @@ namespace SistemaFacturacion_API.Mappers
             //Servicio
             CreateMap<Servicio, ServicioDTO>().ForMember(dest => dest.ArticuloId, opt => opt.MapFrom(src => src.ArticuloId)).ReverseMap();
             CreateMap<Servicio, ServicioCreateDTO>().ReverseMap();
+
+            //Usuario
+            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
 
 
             //Marca
@@ -114,12 +118,14 @@ namespace SistemaFacturacion_API.Mappers
             .ForMember(dest => dest.Venta, opt => opt.Ignore())
             .ForMember(dest => dest.TipoImpuesto, opt => opt.Ignore());
 
-
-
-
             //Ubicación
             CreateMap<Ubicacion, UbicacionDTO>().ReverseMap();
             CreateMap<Ubicacion, UbicacionCreateDTO>().ReverseMap();
+
+
+            //Stock
+            CreateMap<Stock, StockAddDTO>().ReverseMap();
+            CreateMap<Stock, StockDTO>().ReverseMap();
         }
     }
 }

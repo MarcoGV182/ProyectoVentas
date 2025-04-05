@@ -120,5 +120,10 @@ namespace SistemaFacturacion_API.Repositorio
 
             return await query.OrderByDescending(m => m.FechaMovimiento).ToListAsync();
         }
+
+        public async Task Grabar()
+        {
+            await _db.SaveChangesAsync();
+        }
     }
 }

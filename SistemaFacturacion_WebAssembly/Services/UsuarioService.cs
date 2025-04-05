@@ -35,7 +35,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Actualizar<T>(int id,UsuarioRegistroDTO dto)
+        public async Task<APIResponse<T>> Actualizar<T>(string id,UsuarioRegistroDTO dto)
         {
             var apiRequest = new APIRequest()
             {
@@ -91,7 +91,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Eliminar<T>(int id)
+        public async Task<APIResponse<T>> Eliminar<T>(string id)
         {
             var result = await SendAsync<APIResponse<T>>(new APIRequest()
             {

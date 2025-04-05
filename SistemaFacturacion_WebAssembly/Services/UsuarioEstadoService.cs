@@ -1,52 +1,55 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Blazored.LocalStorage;
+using Newtonsoft.Json.Linq;
 using SistemaFacturacion_Model.Modelos.DTOs;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
     public class UsuarioEstadoService
     {
-        private UsuarioResponse _currentUser;
-        private string _token;
+        private readonly ILocalStorageService _localStorageService;
+        private const string UserKey = "Usuario";
+        private const string TokenKey = "accessToken";
 
-        public UsuarioResponse CurrentUser
+        public UsuarioResponse CurrentUser { get; private set; }
+        public string Token { get; private set; }
+
+        public UsuarioEstadoService(ILocalStorageService localStorageService)
         {
-            get => _currentUser;
-            private set
-            {
-                _currentUser = value;
-                NotifyStateChanged();
-            }
+            _localStorageService = localStorageService;
         }
 
-        public string Token
-        {
-            get => _token;
-            private set
-            {
-                _token = value;
-                NotifyStateChanged();
-            }
-        }
 
-        public event Action OnChange;
-
-        public void SetCurrentUser(UsuarioResponse user)
+        public async Task SetCurrentUserAsync(UsuarioResponse user)
         {
             CurrentUser = user;
-        }
-
-        public void SetToken(string token)
-        {
-            Token = token;
-        }
-
-        public void ClearState()
-        {
-            CurrentUser = null;
-            Token = null;
+            await _localStorageService.SetItemAsync(UserKey, user);
             NotifyStateChanged();
         }
 
-        private void NotifyStateChanged() => OnChange?.Invoke();
+        public async Task SetTokenAsync(string token)
+        {
+            Token = token;
+            await _localStorageService.SetItemAsync(TokenKey, token);
+            NotifyStateChanged();
+        }
+
+        public async Task LoadStateAsync()
+        {
+            CurrentUser = await _localStorageService.GetItemAsync<UsuarioResponse>(UserKey);
+            Token = await _localStorageService.GetItemAsync<string>(TokenKey);
+            NotifyStateChanged();
+        }
+
+        public async Task ClearStateAsync()
+        {
+            CurrentUser = null;
+            Token = null;
+            await _localStorageService.RemoveItemAsync(UserKey);
+            await _localStorageService.RemoveItemAsync(TokenKey);
+            NotifyStateChanged();
+        }
+
+        private void NotifyStateChanged() => StateChanged?.Invoke();
+        public event Action StateChanged;
     }
 }

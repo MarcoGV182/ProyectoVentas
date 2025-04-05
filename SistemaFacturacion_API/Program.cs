@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using SistemaFacturacion_API.Datos;
 using Microsoft.Extensions.Options;
+using SistemaFacturacion_Model.Modelos;
 
 string myCors = "AllowBlazor";
 

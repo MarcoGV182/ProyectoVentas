@@ -9,7 +9,6 @@
 @inject ITimbradoService _timbradoService
 @inject IDialogService _DialogService
 @inject UsuarioEstadoService UserStateService
-@inject ILocalStorageService _localStorageService
 
 <MudGrid>
     <!-- Cabecera del formulario -->
@@ -324,15 +323,6 @@
             #region Cargar Datos
             venta.NroFactura = $"{venta.Establecimiento.ToString().PadLeft(3, '0')}-{venta.PuntoExpedicion.ToString().PadLeft(3, '0')}-{venta.Numero.ToString().PadLeft(7, '0')}";
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
-
-            if (UserStateService.CurrentUser == null)
-            {
-                UserStateService = new UsuarioEstadoService();
-                var usuario = await _localStorageService.GetItemAsync<UsuarioResponse>("Usuario");
-                UserStateService.SetCurrentUser(usuario);
-            }
-
-
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
             venta.DetalleVenta = detalles;
             venta.Total = detalles.Sum(s => s.Total);

@@ -35,6 +35,9 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 
         public DateTime? Fecharegistro { get; set; }
 
+        // Relación con stock
+        public virtual ICollection<StockAddDTO> Stocks { get; set; }
+
 
     }
 }

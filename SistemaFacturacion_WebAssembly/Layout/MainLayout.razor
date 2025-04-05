@@ -2,7 +2,7 @@
 @inject SweetAlertService Swal;
 @inject NavigationManager _navigationManager
 @inject ILocalStorageService _localStorageService
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthService _authService
 @inject UsuarioEstadoService UserStateService
 
 
@@ -56,10 +56,9 @@
 
         if (result.IsConfirmed)
         {
-            await _localStorageService.RemoveItemAsync("accessToken");
-            UserStateService.ClearState();
-            ((CustomAuthStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
-            _navigationManager.NavigateTo("/login");           
+            // Usar AuthService para manejar el cierre de sesión
+            await _authService.LogoutAsync();
+            _navigationManager.NavigateTo("/login");
         }
     }
 }

@@ -21,13 +21,15 @@ namespace SistemaFacturacion_API.Controllers
         private readonly IMapper _mapper;
         private readonly IProductoRepositorio _ProductoRepositorio;
         private readonly IStockRepositorio _StockRepositorio;
+        private readonly IUbicacionRepositorio _UbicacionRepositorio;
 
-        public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio, IStockRepositorio StockRepositorio, IMapper mapper)
+        public ProductoController(ILogger<ProductoController> logger, IProductoRepositorio productoRepositorio, IStockRepositorio StockRepositorio, IMapper mapper, IUbicacionRepositorio ubicacionRepositorio)
         {
             _logger = logger;
             _ProductoRepositorio = productoRepositorio;
             _StockRepositorio = StockRepositorio;
             _mapper = mapper;
+            _UbicacionRepositorio = ubicacionRepositorio;
         }
 
 
@@ -136,6 +138,13 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<Producto>();
             try
             {
+                if (CreateDTO == null)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
                 if (_ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower()) == null)
                 {
                     var mensajeError = "El producto con el mismo nombre ingresado ya existe";
@@ -146,16 +155,33 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (CreateDTO == null)
+                if (!CreateDTO.Stocks.Any())
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "No existe ubicaciones para registrar el Stock del Producto" };
                     return BadRequest(_response);
                 }
 
+                // -- Validar ubicacion
+                foreach (var item in CreateDTO.Stocks)
+                {
+                    var ExisteActiva = await _UbicacionRepositorio.ValidarUbicacionActiva(item.UbicacionId);
+                    if (!ExisteActiva)
+                    {
+                        _response.isExitoso = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.ErrorMessages = new List<string>() { $"Ubicación {item.UbicacionId} no encontrada o inactiva" };
+                        return BadRequest(_response);
+                    }
+                }
+
+
+                // -- Crear articulo
                 var _producto = _mapper.Map<Producto>(CreateDTO);
                 _producto.Fecharegistro = DateTime.Now;
 
+                // --Guardar cambios
                 await _ProductoRepositorio.Crear(_producto);
                 await _ProductoRepositorio.Grabar();
 

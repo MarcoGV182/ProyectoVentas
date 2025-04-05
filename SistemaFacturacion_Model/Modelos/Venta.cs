@@ -35,14 +35,14 @@ namespace SistemaFacturacion_Model.Modelos
         public string UsuarioIdModificacion { get; set; }       
         public DateTime? FechaAnulacion { get; set; }
         public string UsuarioIdAnulacion { get; set; }       
-        public short? EmpresaId { get; set; }
-        [ForeignKey(nameof(EmpresaId))]
-        public Empresa Empresa { get; set; }
         public ICollection<DetalleVenta> DetalleVenta { get; set; }
 
         // Movimientos de stock relacionados (no mapeado a DB, solo para acceso)
         [NotMapped]
         public virtual ICollection<MovimientoStock> MovimientosStock { get; set; }
 
+        public int? SucursalId { get; set; }
+
+        public virtual Sucursal Sucursal { get; set; }
     }
 }

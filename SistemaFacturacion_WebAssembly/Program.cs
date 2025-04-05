@@ -55,7 +55,9 @@ builder.Services.AddScoped<IArticuloService, ArticuloService>();
 builder.Services.AddScoped<IVentaService, VentaService>();
 builder.Services.AddScoped<ITimbradoService, TimbradoService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<UsuarioEstadoService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddMudServices();
 builder.Services.AddSweetAlert2();

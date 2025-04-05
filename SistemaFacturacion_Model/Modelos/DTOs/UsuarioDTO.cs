@@ -4,10 +4,10 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class UsuarioDTO
     {
-        public int UsuarioId { get; set; }
+        public string Id { get; set; }
         [Required]
-        public string Login { get; set; }       
-        public string? Correo { get; set; }
-        public Colaborador Colaborador { get; set; }
+        public string UserName { get; set; }       
+        public string Email { get; set; }
+        public string Rol { get; set; }
     }
 }

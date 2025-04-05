@@ -1,5 +1,7 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person2">Clima</MudNavLink>
+﻿@inject UsuarioEstadoService _usuarioEstadoService
+
+
+<MudNavMenu>    
     <MudNavGroup Title="Mantenimiento" Icon="@Icons.Material.Filled.Add">
         <MudNavGroup Title="Productos" Icon="@Icons.Material.Filled.ProductionQuantityLimits">
             <MudNavLink Href="producto" Match="NavLinkMatch.Prefix">Producto</MudNavLink>
@@ -12,15 +14,16 @@
             <MudNavLink Href="servicio" Match="NavLinkMatch.Prefix">Servicios</MudNavLink>
             <MudNavLink Href="tiposervicio" Match="NavLinkMatch.Prefix">Tipos de Servicio</MudNavLink>
         </MudNavGroup>
-        <MudNavGroup Title="Clientes" Icon="@Icons.Material.Filled.AddBusiness">
+        <MudNavGroup Title="Clientes" Icon="@Icons.Material.Filled.AccountCircle">
             <MudNavLink Href="tipoDocIdentidad" Match="NavLinkMatch.Prefix">Tipo Doc. Identidad</MudNavLink>
             <MudNavLink Href="cliente" Match="NavLinkMatch.Prefix">Cliente</MudNavLink>
         </MudNavGroup>
         <MudNavGroup Title="Operaciones" Icon="@Icons.Material.Filled.AddBusiness">
-            <MudNavLink Href="ventas" Match="NavLinkMatch.Prefix">Ventas</MudNavLink>
+            <MudNavLink Href="ventas" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AddShoppingCart">Ventas</MudNavLink>
         </MudNavGroup>
         <MudNavGroup Title="Opciones" Icon="@Icons.Material.Filled.Accessibility">
             <MudNavLink Href="timbrado" Match="NavLinkMatch.Prefix">Timbrados</MudNavLink>
+            <MudNavLink Href="usuario" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountCircle">Usuarios</MudNavLink>
         </MudNavGroup>
     </MudNavGroup>
 </MudNavMenu>

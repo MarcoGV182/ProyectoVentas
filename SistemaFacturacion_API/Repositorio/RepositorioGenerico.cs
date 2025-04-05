@@ -20,7 +20,8 @@ namespace SistemaFacturacion_API.Repositorio
 
         public async Task Crear(T entidad)
         {
-            await _dbSet.AddAsync(entidad);                    }
+            await _dbSet.AddAsync(entidad);                    
+        }
 
         public async Task Grabar()
         {

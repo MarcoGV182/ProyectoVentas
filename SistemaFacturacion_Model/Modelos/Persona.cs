@@ -33,7 +33,8 @@ namespace SistemaFacturacion_Model.Modelos
         // Relación con Colaborador
         public virtual Colaborador Colaborador { get; set; }
 
-
+        public int? SucursalId { get; set; }
+        public virtual Sucursal Sucursal { get; set; }
 
     }
 }

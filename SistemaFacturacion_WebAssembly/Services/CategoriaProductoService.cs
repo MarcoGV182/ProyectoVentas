@@ -22,8 +22,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Categoria/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+           
 
             return result;
         }
@@ -36,8 +35,6 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Categoria"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
 
             return result;
         }
@@ -50,9 +47,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 Tipo = DS.APITipo.DELETE,
                 URL = $"api/Categoria/{id}"
             });
-
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+                        
 
             return result;
         }
@@ -66,8 +61,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Categoria"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+         
 
             return result;
         }
@@ -80,8 +74,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Categoria/{id}"
             });
 
-            if (result.isExitoso)
-                result.Resultado = JsonConvert.DeserializeObject<T>(result.Resultado.ToString());
+          
 
             return result;
         }

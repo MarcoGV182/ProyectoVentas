@@ -20,5 +20,8 @@ namespace SistemaFacturacion_Model.Modelos
         [Required]
         [MaxLength(1)]
         public string Estado { get; set; }
+
+        
+        public virtual ICollection<Rango_Timbrados> Rango_Timbrados { get; set; }
     }
 }

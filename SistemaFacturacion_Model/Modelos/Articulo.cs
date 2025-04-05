@@ -29,8 +29,9 @@ namespace SistemaFacturacion_Model.Modelos
 
         [ForeignKey(nameof(TipoimpuestoId))]
         public TipoImpuesto TipoImpuesto { get; set; }
-
-        //public ICollection<PrecioPromocional> PreciosPromocionales { get; set; }
+        public int? SucursalId { get; set; }
+        public virtual Sucursal Sucursal { get; set; }
+    
     }
 
     public enum TipoArticulo
