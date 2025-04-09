@@ -14,7 +14,7 @@ using System.Net.Http.Headers;
 namespace SistemaFacturacion_WebAssembly.Services
 {
     public class BaseService : IBaseService
-    {        
+    {
         private readonly IHttpClientFactory _httpClientFactory;
 
         public BaseService(IHttpClientFactory httpClientFactory)
@@ -22,8 +22,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<T> SendAsync<T>(APIRequest apiRequest) where T: class, new()
-        {   
+        public async Task<APIResponse<T>> SendAsync<T>(APIRequest apiRequest) where T : class, new()
+        {
+            var response = new APIResponse<T>();
             try
             {
                 var client = _httpClientFactory.CreateClient("Facturacion");
@@ -31,7 +32,6 @@ namespace SistemaFacturacion_WebAssembly.Services
                 message.Headers.Add("Accept", "application/json");
 
                 message.RequestUri = new Uri(apiRequest.URL, UriKind.RelativeOrAbsolute);
-
 
                 if (apiRequest.Datos != null)
                 {
@@ -60,16 +60,19 @@ namespace SistemaFacturacion_WebAssembly.Services
                 HttpResponseMessage apiResponse = await client.SendAsync(message);
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
 
-                
+                response.StatusCode = apiResponse.StatusCode;
+                response.isExitoso = apiResponse.IsSuccessStatusCode;
+
                 if (apiResponse.IsSuccessStatusCode)
                 {
                     try
                     {
-                        return JsonConvert.DeserializeObject<T>(apiContent);
+                        response = JsonConvert.DeserializeObject<APIResponse<T>>(apiContent);
+                        //response.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
                     }
-                    catch (JsonException)
+                    catch (JsonException ex)
                     {
-                        throw new Exception("Error al deserializar la respuesta en el tipo especificado.");
+                        response.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
                     }
                 }
                 else
@@ -77,81 +80,65 @@ namespace SistemaFacturacion_WebAssembly.Services
                     // Manejar errores de la API
                     if (apiResponse.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        throw new UnauthorizedAccessException("El token JWT no es válido o ha expirado.");
+                        response.ErrorMessages = new List<string> { "El token JWT no es válido o ha expirado." };
                     }
                     else if (apiResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
-                        throw new UnauthorizedAccessException("El token JWT no tiene los permisos necesarios para esta operación.");
+                        response.ErrorMessages = new List<string> { "El token JWT no tiene los permisos necesarios para esta operación." };
                     }
                     else if (apiResponse.StatusCode == HttpStatusCode.BadRequest) // Manejo específico para BadRequest
                     {
                         try
                         {
                             // Deserializa directamente como APIResponse para obtener los mensajes de error estructurados
-                            var badRequestResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                            var badRequestResponse = JsonConvert.DeserializeObject<APIResponse<T>>(apiContent);
 
                             if (badRequestResponse != null)
                             {
-                                /*// Lanza una excepción con los mensajes de error del APIResponse
-                                throw new HttpRequestException(
-                                    $"{string.Join(", ", badRequestResponse.ErrorMessages)}",
-                                    null,
-                                    apiResponse.StatusCode
-                                );*/
                                 return badRequestResponse;
                             }
                             else
                             {
-                                throw new HttpRequestException(
-                                    "Error en la solicitud: Respuesta no válida del servidor",
-                                    null,
-                                    apiResponse.StatusCode
-                                );
+                                response.ErrorMessages = new List<string> { "Error en la solicitud: Respuesta no válida del servidor" };
                             }
                         }
                         catch (JsonException)
                         {
-                            throw new HttpRequestException(
-                                "Error al procesar la respuesta de error del servidor",
-                                null,
-                                apiResponse.StatusCode
-                            );
+                            response.ErrorMessages = new List<string> { "Error al procesar la respuesta de error del servidor" };
                         }
                     }
                     else
                     {
-                        var errorResponse = new APIResponse<T>
-                        {
-                            StatusCode = apiResponse.StatusCode,
-                            isExitoso = false,
-                            ErrorMessages = new List<string> { apiResponse.ReasonPhrase ?? "Error desconocido en la solicitud." }
-                        };
+                        response.ErrorMessages = new List<string> { apiResponse.ReasonPhrase ?? "Error desconocido en la solicitud." };
 
                         try
                         {
-                            errorResponse.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
+                            response.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
                         }
                         catch (JsonException)
                         {
-                            errorResponse.ErrorMessages.Add("Error al deserializar la respuesta de error.");
+                            response.ErrorMessages.Add("Error al deserializar la respuesta de error.");
                         }
-
-                        throw new Exception(JsonConvert.SerializeObject(errorResponse));
                     }
                 }
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new Exception($"Acceso no autorizado: {ex.Message}", ex);
-            }            
+                response.isExitoso = false;
+                response.ErrorMessages = new List<string> { $"Acceso no autorizado: {ex.Message}" };
+            }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"Error en la solicitud HTTP: {ex.Message}", ex);
+                response.isExitoso = false;
+                response.ErrorMessages = new List<string> { $"Error en la solicitud HTTP: {ex.Message}" };
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocurrió un error inesperado.", ex);
+                response.isExitoso = false;
+                response.ErrorMessages = new List<string> { "Ocurrió un error inesperado.", ex.Message };
             }
+
+            return response;
         }
     }
 }

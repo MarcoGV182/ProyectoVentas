@@ -116,7 +116,7 @@
 
     private async Task ObtenerServicios()
     {
-        var result = await _servicioService.ObtenerTodos<List<ServicioDTO>>();
+        var result = await _servicioService.ObtenerTodos();
 
         if (result.isExitoso)
         {
@@ -191,7 +191,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _servicioService.Eliminar<ServicioDTO>(Servicio.ArticuloId);
+            var resultado = await _servicioService.Eliminar(Servicio.ArticuloId);
 
             if (resultado.isExitoso)
             {

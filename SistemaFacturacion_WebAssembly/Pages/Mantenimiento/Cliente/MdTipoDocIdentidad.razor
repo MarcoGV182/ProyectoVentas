@@ -8,12 +8,12 @@
                 <DataAnnotationsValidator />
 
                 <MudTextField @bind-Value="@_tipoDoc.Descripcion"
-                              Class="mb-3"
-                              Label="Descripcion"
-                              Variant="Variant.Outlined"
-                              Adornment="Adornment.End"
-                              AdornmentIcon="@Icons.Material.Filled.Badge"
-                              For="@(()=>_tipoDoc.Descripcion)" />
+                Class="mb-3"
+                Label="Descripcion"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Filled.Badge"
+                For="@(()=>_tipoDoc.Descripcion)" />
 
                 <MudCardActions Class="d-flex justify-end">
                     <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
@@ -43,33 +43,44 @@
 
 
     private async Task Guardar()
-    {                
-        string _mensaje = "";
-        bool _resultado;
+    {    
+        try
+        {
+            string _mensaje = "";
+            string _mensajeError = "";
+            bool _resultado;
 
-        TablaMenorCreateDTO _editRegistro = new TablaMenorCreateDTO();
-        _editRegistro.Descripcion = _tipoDoc.Descripcion;
+            TablaMenorCreateDTO _editRegistro = new TablaMenorCreateDTO();
+            _editRegistro.Descripcion = _tipoDoc.Descripcion;
+
+
+            if (_tipoDoc.Id != 0)
+            {
+                var response = await _tipoDocService.Actualizar(_tipoDoc.Id, _editRegistro);
+                _resultado = response.isExitoso;
+                _mensaje = "El registro fue modificado con éxito";
+                _mensajeError = response.ErrorMessages == null ? "" : string.Join("\n", response?.ErrorMessages);
+            }
+            else
+            {
+                var response = await _tipoDocService.Crear(_editRegistro);
+                _resultado = response.isExitoso;
+                _mensajeError = response.ErrorMessages == null ? "" : string.Join("\n", response?.ErrorMessages);
+                _mensaje = "El registro fue creado con éxito";
+            }
+
+            if (_resultado)
+            {
+                _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+                _snackBar.Add($"Error al guardar cambios: {_mensajeError}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
+        catch (Exception ex)
+        {            
+            _snackBar.Add($"Ocurrio un error: {ex}", Severity.Error, a => a.VisibleStateDuration = 500);
+        }
         
-
-        if (_tipoDoc.Id != 0)
-        {
-            var response = await _tipoDocService.Actualizar<TablaMenorDTO>(_tipoDoc.Id, _editRegistro);
-            _resultado = response.isExitoso;
-            _mensaje = "El registro fue modificado con éxito";
-        }
-        else
-        {
-            var response = await _tipoDocService.Crear<TablaMenorDTO>(_editRegistro);
-            _resultado = response.isExitoso;
-            _mensaje = "El registro fue creado con éxito";
-        }
-
-        if (_resultado)
-        {
-            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
-            MudDialog.Close(DialogResult.Ok(true));
-        }
-        else
-            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
     }
 }

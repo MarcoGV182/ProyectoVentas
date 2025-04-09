@@ -5,10 +5,10 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface IUnidadMedidaService
     {
-        Task<APIResponse<T>> ObtenerTodos<T>();
-        Task<APIResponse<T>> Obtener<T>(int id);
-        Task<APIResponse<T>> Crear<T>(UnidadMedidaCreateDTO dto);
-        Task<APIResponse<T>> Actualizar<T>(int id, UnidadMedidaCreateDTO dto);
-        Task<APIResponse<T>> Eliminar<T>(int id);
+        Task<APIResponse<List<UnidadMedidaDTO>>> ObtenerTodos();
+        Task<APIResponse<UnidadMedidaDTO>> Obtener(int id);
+        Task<APIResponse<UnidadMedidaDTO>> Crear(UnidadMedidaCreateDTO dto);
+        Task<APIResponse<object>> Actualizar(int id, UnidadMedidaCreateDTO dto);
+        Task<APIResponse<object>> Eliminar(int id);
     }
 }

@@ -1,9 +1,6 @@
 ﻿using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using SistemaFacturacion_Model.Modelos.DTOs;
-using Newtonsoft.Json;
 
 namespace SistemaFacturacion_WebAssembly.Services
 {
@@ -17,9 +14,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             _productoURL = configuracion.GetValue<string>("ServiceUrls:API_URL");
         }
 
-        public async Task<APIResponse<T>> Crear<T>(ServicioCreateDTO dto)
+        public async Task<APIResponse<ServicioDTO>> Crear(ServicioCreateDTO dto)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<ServicioDTO>(new APIRequest()
             {
                 Tipo = DS.APITipo.POST,
                 Datos = dto,
@@ -29,9 +26,9 @@ namespace SistemaFacturacion_WebAssembly.Services
 
             return result;
         }
-        public async Task<APIResponse<T>> Actualizar<T>(int id, ServicioCreateDTO dto)
+        public async Task<APIResponse<object>> Actualizar(int id, ServicioCreateDTO dto)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<object>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
@@ -43,9 +40,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Obtener<T>(int id)
+        public async Task<APIResponse<ServicioDTO>> Obtener(int id)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<ServicioDTO>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"{_productoURL}/api/Servicio/{id}"
@@ -54,9 +51,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> ObtenerTodos<T>()
+        public async Task<APIResponse<List<ServicioDTO>>> ObtenerTodos()
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<List<ServicioDTO>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"{_productoURL}/api/Servicio"
@@ -67,9 +64,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Eliminar<T>(int id)
+        public async Task<APIResponse<object>> Eliminar(int id)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<object>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
                 URL = $"{_productoURL}/api/Servicio/{id}"

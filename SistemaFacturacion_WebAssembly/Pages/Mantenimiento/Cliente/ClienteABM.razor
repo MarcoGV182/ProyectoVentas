@@ -164,23 +164,23 @@
         {
             if (ClienteId.HasValue)
             {
-                var resultProduct = await _clienteService.Obtener<ClienteDTO>(ClienteId.Value);
+                var resultProduct = await _clienteService.Obtener(ClienteId.Value);
                 if (resultProduct.isExitoso)
                 {
-                    cliente = (ClienteDTO)resultProduct.Resultado;
+                    cliente = resultProduct.Resultado;
                 }
             }
 
-            var ciudadResult = await _ciudadService.ObtenerTodos<List<CiudadDTO>>();
+            var ciudadResult = await _ciudadService.ObtenerTodos();
             if (ciudadResult.isExitoso)
             {
                 ListaCiudad =  ciudadResult.Resultado!;
             }
 
-            var tipoDocResult = await _tipoDocService.ObtenerTodos<List<TablaMenorDTO>>();
+            var tipoDocResult = await _tipoDocService.ObtenerTodos();
             if (tipoDocResult.isExitoso)
             {
-                ListaTipoDocumento = tipoDocResult.Resultado!;
+                ListaTipoDocumento = tipoDocResult.Resultado;
             }
         }
         catch (Exception ex)
@@ -201,7 +201,7 @@
                 Apellido = cliente.Apellido,
                 Observacion = cliente.Observacion,
                 CiudadId = ciudadSeleccionada != null ? ciudadSeleccionada.CiudadId : null,
-                TipoDocumentoIdentidadId = tipoDocSeleccionada != null ? tipoDocSeleccionada.Id : null,
+                TipoDocIdentidadId = tipoDocSeleccionada != null ? tipoDocSeleccionada.Id : null,
                 Correo = cliente.Correo,
                 Telefono = cliente.Telefono,
                 Direccion = cliente.Direccion,
@@ -214,7 +214,7 @@
         {
             
 
-            var response = await _clienteService.Actualizar<ClienteDTO>(cliente.PersonaId, _registro);
+            var response = await _clienteService.Actualizar(cliente.PersonaId, _registro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
@@ -222,7 +222,7 @@
         {
             
 
-            var response = await _clienteService.Crear<ClienteDTO>(_registro);
+            var response = await _clienteService.Crear(_registro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

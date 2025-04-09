@@ -52,13 +52,13 @@
 
         if (_TipoServicio.TipoServicioId != 0)
         {
-            var response = await _TipoServicioService.Actualizar<TipoServicioDTO>(_TipoServicio.TipoServicioId, _nuevaTipoServicio);
+            var response = await _TipoServicioService.Actualizar(_TipoServicio.TipoServicioId, _nuevaTipoServicio);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
-            var response = await _TipoServicioService.Crear<TipoServicioDTO>(_nuevaTipoServicio);
+            var response = await _TipoServicioService.Crear(_nuevaTipoServicio);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

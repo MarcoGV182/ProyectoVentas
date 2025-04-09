@@ -55,13 +55,13 @@
 
         if (_Categoria.CategoriaId != 0)
         {
-            var response = await _CategoriaService.Actualizar<CategoriaProductoDTO>(_Categoria.CategoriaId,_nuevoRegistro);
+            var response = await _CategoriaService.Actualizar(_Categoria.CategoriaId,_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }
         else 
         {
-            var response = await _CategoriaService.Crear<CategoriaProductoDTO>(_nuevoRegistro);
+            var response = await _CategoriaService.Crear(_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con exito";
         }

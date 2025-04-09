@@ -78,11 +78,11 @@
 
     private async Task ObtenerMarcas()
     {  
-        var result = await _marcaservice.ObtenerTodos<List<MarcaDTO>>();
+        var result = await _marcaservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaMarcas = (List<MarcaDTO>)result.Resultado!;
+            listaMarcas = result.Resultado;
         }
     }
 
@@ -146,7 +146,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _marcaservice.Eliminar<MarcaDTO>(marca.MarcaId);
+            var resultado = await _marcaservice.Eliminar(marca.MarcaId);
 
             if (resultado.isExitoso)
             {

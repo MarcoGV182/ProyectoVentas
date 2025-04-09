@@ -72,13 +72,13 @@
 
         if (_tipoimpuesto.TipoimpuestoId != 0)
         {
-            var response = await _tipoImpuestoService.Actualizar<TipoImpuestoDTO>(_tipoimpuesto.TipoimpuestoId, _nuevoimpuesto);
+            var response = await _tipoImpuestoService.Actualizar(_tipoimpuesto.TipoimpuestoId, _nuevoimpuesto);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }
         else
         {
-            var response = await _tipoImpuestoService.Crear<TipoImpuestoDTO>(_nuevoimpuesto);
+            var response = await _tipoImpuestoService.Crear(_nuevoimpuesto);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con exito";
         }

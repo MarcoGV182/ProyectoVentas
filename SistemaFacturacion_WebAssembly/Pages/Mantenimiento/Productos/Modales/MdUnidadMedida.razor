@@ -52,13 +52,13 @@
 
         if (_unidadMedida.UnidadMedidaId != 0)
         {
-            var response = await _unidadMedidaService.Actualizar<UnidadMedidaDTO>(_unidadMedida.UnidadMedidaId, _nuevaunidadMedida);
+            var response = await _unidadMedidaService.Actualizar(_unidadMedida.UnidadMedidaId, _nuevaunidadMedida);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
-            var response = await _unidadMedidaService.Crear<UnidadMedidaDTO>(_nuevaunidadMedida);
+            var response = await _unidadMedidaService.Crear(_nuevaunidadMedida);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

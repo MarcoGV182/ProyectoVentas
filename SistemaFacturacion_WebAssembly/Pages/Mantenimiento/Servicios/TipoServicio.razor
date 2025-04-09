@@ -77,11 +77,11 @@
 
     private async Task Obtenertiposervicios()
     {  
-        var result = await _tiposervicioservice.ObtenerTodos<List<TipoServicioDTO>>();
+        var result = await _tiposervicioservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listatiposervicios = (List<TipoServicioDTO>)result.Resultado!;
+            listatiposervicios = result.Resultado;
         }
     }
 
@@ -145,7 +145,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _tiposervicioservice.Eliminar<TipoServicioDTO>(tiposervicio.TipoServicioId);
+            var resultado = await _tiposervicioservice.Eliminar(tiposervicio.TipoServicioId);
 
             if (resultado.isExitoso)
             {

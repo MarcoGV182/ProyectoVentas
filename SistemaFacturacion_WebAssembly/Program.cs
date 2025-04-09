@@ -54,6 +54,8 @@ builder.Services.AddScoped<ICiudadService, CiudadService>();
 builder.Services.AddScoped<IArticuloService, ArticuloService>();
 builder.Services.AddScoped<IVentaService, VentaService>();
 builder.Services.AddScoped<ITimbradoService, TimbradoService>();
+builder.Services.AddScoped<IRangoTimbradoService, RangoTimbradoService>();
+builder.Services.AddScoped<ISucursalService, SucursalService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<UsuarioEstadoService>();
@@ -64,6 +66,14 @@ builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredLocalStorage();
 
 
-builder.Services.AddAuthorizationCore(); // <- Necesario para manejar la autenticación
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("RequireOpcionesAccess", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            (context.User.IsInRole("Jefe") &&
+             context.User.HasClaim("Permiso", "Ver Opciones"))
+    ));
+}); // <- Necesario para manejar la autenticación
 
 await builder.Build().RunAsync();

@@ -112,13 +112,13 @@
     {
         try
         {
-            var tipoServicioResult = await _tipoServicioService.ObtenerTodos<List<TipoServicioDTO>>();
+            var tipoServicioResult = await _tipoServicioService.ObtenerTodos();
             if (tipoServicioResult.isExitoso)
             {
                 ListaTipoServicio = tipoServicioResult.Resultado;
             }
 
-            var tipoImpuestoResult = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            var tipoImpuestoResult = await _tipoImpuestoService.ObtenerTodos();
             if (tipoImpuestoResult.isExitoso)
             {
                 ListaImpuestos = tipoImpuestoResult.Resultado!;
@@ -148,13 +148,13 @@
 
         if (_servicio.ArticuloId != 0)
         {
-            var response = await _servicioService.Actualizar<ServicioDTO>(_servicio.ArticuloId, _editRegistro);
+            var response = await _servicioService.Actualizar(_servicio.ArticuloId, _editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
-            var response = await _servicioService.Crear<ServicioDTO>(_editRegistro);
+            var response = await _servicioService.Crear(_editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

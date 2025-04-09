@@ -15,7 +15,7 @@ namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize
+    [Authorize]
     public class ClienteController : ControllerBase
     {
         private readonly ILogger<ClienteController> _logger;
@@ -101,8 +101,8 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<ClienteDTO>();
             try
             {
-                var existeCliente = _ClienteRepositorio.Obtener(v => v.Nrodocumento.ToLower() == CreateDTO.Nrodocumento.ToLower());
-                if (existeCliente.Result != null)
+                var existeCliente = await _ClienteRepositorio.Obtener(v => v.Nrodocumento.ToLower() == CreateDTO.Nrodocumento.ToLower());
+                if (existeCliente != null)
                 {
                     ModelState.AddModelError("ErrorMessages", "El Cliente con el mismo numero de documento ingresado ya existe");
                     return BadRequest(ModelState);

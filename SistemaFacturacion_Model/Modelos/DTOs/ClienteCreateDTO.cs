@@ -16,7 +16,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public string Correo { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public string Observacion { get; set; }
-        public short? TipoDocumentoIdentidadId { get; set; }
+        public short? TipoDocIdentidadId { get; set; }
         public short? CiudadId { get; set; }
     }
 }

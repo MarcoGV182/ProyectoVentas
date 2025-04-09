@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\Timbrado.razor">
+    <Content Update="Pages\Opciones\Timbrado.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="Pages\Mantenimiento\Cliente\MdTipoDocIdentidad.razor">

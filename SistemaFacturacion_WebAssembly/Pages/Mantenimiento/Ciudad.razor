@@ -81,11 +81,11 @@
 
     private async Task ObtenerCiudades()
     {
-        var result = await _Ciudadservice.ObtenerTodos<List<CiudadDTO>>();
+        var result = await _Ciudadservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaCiudads = result.Resultado!;
+            listaCiudads = result.Resultado;
         }
     }
 
@@ -153,7 +153,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Ciudadservice.Eliminar<CiudadDTO>(Ciudad.CiudadId);
+            var resultado = await _Ciudadservice.Eliminar(Ciudad.CiudadId);
 
             if (resultado.isExitoso)
             {

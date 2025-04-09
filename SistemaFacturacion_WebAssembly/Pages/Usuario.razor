@@ -81,7 +81,7 @@
 
     private async Task ObtenerUsuarios()
     {
-        var result = await _UsuarioService.ObtenerTodos<List<UsuarioDTO>>();
+        var result = await _UsuarioService.ObtenerTodos();
 
         if (result.isExitoso)
         {
@@ -156,7 +156,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _UsuarioService.Eliminar<UsuarioDTO>(Usuario.Id);
+            var resultado = await _UsuarioService.Eliminar(Usuario.Id);
 
             if (resultado.isExitoso)
             {

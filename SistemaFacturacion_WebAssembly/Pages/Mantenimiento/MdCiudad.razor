@@ -53,13 +53,13 @@
 
         if (_Ciudad.CiudadId != 0)
         {
-            var response = await _ciudadService.Actualizar<object>(_Ciudad.CiudadId, _editRegistro);
+            var response = await _ciudadService.Actualizar(_Ciudad.CiudadId, _editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
-            var response = await _ciudadService.Crear<CiudadDTO>(_editRegistro);
+            var response = await _ciudadService.Crear(_editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

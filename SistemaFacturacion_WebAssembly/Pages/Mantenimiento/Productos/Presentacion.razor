@@ -78,11 +78,11 @@
 
     private async Task ObtenerPresentacion()
     {
-        var result = await _Presentacionservice.ObtenerTodos<List<PresentacionDTO>>();
+        var result = await _Presentacionservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaPresentacion = (List<PresentacionDTO>)result.Resultado!;
+            listaPresentacion = result.Resultado;
         }
     }
 
@@ -144,7 +144,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Presentacionservice.Eliminar<PresentacionDTO>(Presentacion.PresentacionId);
+            var resultado = await _Presentacionservice.Eliminar(Presentacion.PresentacionId);
 
             if (resultado.isExitoso)
             {

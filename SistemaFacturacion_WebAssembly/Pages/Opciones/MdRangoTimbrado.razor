@@ -1,0 +1,189 @@
+﻿@using static SistemaFacturacion_Model.Modelos.Rango_Timbrados
+@inject IRangoTimbradoService _rangoTimbradoService
+@inject ITimbradoService _timbradoService
+@inject ISucursalService _sucursalService
+@inject ISnackbar _snackBar
+
+<MudDialog Style="width:400px">
+    <DialogContent>
+        <MudContainer Style="max-height: 400; overflow-y: scroll" Class="m-0 p-0">
+            <EditForm Model="@_rangoTimbrado" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+
+                <MudSelect Label="Timbrado" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TimbradoDTO" @bind-Value="timbradoSeleccionada">
+                    @if (ListaTimbrados.Any())
+                    {
+                        foreach (var tim in ListaTimbrados)
+                        {
+                            <MudSelectItem Value="@tim">@($"{tim.Numero}({tim.TimbradoId})")</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudNumericField @bind-Value="@_rangoTimbrado.Nro_Establecimiento"
+                Class="mb-3"
+                Label="Establecimiento"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                For="@(()=>_rangoTimbrado.Nro_Establecimiento)" />
+
+                <MudNumericField @bind-Value="@_rangoTimbrado.Nro_PuntoExp"
+                Class="mb-3"
+                Label="Punto Expedicion"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                For="@(()=>_rangoTimbrado.Nro_Establecimiento)" />
+
+
+                <MudNumericField @bind-Value="@_rangoTimbrado.RangoDesde"
+                Class="mb-3"
+                Label="Rango Desde"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                For="@(()=>_rangoTimbrado.RangoDesde)" />
+
+                <MudNumericField @bind-Value="@_rangoTimbrado.RangoHasta"
+                Class="mb-3"
+                Label="Rango Hasta"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                For="@(()=>_rangoTimbrado.RangoHasta)" />
+
+                <MudSelect Label="Tipo Documento" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" @bind-Value="tipoSeleccionado">
+                    @if (tipoDocumentos.Any())
+                    {
+                        foreach (var rol in tipoDocumentos)
+                        {
+                            <MudSelectItem Value="@rol.Key">@rol.Value</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Sucursal" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="SucursalDTO" @bind-Value="sucursalSeleccionada">
+                    @if (ListaSucursales.Any())
+                    {
+                        foreach (var suc in ListaSucursales)
+                        {
+                            <MudSelectItem Value="@suc">@($"{suc.Nombre}({suc.SucursalId})")</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+
+
+                <MudCardActions Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@Cancel" Class="mr-2">Cancelar</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Guardar</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public RangoTimbradoDTO _rangoTimbrado { get; set; } = new RangoTimbradoDTO();
+
+    public List<TimbradoDTO> ListaTimbrados { get; set; } = new List<TimbradoDTO>();
+    public TimbradoDTO timbradoSeleccionada { get; set; }
+
+    public List<SucursalDTO> ListaSucursales { get; set; } = new List<SucursalDTO>();
+    public SucursalDTO sucursalSeleccionada { get; set; }
+
+    private TipoDocumento tipoSeleccionado;
+    private List<KeyValuePair<int, string>> tipoDocumentos;
+
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(_rangoTimbrado.Id);
+        await ObtenerListados();
+
+        if (_rangoTimbrado.Id != 0)
+        {
+            try
+            {
+                timbradoSeleccionada = _rangoTimbrado.Timbrado == null ? null : ListaTimbrados.FirstOrDefault(p => p.TimbradoId == _rangoTimbrado.Timbrado.TimbradoId);
+                sucursalSeleccionada = _rangoTimbrado.Sucursal == null ? null : ListaSucursales.FirstOrDefault(p => p.SucursalId == _rangoTimbrado.Sucursal.SucursalId);               
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+    }    
+
+    private async Task ObtenerListados()
+    {
+        try
+        {
+            tipoDocumentos = Shared.ToListWithDisplayName<TipoDocumento>();
+
+            var timbrado = await _timbradoService.ObtenerTodos();
+            if (timbrado.isExitoso)
+            {
+                ListaTimbrados = timbrado.Resultado;
+            }
+
+            var sucursal = await _sucursalService.ObtenerTodos();
+            if (sucursal.isExitoso)
+            {
+                ListaSucursales = sucursal.Resultado;
+            }         
+        }
+        catch (Exception ex)
+        {            
+            throw ex;
+        }
+    }
+
+
+    private async Task Guardar()
+    {                
+        string _mensaje = "";
+        bool _resultado;
+
+        RangoTimbradoCreateDTO _editRegistro = new RangoTimbradoCreateDTO()
+        {
+            Nro_Establecimiento = _rangoTimbrado.Nro_Establecimiento,
+            Nro_PuntoExp = _rangoTimbrado.Nro_PuntoExp,
+            RangoDesde = _rangoTimbrado.RangoDesde,
+            RangoHasta = _rangoTimbrado.RangoHasta,
+            SucursalId = sucursalSeleccionada.SucursalId,
+            TimbradoId = timbradoSeleccionada.TimbradoId,
+            TipoDocumentoId = tipoSeleccionado
+
+        };
+
+        if (_rangoTimbrado.Id != 0)
+        {   
+
+            var response = await _rangoTimbradoService.Actualizar(_editRegistro.TimbradoId, _editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue modificado con éxito";
+        }
+        else
+        {   
+            var response = await _rangoTimbradoService.Crear(_editRegistro);
+            _resultado = response.isExitoso;
+            _mensaje = "El registro fue creado con éxito";
+        }
+
+        if (_resultado)
+        {
+            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
+    }
+}

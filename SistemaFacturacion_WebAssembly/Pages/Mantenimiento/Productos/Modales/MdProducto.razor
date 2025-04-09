@@ -196,31 +196,31 @@
     {
         try
         {
-            var marca = await _marcarvice.ObtenerTodos<List<MarcaDTO>>();
+            var marca = await _marcarvice.ObtenerTodos();
             if (marca.isExitoso)
             {
                 ListaMarcas = marca.Resultado;
             }
 
-            var tipoImpuesto = await _tipoImpuestoService.ObtenerTodos<List<TipoImpuestoDTO>>();
+            var tipoImpuesto = await _tipoImpuestoService.ObtenerTodos();
             if (tipoImpuesto.isExitoso)
             {
                 ListaImpuestos = tipoImpuesto.Resultado;
             }
 
-            var categoria = await _CategoriaService.ObtenerTodos<List<CategoriaProductoDTO>>();
+            var categoria = await _CategoriaService.ObtenerTodos();
             if (categoria.isExitoso)
             {
                 ListaCategoria = categoria.Resultado;
             }
 
-            var presentacion = await _presentacionService.ObtenerTodos<List<PresentacionDTO>>();
+            var presentacion = await _presentacionService.ObtenerTodos();
             if (presentacion.isExitoso)
             {
                 ListaPresentacion = presentacion.Resultado;
             }
 
-            var unidadMedida = await _unidadMedidaService.ObtenerTodos<List<UnidadMedidaDTO>>();
+            var unidadMedida = await _unidadMedidaService.ObtenerTodos();
             if (unidadMedida.isExitoso)
             {
                 ListaUnidadMedida = unidadMedida.Resultado;
@@ -257,7 +257,7 @@
             _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
-            var response = await _productoService.Actualizar<ProductoDTO>(_producto.ArticuloId, _editRegistro);
+            var response = await _productoService.Actualizar(_producto.ArticuloId, _editRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
@@ -278,7 +278,7 @@
             _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
-            var response = await _productoService.Crear<ProductoDTO>(_nuevoRegistro);
+            var response = await _productoService.Crear(_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

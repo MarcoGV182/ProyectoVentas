@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,25 @@ namespace SistemaFacturacion_Utilidad
 
             return new string(Enumerable.Repeat(chars, size).Select(s => s[random.Next(s.Length)]).ToArray());
         
+        }
+
+
+        public static string GetDisplayName(Enum value)
+        {
+            return value.GetType()
+                        .GetField(value.ToString())
+                        ?.GetCustomAttributes(typeof(DisplayAttribute), false)
+                        is DisplayAttribute[] displayAttributes && displayAttributes.Length > 0
+                ? displayAttributes[0].Name
+                : value.ToString();
+        }
+
+        public static List<KeyValuePair<int, string>> ToListWithDisplayName<T>() where T : Enum
+        {
+            return Enum.GetValues(typeof(T))
+                       .Cast<Enum>()
+                       .Select(e => new KeyValuePair<int, string>(Convert.ToInt32(e), GetDisplayName(e)))
+                       .ToList();
         }
     }
 }

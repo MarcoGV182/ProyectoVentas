@@ -79,7 +79,7 @@
 
     private async Task ObtenerUnidadMedidas()
     {
-        var result = await _unidadMedidaservice.ObtenerTodos<List<UnidadMedidaDTO>>();
+        var result = await _unidadMedidaservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
@@ -147,7 +147,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _unidadMedidaservice.Eliminar<UnidadMedidaDTO>(UnidadMedida.UnidadMedidaId);
+            var resultado = await _unidadMedidaservice.Eliminar(UnidadMedida.UnidadMedidaId);
 
             if (resultado.isExitoso)
             {

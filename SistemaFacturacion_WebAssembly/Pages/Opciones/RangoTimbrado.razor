@@ -1,0 +1,176 @@
+﻿@page "/rangos-timbrados"
+@inject IRangoTimbradoService _rangoTimbradosService
+@inject IDialogService _dialogServicio
+@inject ISnackbar _snackbar
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Rango de Timbrados</MudText>
+
+    <MudPaper Elevation="3" Class="pa-4" Width="100%">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           OnClick="NuevoRegistro">
+                    Nuevo registro
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+
+                <MudTable Items="@ListarangosTimbrados"
+                          Dense="true"
+                          Striped="true" Bordered="true"
+                          Filter="new Func<RangoTimbradoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                          Loading="@_loading" LoadingProgressColor="Color.Info">
+                    <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.Id)">
+                                Código
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.Timbrado.Numero)">
+                                Nro. Timbrado
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.Nro_Establecimiento)">
+                                Establecimiento
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.Nro_PuntoExp)">
+                                Punto Exp.
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.RangoDesde)">
+                                Nro. Desde
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.RangoHasta)">
+                                Nro. Hasta
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<RangoTimbradoDTO, object>(x=> x.Sucursal.SucursalId)">
+                                Sucursal
+                            </MudTableSortLabel>
+                        </MudTh>
+
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="itemRow">
+                        <MudTd DataLabel="Codigo">@itemRow.Id</MudTd>
+                        <MudTd DataLabel="Nro.Timbrado">@itemRow.Timbrado.Numero</MudTd>
+                        <MudTd DataLabel="Establecimiento">@itemRow.Nro_Establecimiento</MudTd>
+                        <MudTd DataLabel="Nro.Timbrado">@itemRow.Nro_PuntoExp</MudTd>
+                        <MudTd DataLabel="desde">@itemRow.RangoDesde</MudTd>
+                        <MudTd DataLabel="hasta">@itemRow.RangoHasta</MudTd>
+                        <MudTd DataLabel="Sucursal">@($"{itemRow.Sucursal.Nombre} ({itemRow.Sucursal.SucursalId})")</MudTd>
+                        <MudTd DataLabel="">
+                            <MudFab Color="Color.Primary"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => Editar(itemRow))" />
+                            <MudFab Color="Color.Error"
+                                    StartIcon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    IconSize="Size.Small"
+                                    OnClick="@(() => Eliminar(itemRow.Id))" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Filas por Página:" />
+                    </PagerContent>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+</MudContainer>
+
+@code {
+    private List<RangoTimbradoDTO> ListarangosTimbrados = new List<RangoTimbradoDTO>();
+    private string searchString1 = "";
+    private RangoTimbradoDTO selectedItem1 = null;
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarRangosTimbrados();
+        _loading = false;
+    }
+
+    private async Task CargarRangosTimbrados()
+    {
+        var resultado = await _rangoTimbradosService.ObtenerTodos();
+        if (resultado.isExitoso)
+        {
+            ListarangosTimbrados = resultado.Resultado;
+        }
+        else
+        {
+            _snackbar.Add("Error al cargar los rangos de timbrados", Severity.Error);
+        }
+    }
+
+    private bool FilterFunc1(RangoTimbradoDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(RangoTimbradoDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Timbrado.Numero.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task NuevoRegistro()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = _dialogServicio.Show<MdRangoTimbrado>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await CargarRangosTimbrados();
+        }
+    }
+
+    private async Task Editar(RangoTimbradoDTO rangoTimbrado)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_rangoTimbrado"] = rangoTimbrado };
+
+        var dialogo = _dialogServicio.Show<MdRangoTimbrado>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await CargarRangosTimbrados();
+        }
+    }
+
+    private async Task Eliminar(int itemRangoTimbradoId)
+    {
+        var resultado = await _rangoTimbradosService.Eliminar(itemRangoTimbradoId);
+        if (resultado.isExitoso)
+        {
+            _snackbar.Add("Rango de timbrado eliminado correctamente", Severity.Success);
+            await CargarRangosTimbrados();
+        }
+        else
+        {
+            _snackbar.Add("Error al eliminar el rango de timbrado", Severity.Error);
+        }
+    }
+}

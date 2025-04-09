@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using SistemaFacturacion_Utilidad;
 using SistemaFacturacion_API.Migrations;
+using SistemaFacturacion_API.Services;
 
 namespace SistemaFacturacion_API.Controllers
 {
@@ -20,17 +21,15 @@ namespace SistemaFacturacion_API.Controllers
     {
         private readonly ILogger<VentaController> _logger;
         private readonly IMapper _mapper;
-        private readonly IVentaRepositorio _VentaRepositorio;
-        private readonly IStockRepositorio _stockRepositorio;
+        private readonly VentaService _ventaService;
         private readonly ApplicationDbContext _context;
 
-        public VentaController(ILogger<VentaController> logger, IVentaRepositorio ventaRepositorio, IMapper mapper, IStockRepositorio stockRepositorio, ApplicationDbContext context)
+        public VentaController(ILogger<VentaController> logger, IMapper mapper, ApplicationDbContext context, VentaService ventaService)
         {
             _logger = logger;
-            _VentaRepositorio = ventaRepositorio;
-            _mapper = mapper;     
-            _stockRepositorio = stockRepositorio;
+            _mapper = mapper;
             _context = context;
+            _ventaService = ventaService;
         }
 
 
@@ -41,8 +40,8 @@ namespace SistemaFacturacion_API.Controllers
             //_logger.LogInformation("Obteniendo datos de las Ventas");
             var _response = new APIResponse<IEnumerable<VentaDTO>>();
             try
-            {
-                IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
+            {                
+                var VentaList = _ventaService.GetVentas();
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);                
@@ -113,21 +112,6 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<VentaDTO>();
             try
             {
-                var existe = await _VentaRepositorio.Obtener(v => v.Establecimiento == CreateDTO.Establecimiento &&
-                                                   v.PuntoExpedicion == CreateDTO.PuntoExpedicion &&
-                                                   v.Numero == CreateDTO.Numero &&
-                                                   v.TimbradoId == CreateDTO.TimbradoId &&
-                                                   v.ClienteId == CreateDTO.ClienteId);
-                if (existe != null)
-                {
-                    var mensajeError = "La numeración de la factura y timbrado ya existe para el mismo cliente";
-                    ModelState.AddModelError("ErrorMessages", mensajeError);
-                    _response.isExitoso = false;
-                    _response.ErrorMessages = new List<string>() { mensajeError };
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    return BadRequest(_response);
-                }
-
                 if (CreateDTO == null)
                 {
                     _response.isExitoso = false;
@@ -135,41 +119,15 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                //Parseo del DTO a la clase
-                var _Venta = _mapper.Map<Venta>(CreateDTO);
+                var ventaRegistrada = await _ventaService.RegistrarVenta(CreateDTO);            
 
-                // Validar stock disponible para cada item
-                foreach (var item in _Venta.DetalleVenta)
-                {
-                    var articulo = await _context.Articulo
-                   .AsNoTracking()
-                   .FirstOrDefaultAsync(a => a.ArticuloId == item.ItemId);
-
-                    if (item.TipoItem == TipoArticulo.Servicio)
-                        continue;
-
-
-                    var disponible = await _stockRepositorio.ObtenerCantidadDisponibleAsync(item.ItemId, CreateDTO.UbicacionId);
-
-                    if (disponible < item.Cantidad)
-                    {
-                        _response.isExitoso = false;
-                        _response.ErrorMessages = new List<string>() { $"Stock insuficiente para el producto {articulo.Descripcion}({item.ItemId})" };
-                        _response.StatusCode = HttpStatusCode.BadRequest;
-                        return BadRequest(_response);
-                    }
-                }
-
-                // Crear venta (esto ahora maneja todo el proceso completo)
-                var ventaCreada = await _VentaRepositorio.CreateVentaAsync(_Venta);
-
-
+                
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.Created;
-                _response.Resultado = _mapper.Map<VentaDTO>(ventaCreada);
+                _response.Resultado = ventaRegistrada;
 
 
-                return CreatedAtRoute("GetVentasById", new { id = _Venta.Id }, _response);
+                return CreatedAtRoute("GetVentasById", new { Id = ventaRegistrada.Id }, _response);
             }
             catch (Exception ex)
             {   

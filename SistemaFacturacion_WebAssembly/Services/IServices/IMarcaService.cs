@@ -5,10 +5,10 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface IMarcaService
     {
-        Task<APIResponse<T>> ObtenerTodos<T>();
-        Task<APIResponse<T>> Obtener<T>(int id);
-        Task<APIResponse<T>> Crear<T>(MarcaCreateDTO dto);
-        Task<APIResponse<T>> Actualizar<T>(int id, MarcaCreateDTO dto);
-        Task<APIResponse<T>> Eliminar<T>(int id);
+        Task<APIResponse<List<MarcaDTO>>> ObtenerTodos();
+        Task<APIResponse<MarcaDTO>> Obtener(int id);
+        Task<APIResponse<MarcaDTO>> Crear(MarcaCreateDTO dto);
+        Task<APIResponse<object>> Actualizar(int id, MarcaCreateDTO dto);
+        Task<APIResponse<object>> Eliminar(int id);
     }
 }

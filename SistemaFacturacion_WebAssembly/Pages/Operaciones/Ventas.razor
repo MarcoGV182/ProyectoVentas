@@ -6,7 +6,7 @@
 @inject IVentaService _VentaService
 @inject IClienteService _ClienteService
 @inject IArticuloService _ArticuloService
-@inject ITimbradoService _timbradoService
+@inject IRangoTimbradoService _rangoTimbradoService
 @inject IDialogService _DialogService
 @inject UsuarioEstadoService UserStateService
 
@@ -44,7 +44,7 @@
                     <!-- Timbrado -->
                     <MudItem xs="12" sm="2">
                         <MudTextField Label="Timbrado"
-                        Value="timbradoSeleccionado.Numero"
+                        Value="rangoTimbradoSeleccionado.Timbrado?.Numero"
                         Format="0000000"
                         Disabled="true"
                         Class="compact-field" />
@@ -71,7 +71,7 @@
             </MudCardHeader>
             <MudCardContent>
                 <!-- Tabla de productos -->
-                <MudTable Items="@detalles" Hover="true" Class="mt-2">
+                <MudTable Items="@venta.DetalleVenta" Hover="true" Class="mt-2">
                     <HeaderContent>
                         <MudTh>Nro</MudTh>
                         <MudTh>Producto/Servicio</MudTh>
@@ -199,12 +199,11 @@
 </style>
 
 @code {
-    private VentaCreateDTO venta = new VentaCreateDTO();
-    private List<DetalleVentaCreateDTO> detalles = new List<DetalleVentaCreateDTO>();
+    private VentaCreateDTO venta = null;
     private List<ClienteDTO> clientes = new List<ClienteDTO>();
     private ClienteDTO clienteSeleccionado = null;
     private ArticuloDTO articuloSeleccionado = null;
-    private TimbradoDTO timbradoSeleccionado = new TimbradoDTO();
+    private RangoTimbradoDTO rangoTimbradoSeleccionado = new RangoTimbradoDTO();
     private List<ArticuloDTO> articulos = new List<ArticuloDTO>();
     private Shared utilidades = new Shared();
     private decimal TotalPagar = 0;
@@ -226,21 +225,25 @@
             detalle.TipoItem = articuloSeleccionado.TipoArticulo;
             detalle.Precio = articuloSeleccionado.PrecioBase;
             detalle.TipoimpuestoId = articuloSeleccionado.TipoImpuesto.TipoimpuestoId;
+            articulos.Add(articuloSeleccionado);
             CalcularTotales(); // Actualizar los totales
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadData();
-        await BuscarTimbrado();
-    }
+        try
+        {
+            venta = new VentaCreateDTO() { DetalleVenta = new List<DetalleVentaCreateDTO>()};
+            venta.Fecha = DateTime.Now;
 
-    private async Task LoadData()
-    {
-        venta.Fecha = DateTime.Now;
-        //colaboradores = await ColaboradorService.GetColaboradores();
-        //articulos = await _ArticuloService.ObtenerTodos();
+            await BuscarTimbrado();
+        }
+        catch (Exception ex)
+        {
+            _Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+
     }
 
     private void AgregarDetalle()
@@ -251,16 +254,16 @@
         #endregion
 
 
-        detalles.Add(new DetalleVentaCreateDTO
+        venta.DetalleVenta.Add(new DetalleVentaCreateDTO
         {
-            NroItem = detalles.Count + 1
+                NroItem = venta.DetalleVenta.Count + 1
         });
         articuloSeleccionado = null;
     }
 
     private void EliminarDetalle(DetalleVentaCreateDTO detail)
     {
-        detalles.Remove(detail);
+        venta.DetalleVenta.Remove(detail);
         StateHasChanged();
     }
 
@@ -275,22 +278,22 @@
     {
         try
         {
-            foreach (var detalle in detalles)
+            foreach (var detalle in venta.DetalleVenta)
             {
-                var articuloSeleccionado = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ItemId);
+                var datosArticuloItem = articulos.FirstOrDefault(a => a.ArticuloId == detalle.ItemId);
                 detalle.Total = detalle.Cantidad * (decimal)detalle.Precio;
                 detalle.ImporteGravado = utilidades.CalcularImpuesto(detalle.Total,
-                                                                     articuloSeleccionado.TipoImpuesto.Porcentajeiva,
-                                                                     articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                     datosArticuloItem.TipoImpuesto.Porcentajeiva,
+                                                                     datosArticuloItem.TipoImpuesto.Baseimponible, 0,
                                                                      "GRAVADO");
                 detalle.ImporteIVA = utilidades.CalcularImpuesto(detalle.Total,
-                                                                 articuloSeleccionado.TipoImpuesto.Porcentajeiva,
-                                                                 articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
+                                                                 datosArticuloItem.TipoImpuesto.Porcentajeiva,
+                                                                 datosArticuloItem.TipoImpuesto.Baseimponible, 0,
                                                                  "IVA");
                 detalle.ImporteExento = utilidades.CalcularImpuesto(detalle.Total,
-                                                                 articuloSeleccionado.TipoImpuesto.Porcentajeiva,
-                                                                    articuloSeleccionado.TipoImpuesto.Baseimponible, 0,
-                                                                    "EXENTO");
+                                                                  datosArticuloItem.TipoImpuesto.Porcentajeiva,
+                                                                  datosArticuloItem.TipoImpuesto.Baseimponible, 0,
+                                                                  "EXENTO");
             }            
         }
         catch (Exception)
@@ -299,9 +302,9 @@
         }
         finally
         {
-            TotalPagar = detalles.Sum(c => c.Total);
-            totalIva = detalles.Sum(c => c.ImporteIVA);
-            totalgravado = detalles.Sum(c => c.ImporteGravado);        
+            TotalPagar = venta.DetalleVenta.Sum(c => c.Total);
+            totalIva = venta.DetalleVenta.Sum(c => c.ImporteIVA);
+            totalgravado = venta.DetalleVenta.Sum(c => c.ImporteGravado);
         }    
     }
 
@@ -310,7 +313,13 @@
         try
         {
             #region Validaciones
-            if (detalles == null || detalles.Count() == 0)
+            if (clienteSeleccionado == null)
+            {
+                _Snackbar.Add("Favor seleccione un cliente", Severity.Error);
+                return;
+            }
+
+            if (venta.DetalleVenta == null || venta.DetalleVenta.Count() == 0)
             {
                 _Snackbar.Add("No existen registros en el detalle", Severity.Error);
                 return;
@@ -325,14 +334,14 @@
             venta.EsAutoimprenta = esAutoimprenta ? "S" : "N";
             venta.UsuarioIdRegistro = UserStateService.CurrentUser.Id;
             venta.SucursalId = UserStateService.CurrentUser.SucursalId.Value;
-            venta.DetalleVenta = detalles;
-            venta.Total = detalles.Sum(s => s.Total);
-            venta.TotalIVA = detalles.Sum(s => s.ImporteIVA);
+            venta.DetalleVenta = venta.DetalleVenta;
+            venta.Total = venta.DetalleVenta.Sum(s => s.Total);
+            venta.TotalIVA = venta.DetalleVenta.Sum(s => s.ImporteIVA);
             venta.UbicacionId = 1;
             //venta.EmpresaId = 1;
             #endregion
 
-            var resultado = await _VentaService.RegistrarVenta<VentaDTO>(venta);
+            var resultado = await _VentaService.RegistrarVenta(venta);
 
             if (resultado.isExitoso)
             {
@@ -385,11 +394,11 @@
         try
         {
             // Ejemplo de llamada a servicio
-            var resultado = await _timbradoService.ObtenerTodos<List<TimbradoDTO>>();
+            var resultado = await _rangoTimbradoService.ObtenerTodos();
 
             if (resultado.isExitoso)
             {
-                var listaTimbrado = (List<TimbradoDTO>)resultado.Resultado;
+                var listaTimbrado = resultado.Resultado;
                 var TipoTimbradoActual = esAutoimprenta ? "Autoimprenta" : "Manual";
 
                 if (!listaTimbrado.Any())
@@ -398,25 +407,36 @@
                     return;
                 }
 
-                var timbradoEncontrado = listaTimbrado.Where(c => c.TipoTimbrado.Equals(TipoTimbradoActual) && c.Estado == "A").FirstOrDefault();
+                var timbradoEncontrado = listaTimbrado.Where(c => c.Timbrado.TipoTimbrado.Equals(TipoTimbradoActual) && c.Timbrado.Estado == "A" && c.TipoDocumentoId == TipoDocumento.Factura).FirstOrDefault();
                 if (timbradoEncontrado != null)
                 {
-                    timbradoSeleccionado = timbradoEncontrado;
-                    venta.TimbradoId = timbradoEncontrado.TimbradoId;
+                    rangoTimbradoSeleccionado = timbradoEncontrado;
+                    venta.TimbradoId = timbradoEncontrado.Timbrado.TimbradoId;
+                    venta.Establecimiento = timbradoEncontrado.Nro_Establecimiento;
+                    venta.PuntoExpedicion = timbradoEncontrado.Nro_PuntoExp;
+                    venta.Numero = timbradoEncontrado.NroActual+1;
                 }
                 else
                 {
                     _Snackbar.Add("No se encontraron timbrados", Severity.Warning);
-                    timbradoSeleccionado = new TimbradoDTO();
+
+                    rangoTimbradoSeleccionado = new RangoTimbradoDTO();
+                    venta.TimbradoId = 0;
+                    venta.Establecimiento = 0;
+                    venta.PuntoExpedicion = 0;
+                    venta.Numero = 0;
                     return;
                 }
-
-
             }
             else
             {                
                 _Snackbar.Add("No se encontraron timbrados", Severity.Warning);
-                timbradoSeleccionado = new TimbradoDTO();
+                rangoTimbradoSeleccionado = new RangoTimbradoDTO();
+                venta.TimbradoId = 0;
+                venta.Establecimiento = 0;
+                venta.PuntoExpedicion = 0;
+                venta.Numero = 0;
+
                 return;
             }
 
@@ -434,14 +454,14 @@
 
     private bool ValidacionesCompartidas()
     {
-        var existeSinCantidad = detalles.Where(c => c.Cantidad == 0);
+        var existeSinCantidad = venta.DetalleVenta.Where(c => c.Cantidad == 0);
         if (existeSinCantidad.Any())
         {
             _Snackbar.Add("La Cantidad no puede ser 0.\nFavor ingrese la cantidad", Severity.Error);
             return false;
         }
 
-        var existeSinPrecio = detalles.Where(c => c.Precio == 0);
+        var existeSinPrecio = venta.DetalleVenta.Where(c => c.Precio == 0);
         if (existeSinPrecio.Any())
         {
             _Snackbar.Add("Favor ingrese el precio", Severity.Error);
@@ -453,8 +473,8 @@
 
     private void ResetForm()
     {
-        venta = new VentaCreateDTO();
+        venta = new VentaCreateDTO() 
+        { DetalleVenta = new List<DetalleVentaCreateDTO>()};
         clienteSeleccionado = null;
-        detalles.Clear();
     }
 }

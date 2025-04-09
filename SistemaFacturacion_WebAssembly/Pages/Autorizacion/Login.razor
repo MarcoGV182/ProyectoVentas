@@ -70,7 +70,7 @@
     {
         myImageClass = "d-block";
         disableButton = true;
-        AutorizacionResponse result = new AutorizacionResponse();
+        APIResponse<AutorizacionResponse> result = new APIResponse<AutorizacionResponse>();
         try
         {
             result = await _usuarioServicio.IniciarSesion(usuarioLogin);
@@ -84,16 +84,15 @@
         }
 
 
-        if (result.Resultado) 
+        if (result.isExitoso) 
         { 
             // Usar AuthService para manejar la autenticación
-            await _authService.LoginAsync(result.Token, result.Usuario);
-
+            await _authService.LoginAsync(result.Resultado.Token, result.Resultado.Usuario);
             _navigationManager.NavigateTo("/producto");
         }   
         else
         {
-            //messageError = "No se encontraron coincidencias";
+            messageError = string.Join("\n",result.Resultado.Mensaje);
             myImageClass = "d-none";
             disableButton = false;
             myAlert = "d-block";

@@ -1,7 +1,7 @@
 ﻿@page "/tipoDocIdentidad"
 @attribute [Authorize]
 @inject ITipoDocIdentidadService _tipoDocIdentidadService
-@inject IDialogService _dialogServicio
+@inject IDialogService _dialogService
 @inject ISnackbar _snackBar
 @inject SweetAlertService Swal;
 
@@ -31,32 +31,32 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<TipoServicioDTO, object>(x=> x.TipoServicioId)">
+                            <MudTableSortLabel SortBy="new Func<TablaMenorDTO, object>(x=> x.Id)">
                                 Código
                             </MudTableSortLabel>
                         </MudTh>
                         <MudTh>
-                            <MudTableSortLabel SortBy="new Func<TipoServicioDTO, object>(x=> x.Descripcion)">
+                            <MudTableSortLabel SortBy="new Func<TablaMenorDTO, object>(x=> x.Descripcion)">
                                 Descripción
                             </MudTableSortLabel>
                         </MudTh>                      
                         <MudTh></MudTh>
                     </HeaderContent>
-                    <RowTemplate Context="tiposervicioRow">
-                        <MudTd DataLabel="Codigo">@tiposervicioRow.Id</MudTd>
-                        <MudTd DataLabel="Descripcion">@tiposervicioRow.Descripcion</MudTd>                        
+                    <RowTemplate Context="row">
+                        <MudTd DataLabel="Codigo">@row.Id</MudTd>
+                        <MudTd DataLabel="Descripcion">@row.Descripcion</MudTd>
                         <MudTd DataLabel="">
                             <MudFab Color="Color.Primary" 
                             StartIcon="@Icons.Material.Filled.Edit"
                             Size="Size.Small" 
                             IconSize="Size.Small"
-                                    OnClick="@(() => AbrirEditarRegistro(tiposervicioRow))" />
+                                    OnClick="@(() => AbrirEditarRegistro(row))" />
                             <MudFab 
                             Color="Color.Error" 
                             StartIcon="@Icons.Material.Filled.Delete" 
                             Size="Size.Small" 
                             IconSize="Size.Small"
-                                    OnClick="@(() => EliminarRegistro(tiposervicioRow))" />
+                                    OnClick="@(() => EliminarRegistro(row))" />
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
@@ -74,20 +74,20 @@
     private TablaMenorDTO selectedItem1 = null;
     private bool _loading = true;
 
-    private async Task ObtenerServicios()
+    private async Task ObtenerRegistros()
     {
-        var result = await _tipoDocIdentidadService.ObtenerTodos<List<TablaMenorDTO>>();
+        var result = await _tipoDocIdentidadService.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaRegistro = (List<TablaMenorDTO>)result.Resultado!;
+            listaRegistro = result.Resultado;
         }
     }
 
 
     protected override async Task OnInitializedAsync()
     {
-        await ObtenerServicios();
+        await ObtenerRegistros();
         _loading = false;
     }
 
@@ -111,28 +111,23 @@
     private async Task AbrirNuevoRegistro()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var dialogo = await _dialogServicio.ShowAsync<MdTipoDocIdentidad>("Nuevo registro", options);
+        var dialogo = await _dialogService.ShowAsync<MdTipoDocIdentidad>("Nuevo registro", options);
         var resultado = await dialogo.Result;
 
         if (!resultado.Canceled)
-        {
-            await ObtenerServicios();
-        }
-        //_navigationManager.NavigateTo($"/Servicio/ABM");
+            await ObtenerRegistros();
+
     }
 
-    private async Task AbrirEditarRegistro(TablaMenorDTO Servicio)
+    private async Task AbrirEditarRegistro(TablaMenorDTO item)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var parametros = new DialogParameters { ["_Servicio"] = Servicio };
+        var parametros = new DialogParameters { ["_tipoDoc"] = item };
 
-        var dialogo = _dialogServicio.Show<MdTipoDocIdentidad>("Editar registro", parametros, options);
+        var dialogo = _dialogService.Show<MdTipoDocIdentidad>("Editar registro", parametros, options);
         var resultado = await dialogo.Result;
         if (!resultado.Canceled)
-        {
-            await ObtenerServicios();
-        }
-        //_navigationManager.NavigateTo($"/Servicio/ABM/{Servicio.ArticuloId}");
+            await ObtenerRegistros();
     }
 
     private async Task EliminarRegistro(TablaMenorDTO item)
@@ -140,7 +135,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = $"Eliminar la Servicio: {item.Descripcion}({item.Id})",
+                Text = $"Eliminar el registro: {item.Descripcion}({item.Id})",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Si, eliminar",
@@ -149,12 +144,12 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _tipoDocIdentidadService.Eliminar<TablaMenorDTO>(item.Id);
+            var resultado = await _tipoDocIdentidadService.Eliminar(item.Id);
 
             if (resultado.isExitoso)
             {
-                _snackBar.Add("La Servicio fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
-                await ObtenerServicios();
+                _snackBar.Add("El registro fue eliminado", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerRegistros();
             }
             else
                 _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);

@@ -915,8 +915,8 @@ namespace SistemaFacturacion_API.Migrations
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)");
 
-                    b.Property<short>("Establecimiento")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Establecimiento")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Estado")
                         .HasMaxLength(8)
@@ -944,8 +944,8 @@ namespace SistemaFacturacion_API.Migrations
                     b.Property<string>("Observacion")
                         .HasColumnType("text");
 
-                    b.Property<short>("PuntoExpedicion")
-                        .HasColumnType("smallint");
+                    b.Property<int>("PuntoExpedicion")
+                        .HasColumnType("integer");
 
                     b.Property<int>("SucursalId")
                         .HasColumnType("integer");
@@ -1161,7 +1161,7 @@ namespace SistemaFacturacion_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaFacturacion_Model.Modelos.Stock", null)
+                    b.HasOne("SistemaFacturacion_Model.Modelos.Stock", "Stock")
                         .WithMany("Movimientos")
                         .HasForeignKey("StockId");
 
@@ -1172,6 +1172,8 @@ namespace SistemaFacturacion_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Producto");
+
+                    b.Navigation("Stock");
 
                     b.Navigation("Ubicacion");
                 });

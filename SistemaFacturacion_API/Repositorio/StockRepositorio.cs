@@ -68,26 +68,37 @@ namespace SistemaFacturacion_API.Repositorio
 
         public async Task RegistrarMovimientoAsync(MovimientoStock movimiento)
         {
-            // 1. Registrar el movimiento histórico
-            await _db.Movimientos.AddAsync(movimiento);
-
-            // 2. Actualizar el stock actual
-            var stock = await ObtenerStockAsync(movimiento.ProductoId, movimiento.UbicacionId);
-
-            if (stock == null)
+            try
             {
-                stock = new Stock
+                // 1. Actualizar el stock actual
+                var stock = await ObtenerStockAsync(movimiento.ProductoId, movimiento.UbicacionId);
+
+                if (stock == null)
                 {
-                    ProductoId = movimiento.ProductoId,
-                    UbicacionId = movimiento.UbicacionId,
-                    Cantidad = 0
-                };
-                _db.Stock.Add(stock);
+                    stock = new Stock
+                    {
+                        ProductoId = movimiento.ProductoId,
+                        UbicacionId = movimiento.UbicacionId,
+                        Cantidad = 0                        
+                    };                   
+
+                    await _db.Stock.AddAsync(stock);
+                    await _db.SaveChangesAsync();
+                }
+
+                // 2. Registrar el movimiento histórico
+                movimiento.StockId = stock.Id;
+                await _db.Movimientos.AddAsync(movimiento);
+
+                stock.Cantidad += movimiento.Cantidad;
+                stock.FechaActualizacion = DateTime.Now;
+                await _db.SaveChangesAsync();
             }
-
-
-            stock.Cantidad += movimiento.Cantidad;
-            stock.FechaActualizacion = DateTime.Now;
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public async Task<List<MovimientoStock>> ObtenerMovimientosPorProductoAsync(int productoId, DateTime? desde, DateTime? hasta)

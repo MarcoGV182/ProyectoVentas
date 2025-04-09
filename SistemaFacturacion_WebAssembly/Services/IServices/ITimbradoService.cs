@@ -1,4 +1,5 @@
-﻿using SistemaFacturacion_Model.Modelos.DTOs;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Utilidad;
 
 
@@ -6,10 +7,10 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface ITimbradoService
     {
-        Task<APIResponse<T>> ObtenerTodos<T>();
-        Task<APIResponse<T>> Obtener<T>(int id);
-        Task<APIResponse<T>> Crear<T>(TimbradoCreateDTO dto);
-        Task<APIResponse<T>> Eliminar<T>(int id);
-        Task<APIResponse<T>> Actualizar<T>(int id, TimbradoCreateDTO dto);
+        Task<APIResponse<List<TimbradoDTO>>> ObtenerTodos();
+        Task<APIResponse<TimbradoDTO>> Obtener(int id);
+        Task<APIResponse<TimbradoDTO>> Crear(TimbradoCreateDTO dto);
+        Task<APIResponse<object>> Eliminar(int id);
+        Task<APIResponse<object>> Actualizar(int id, TimbradoCreateDTO dto);
     }
 }

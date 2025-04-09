@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,10 @@ namespace SistemaFacturacion_Model.Modelos
         // Auditoría
         public string UsuarioId { get; set; } // Quién realizó el movimiento
         public string Comentarios { get; set; }
+        public int? StockId { get; set; }
+
+        [ForeignKey(nameof(StockId))]
+        public virtual Stock Stock { get; set; }
     }
 
 

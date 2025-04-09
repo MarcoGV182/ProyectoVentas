@@ -1,10 +1,7 @@
 ﻿using Blazored.LocalStorage;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Newtonsoft.Json;
 using SistemaFacturacion_Model.Modelos.Custom;
 using SistemaFacturacion_Model.Modelos.DTOs;
 using SistemaFacturacion_Utilidad;
-using SistemaFacturacion_WebAssembly.Models;
 using SistemaFacturacion_WebAssembly.Services.IServices;
 
 namespace SistemaFacturacion_WebAssembly.Services
@@ -19,7 +16,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<APIResponse<T>> Crear<T>(UsuarioRegistroDTO dto)
+        public async Task<APIResponse<UsuarioDTO>> Crear(UsuarioRegistroDTO dto)
         {
             var apiRequest = new APIRequest()
             {
@@ -28,14 +25,14 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Usuario"
             };
 
-            var result = await SendAsync<APIResponse<T>>(apiRequest);
+            var result = await SendAsync<UsuarioDTO>(apiRequest);
 
           
 
             return result;
         }
 
-        public async Task<APIResponse<T>> Actualizar<T>(string id,UsuarioRegistroDTO dto)
+        public async Task<APIResponse<object>> Actualizar(string id,UsuarioRegistroDTO dto)
         {
             var apiRequest = new APIRequest()
             {
@@ -44,14 +41,14 @@ namespace SistemaFacturacion_WebAssembly.Services
                 URL = $"api/Usuario/{id}"
             };
 
-            var result = await SendAsync<APIResponse<T>>(apiRequest);
+            var result = await SendAsync<object>(apiRequest);
 
             
 
             return result;
         }
 
-        public async Task<AutorizacionResponse> IniciarSesion(LoginDTO login)
+        public async Task<APIResponse<AutorizacionResponse>> IniciarSesion(LoginDTO login)
         {
             var apiRequest = new APIRequest()
             {
@@ -65,7 +62,7 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<AutorizacionResponse> RefrescarToken(TokenRequest tokenRequest)
+        public async Task<APIResponse<AutorizacionResponse>> RefrescarToken(TokenRequest tokenRequest)
         {
             var apiRequest = new APIRequest()
             {
@@ -79,9 +76,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> ObtenerTodos<T>()
+        public async Task<APIResponse<List<UsuarioDTO>>> ObtenerTodos()
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<List<UsuarioDTO>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"api/Usuario"
@@ -91,9 +88,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Eliminar<T>(string id)
+        public async Task<APIResponse<object>> Eliminar(string id)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<object>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
                 URL = $"api/Usuario/{id}"

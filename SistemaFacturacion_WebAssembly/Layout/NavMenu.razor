@@ -18,13 +18,39 @@
             <MudNavLink Href="tipoDocIdentidad" Match="NavLinkMatch.Prefix">Tipo Doc. Identidad</MudNavLink>
             <MudNavLink Href="cliente" Match="NavLinkMatch.Prefix">Clientes</MudNavLink>
             <MudNavLink Href="ciudad" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AddHome">Ciudades</MudNavLink>
-        </MudNavGroup>
-        <MudNavGroup Title="Operaciones" Icon="@Icons.Material.Filled.AddBusiness">
-            <MudNavLink Href="ventas" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AddShoppingCart">Ventas</MudNavLink>
-        </MudNavGroup>
+        </MudNavGroup>        
+    </MudNavGroup>
+
+    <MudNavGroup Title="Operaciones" Icon="@Icons.Material.Filled.AddBusiness">
+        <MudNavLink Href="ventas" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AddShoppingCart">Ventas</MudNavLink>
+    </MudNavGroup>
+
+    @if (_usuarioEstadoService.CurrentUser?.Rol == "Admin")
+    {
         <MudNavGroup Title="Opciones" Icon="@Icons.Material.Filled.Accessibility">
             <MudNavLink Href="timbrado" Match="NavLinkMatch.Prefix">Timbrados</MudNavLink>
+            <MudNavLink Href="rangos-timbrados" Match="NavLinkMatch.Prefix">Rango de Timbrados</MudNavLink>
             <MudNavLink Href="usuario" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountCircle">Usuarios</MudNavLink>
         </MudNavGroup>
-    </MudNavGroup>
+    }
+    
+  
 </MudNavMenu>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        _usuarioEstadoService.StateChanged += OnUsuarioStateChanged;
+    }
+
+    private void OnUsuarioStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _usuarioEstadoService.StateChanged -= OnUsuarioStateChanged;
+    }
+}

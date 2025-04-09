@@ -22,7 +22,7 @@
         </MudItem>
             @if (isLoading)
             {
-                <MudProgressCircular Height="40px" Width="100%" Class="mt-2" Color="Color.Primary" Indeterminate="true" />
+                <MudProgressLinear Height="40px" Width="100%" Class="mt-2" Color="Color.Primary" Indeterminate="true" />
             }
             else
             {
@@ -164,11 +164,11 @@
             isLoading = true;
             StateHasChanged(); // Fuerza actualización UI
 
-            var result = await _productoservice.ObtenerTodos<List<ProductoDTO>>();
+            var result = await _productoservice.ObtenerTodos();
 
             if (result.isExitoso)
             {
-                listaproductos = (List<ProductoDTO>)result.Resultado!;
+                listaproductos = result.Resultado;
             }
         }
         catch (Exception ex)
@@ -251,7 +251,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _productoservice.Eliminar<ProductoDTO>(producto.ArticuloId);
+            var resultado = await _productoservice.Eliminar(producto.ArticuloId);
 
             if (resultado.isExitoso)
             {

@@ -73,11 +73,11 @@
 
     private async Task ObtenerTipoImpuesto()
     {
-        var result = await _tipoimpuestoservice.ObtenerTodos<List<TipoImpuestoDTO>>();
+        var result = await _tipoimpuestoservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaTipoImpuesto = (List<TipoImpuestoDTO>)result.Resultado!;
+            listaTipoImpuesto = result.Resultado;
         }
     }
 
@@ -139,7 +139,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _tipoimpuestoservice.Eliminar<TipoImpuestoDTO>(tipoimpuesto.TipoimpuestoId);
+            var resultado = await _tipoimpuestoservice.Eliminar(tipoimpuesto.TipoimpuestoId);
 
             if (resultado.isExitoso)
             {

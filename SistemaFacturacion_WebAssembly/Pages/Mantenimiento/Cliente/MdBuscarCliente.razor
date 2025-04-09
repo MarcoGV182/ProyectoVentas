@@ -63,7 +63,7 @@
         {
             isLoading = true;
             StateHasChanged(); // Fuerza actualización UI
-            var result = await _ClienteService.ObtenerTodos<List<ClienteDTO>>();
+            var result = await _ClienteService.ObtenerTodos();
 
             if (!result.isExitoso)
             { 
@@ -75,7 +75,7 @@
             {                
                 if (result.isExitoso)
                 {
-                    var listaClientes = (List<ClienteDTO>)result.Resultado;
+                    var listaClientes = result.Resultado;
 
                     clientes = listaClientes.Where(c => c.Nombre.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) ||
                             c.Apellido.Contains(criterioBusqueda, StringComparison.OrdinalIgnoreCase) ||
@@ -85,7 +85,7 @@
             }
             else
             {
-                var listaClientes = (List<ClienteDTO>)result.Resultado;
+                var listaClientes = result.Resultado;
                 clientes = listaClientes;
             }
         }

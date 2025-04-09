@@ -33,7 +33,8 @@ namespace SistemaFacturacion_API.Migrations
                     DocumentoReferencia = table.Column<string>(type: "text", nullable: true),
                     ReferenciaId = table.Column<int>(type: "integer", nullable: true),
                     UsuarioId = table.Column<string>(type: "text", nullable: true),
-                    Comentarios = table.Column<string>(type: "text", nullable: true)
+                    Comentarios = table.Column<string>(type: "text", nullable: true),
+                    StockId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,6 +50,12 @@ namespace SistemaFacturacion_API.Migrations
                         column: x => x.UbicacionId,
                         principalTable: "ubicacion",
                         principalColumn: "UbicacionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Movimientos_Stock_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stock",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

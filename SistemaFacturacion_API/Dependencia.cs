@@ -3,10 +3,7 @@ using SistemaFacturacion_API.Datos;
 using SistemaFacturacion_API.Repositorio.IRepositorio;
 using SistemaFacturacion_API.Repositorio;
 using SistemaFacturacion_API.Services;
-using SistemaFacturacion_Model.Modelos;
 using SistemaFacturacion_API.Mappers;
-using AutoMapper;
-using SistemaFacturacion_Model.Modelos.DTOs;
 using Microsoft.AspNetCore.Identity;
 
 namespace SistemaFacturacion_API
@@ -36,6 +33,7 @@ namespace SistemaFacturacion_API
             services.AddScoped<IPresentacionRepositorio, PresentacionRepositorio>();
             services.AddScoped<IUnidadMedidaRepositorio, UnidadMedidaRepositorio>();
             services.AddScoped<ITimbradoRepositorio, TimbradoRepositorio>();
+            services.AddScoped<IRangoTimbradoRepositorio, RangoTimbradoRepositorio>();
             services.AddScoped<IServicioRepositorio, ServicioRepositorio>();
             services.AddScoped<ITipoServicioRepositorio, TipoServicioRepositorio>();
             services.AddScoped<ICiudadRepositorio, CiudadRepositorio>();
@@ -44,7 +42,10 @@ namespace SistemaFacturacion_API
             services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
             services.AddScoped<IVentaRepositorio, VentaRepositorio>();
             services.AddScoped<IUbicacionRepositorio, UbicacionRepositorio>();
+            services.AddScoped<ISucursalRepositorio, SucursalRepositorio>();
             services.AddScoped<IStockRepositorio, StockRepositorio>();
+            services.AddScoped<SucursalService>();
+            services.AddScoped<VentaService>();
 
 
             //Configurar el IdentityUser

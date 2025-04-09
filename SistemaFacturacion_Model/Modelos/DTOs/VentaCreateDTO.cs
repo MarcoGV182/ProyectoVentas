@@ -7,8 +7,8 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
     {
         public int Id { get; set; } 
         public string NroFactura { get; set; }
-        public short Establecimiento { get; set; }
-        public short PuntoExpedicion { get; set; }
+        public int Establecimiento { get; set; }
+        public int PuntoExpedicion { get; set; }
         public int Numero { get; set; }
         public int ClienteId { get; set; }
         public DateTime Fecha { get; set; } 

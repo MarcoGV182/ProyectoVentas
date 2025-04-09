@@ -103,19 +103,23 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<TablaMenorDTO>();
             try
             {
-                var existeTipoDocumentoIdentidad = _TipoDocumentoIdentidadRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
-                if (existeTipoDocumentoIdentidad.Result != null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "El registro con el nombre ingresado ya existe");
-                    return BadRequest(ModelState);
-                }
-
                 if (CreateDTO == null)
                 {
                     _response.isExitoso = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
+
+
+                var existeTipoDocumentoIdentidad = await _TipoDocumentoIdentidadRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
+                if (existeTipoDocumentoIdentidad != null)
+                {
+                    _response.isExitoso = false;
+                    _response.ErrorMessages = new List<string>() { "El registro con el nombre ingresado ya existe" };
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+                
 
                 var _TipoDocumentoIdentidad = new TipoDocumentoIdentidad();
                 _TipoDocumentoIdentidad.Descripcion = CreateDTO.Descripcion;

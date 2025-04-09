@@ -19,9 +19,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             _logger = logger;
         }
 
-        public async Task<APIResponse<T>> Crear<T>(ProductoCreateDTO dto)
+        public async Task<APIResponse<ProductoDTO>> Crear(ProductoCreateDTO dto)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<ProductoDTO>(new APIRequest()
             {
                 Tipo = DS.APITipo.POST,
                 Datos = dto,
@@ -30,9 +30,9 @@ namespace SistemaFacturacion_WebAssembly.Services
 
             return result;
         }
-        public async Task<APIResponse<T>> Actualizar<T>(int id,ProductoUpdateDTO dto)
+        public async Task<APIResponse<object>> Actualizar(int id,ProductoUpdateDTO dto)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<object>(new APIRequest()
             {
                 Tipo = DS.APITipo.PUT,
                 Datos = dto,
@@ -43,9 +43,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Obtener<T>(int id)
+        public async Task<APIResponse<ProductoDTO>> Obtener(int id)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<ProductoDTO>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"{_productoURL}/api/Producto/{id}"
@@ -55,9 +55,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> ObtenerTodos<T>()
+        public async Task<APIResponse<List<ProductoDTO>>> ObtenerTodos()
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<List<ProductoDTO>>(new APIRequest()
             {
                 Tipo = DS.APITipo.GET,
                 URL = $"{_productoURL}/api/Producto"
@@ -67,9 +67,9 @@ namespace SistemaFacturacion_WebAssembly.Services
             return result;
         }
 
-        public async Task<APIResponse<T>> Eliminar<T>(int id)
+        public async Task<APIResponse<object>> Eliminar(int id)
         {
-            var result = await SendAsync<APIResponse<T>>(new APIRequest()
+            var result = await SendAsync<object>(new APIRequest()
             {
                 Tipo = DS.APITipo.DELETE,
                 URL = $"{_productoURL}/api/Producto/{id}"
@@ -80,9 +80,9 @@ namespace SistemaFacturacion_WebAssembly.Services
         }
 
 
-        public async Task<APIResponse<T>> ObtenerStock<T>(int idProducto, int ubicacionId)
+        public async Task<APIResponse<StockDTO>> ObtenerStock(int idProducto, int ubicacionId)
         {
-            var response = new APIResponse<T>();
+            var response = new APIResponse<StockDTO>();
 
             try
             {
@@ -92,7 +92,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                     URL = $"{_productoURL}/api/Stock/ObtenerCantidadDisponible?productoId={idProducto}&ubicacionId={ubicacionId}"
                 };
 
-                response = await SendAsync<APIResponse<T>>(request);
+                response = await SendAsync<StockDTO>(request);
             }
             catch (Exception ex)
             {

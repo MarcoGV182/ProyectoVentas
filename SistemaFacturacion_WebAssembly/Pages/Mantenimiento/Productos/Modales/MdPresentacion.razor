@@ -55,13 +55,13 @@
 
         if (_Presentacion.PresentacionId != 0)
         {
-            var response = await _PresentacionService.Actualizar<PresentacionDTO>(_Presentacion.PresentacionId, _nuevoRegistro);
+            var response = await _PresentacionService.Actualizar(_Presentacion.PresentacionId, _nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con exito";
         }
         else 
         {
-            var response = await _PresentacionService.Crear<PresentacionDTO>(_nuevoRegistro);
+            var response = await _PresentacionService.Crear(_nuevoRegistro);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con exito";
         }

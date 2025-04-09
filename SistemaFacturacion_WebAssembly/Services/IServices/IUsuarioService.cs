@@ -7,11 +7,11 @@ namespace SistemaFacturacion_WebAssembly.Services.IServices
 {
     public interface IUsuarioService
     {
-        Task<APIResponse<T>> ObtenerTodos<T>();
-        Task<AutorizacionResponse> IniciarSesion(LoginDTO login);
-        Task<APIResponse<T>> Crear<T>(UsuarioRegistroDTO dto);
-        Task<APIResponse<T>> Actualizar<T>(string id, UsuarioRegistroDTO dto);
-        Task<APIResponse<T>> Eliminar<T>(string id);
-        Task<AutorizacionResponse> RefrescarToken(TokenRequest tokenRequest);
+        Task<APIResponse<List<UsuarioDTO>>> ObtenerTodos();
+        Task<APIResponse<AutorizacionResponse>> IniciarSesion(LoginDTO login);
+        Task<APIResponse<UsuarioDTO>> Crear(UsuarioRegistroDTO dto);
+        Task<APIResponse<object>> Actualizar(string id, UsuarioRegistroDTO dto);
+        Task<APIResponse<object>> Eliminar(string id);
+        Task<APIResponse<AutorizacionResponse>> RefrescarToken(TokenRequest tokenRequest);
     }
 }

@@ -13,18 +13,25 @@ namespace SistemaFacturacion_Model.Modelos
         public int RangoHasta { get; set; }
         public int NroActual { get; set; }        
         public short TimbradoId { get; set; }
-        public int TipoDocumentoId { get; set; }
+        public TipoDocumento TipoDocumentoId { get; set; }
         public virtual Timbrado Timbrado { get; set; }
 
         public int SucursalId { get; set; }
         public virtual Sucursal Sucursal { get; set; }
+    }
 
-        public enum TipoDocumento
-        {
-            Factura = 1,
-            NotaCredito = 2,
-            NotaDebito = 3,
-            Recibo = 4
-        }
+    public enum TipoDocumento
+    {
+        [Display(Name = "Factura")]
+        Factura = 1,
+
+        [Display(Name = "Nota de Crédito")]
+        NotaCredito = 2,
+
+        [Display(Name = "Nota de Débito")]
+        NotaDebito = 3,
+
+        [Display(Name = "Recibo")]
+        Recibo = 4
     }
 }

@@ -15,7 +15,7 @@ namespace SistemaFacturacion_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TimbradoController : ControllerBase
     {
         private readonly ILogger<TimbradoController> _logger;
@@ -166,7 +166,7 @@ namespace SistemaFacturacion_API.Controllers
                 Timbrado modelo = _mapper.Map<Timbrado>(CreateDTO);
                 modelo.TimbradoId = id;
 
-                await _TimbradoRepositorio.Actualizar(modelo);
+                await _TimbradoRepositorio.ActualizarAsync(modelo);
                 await _TimbradoRepositorio.Grabar();
 
                 _response.isExitoso = true;

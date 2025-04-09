@@ -9,8 +9,8 @@ namespace SistemaFacturacion_Model.Modelos
         public int Id { get; set; }
         [MaxLength(20)]
         public string NroFactura { get; set; }
-        public short Establecimiento { get; set; }
-        public short PuntoExpedicion { get; set; }
+        public int Establecimiento { get; set; }
+        public int PuntoExpedicion { get; set; }
         public int Numero { get; set; }
         public int ClienteId { get; set; }
         public Persona Cliente { get; set; }

@@ -95,11 +95,11 @@
 
     private async Task ObtenerTimbrado()
     {
-        var result = await _timbradoService.ObtenerTodos<List<TimbradoDTO>>();
+        var result = await _timbradoService.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaTimbrados = (List<TimbradoDTO>)result.Resultado!;
+            listaTimbrados = result.Resultado;
         }
     }
 
@@ -161,7 +161,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _timbradoService.Eliminar<TimbradoDTO>(timbrado.TimbradoId);
+            var resultado = await _timbradoService.Eliminar(timbrado.TimbradoId);
 
             if (resultado.isExitoso)
             {

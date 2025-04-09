@@ -52,13 +52,13 @@
 
         if (_marca.MarcaId != 0)
         {
-            var response = await _marcaService.Actualizar<MarcaDTO>(_marca.MarcaId, _nuevaMarca);
+            var response = await _marcaService.Actualizar(_marca.MarcaId, _nuevaMarca);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue modificado con éxito";
         }
         else
         {
-            var response = await _marcaService.Crear<MarcaDTO>(_nuevaMarca);
+            var response = await _marcaService.Crear(_nuevaMarca);
             _resultado = response.isExitoso;
             _mensaje = "El registro fue creado con éxito";
         }

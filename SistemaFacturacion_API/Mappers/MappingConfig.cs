@@ -81,12 +81,17 @@ namespace SistemaFacturacion_API.Mappers
                 .ForMember(dest => dest.TipoTimbrado, opt => opt.MapFrom(src => src.TipoTimbrado.ToString()))
                 .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia.Date));
 
+            // Rango timbrado
+            CreateMap<Rango_Timbrados, RangoTimbradoDTO>().ReverseMap();
+            CreateMap<Rango_Timbrados, RangoTimbradoCreateDTO>().ReverseMap();
+
             //Ciudad
             CreateMap<Ciudad, CiudadDTO>().ReverseMap();
             CreateMap<Ciudad, CiudadCreateDTO>().ReverseMap();
 
             //TipoDocumentoIdentidad,
             CreateMap<TipoDocumentoIdentidad, TablaMenorCreateDTO>().ReverseMap();
+            CreateMap<TipoDocumentoIdentidad, TablaMenorDTO>().ReverseMap();
 
             //Cliente,
             CreateMap<Persona, ClienteDTO>().ReverseMap();
@@ -121,6 +126,10 @@ namespace SistemaFacturacion_API.Mappers
             //Ubicación
             CreateMap<Ubicacion, UbicacionDTO>().ReverseMap();
             CreateMap<Ubicacion, UbicacionCreateDTO>().ReverseMap();
+
+            //Sucursal
+            CreateMap<Sucursal, SucursalCreateDTO>().ReverseMap();
+            CreateMap<Sucursal, SucursalDTO>().ReverseMap();
 
 
             //Stock

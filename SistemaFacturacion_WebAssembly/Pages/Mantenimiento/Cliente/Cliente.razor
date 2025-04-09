@@ -138,23 +138,28 @@
     private ClienteDTO selectedItem1 = null;
     private bool _loading = true;
 
-    private async Task ObtenerClientes()
-    {
-        var result = await _Clienteservice.ObtenerTodos<List<ClienteDTO>>();
-
-        if (result.isExitoso)
-        {
-            listaClientes = (List<ClienteDTO>)result.Resultado!;
-        }
-    }
-
-
     protected override async Task OnInitializedAsync()
     {
         await ObtenerClientes();
         _loading = false;
     }
 
+
+    private async Task ObtenerClientes()
+    {
+        var result = await _Clienteservice.ObtenerTodos();
+
+        if (!result.isExitoso)
+        {
+            _snackBar.Add($"{string.Join("\n",result.ErrorMessages)}", Severity.Success, a => a.VisibleStateDuration = 500);
+            return;
+        }
+
+        listaClientes = result.Resultado;
+    }
+
+
+  
     private bool FilterFunc1(ClienteDTO element) => FilterFunc(element, searchString1, searchString2, searchString3);
 
     private bool FilterFunc(ClienteDTO element, string searchString, string searchString_2, string searchString_3)
@@ -217,7 +222,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Clienteservice.Eliminar<ClienteDTO>(Cliente.PersonaId);
+            var resultado = await _Clienteservice.Eliminar(Cliente.PersonaId);
 
             if (resultado.isExitoso)
             {

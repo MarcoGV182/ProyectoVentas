@@ -77,11 +77,11 @@
 
     private async Task ObtenerCategoria()
     {
-        var result = await _Categoriaservice.ObtenerTodos<List<CategoriaProductoDTO>>();
+        var result = await _Categoriaservice.ObtenerTodos();
 
         if (result.isExitoso)
         {
-            listaCategoria = (List<CategoriaProductoDTO>)result.Resultado!;
+            listaCategoria = result.Resultado;
         }
     }
 
@@ -143,7 +143,7 @@
 
         if (result.IsConfirmed)
         {
-            var resultado = await _Categoriaservice.Eliminar<CategoriaProductoDTO>(Categoria.CategoriaId);
+            var resultado = await _Categoriaservice.Eliminar(Categoria.CategoriaId);
 
             if (resultado.isExitoso)
             {
