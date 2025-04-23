@@ -250,11 +250,11 @@
             _editRegistro.Codigobarra = _producto.Codigobarra;
             _editRegistro.Stockminimo = _producto.Stockminimo;
             _editRegistro.PrecioCompra = _producto.PrecioCompra;
-            _editRegistro.Fechavencimiento = _producto.FechaVencimiento;
-            _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+            _editRegistro.FechaVencimiento = _producto.FechaVencimiento;
+            _editRegistro.PresentacionId = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
             _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
             _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
-            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
+            _editRegistro.UnidadMedidaId = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
             var response = await _productoService.Actualizar(_producto.ArticuloId, _editRegistro);
@@ -271,11 +271,11 @@
             _nuevoRegistro.Codigobarra = _producto.Codigobarra;
             _nuevoRegistro.Stockminimo = _producto.Stockminimo;
             _nuevoRegistro.PrecioCompra = _producto.PrecioCompra;
-            _nuevoRegistro.Fechavencimiento = _producto.FechaVencimiento;
-            _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+            _nuevoRegistro.FechaVencimiento = _producto.FechaVencimiento;
+            _nuevoRegistro.PresentacionId = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
             _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
             _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
-            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
+            _nuevoRegistro.UnidadMedidaId = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
             _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
 
             var response = await _productoService.Crear(_nuevoRegistro);

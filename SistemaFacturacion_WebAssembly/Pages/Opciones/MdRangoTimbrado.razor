@@ -10,12 +10,13 @@
             <EditForm Model="@_rangoTimbrado" OnValidSubmit="Guardar">
                 <DataAnnotationsValidator />
 
-                <MudSelect Label="Timbrado" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="TimbradoDTO" @bind-Value="timbradoSeleccionada">
+                <MudSelect Label="Timbrado" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" @bind-Value="timbradoSeleccionada">
                     @if (ListaTimbrados.Any())
                     {
                         foreach (var tim in ListaTimbrados)
                         {
-                            <MudSelectItem Value="@tim">@($"{tim.Numero}({tim.TimbradoId})")</MudSelectItem>
+                            Console.WriteLine(tim.GetType());
+                            <MudSelectItem Value="@tim">@tim.ToString()</MudSelectItem>
                         }
                     }
                 </MudSelect>
@@ -59,12 +60,13 @@
                     }
                 </MudSelect>
 
-                <MudSelect Label="Sucursal" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" T="SucursalDTO" @bind-Value="sucursalSeleccionada">
+                <MudSelect Label="Sucursal" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mb-3" @bind-Value="sucursalSeleccionada">
                     @if (ListaSucursales.Any())
                     {
                         foreach (var suc in ListaSucursales)
                         {
-                            <MudSelectItem Value="@suc">@($"{suc.Nombre}({suc.SucursalId})")</MudSelectItem>
+                            @* <MudSelectItem Value="@suc">@($"{suc.Nombre}({suc.SucursalId})")</MudSelectItem> *@
+                            <MudSelectItem Value="@suc">@suc.ToString()</MudSelectItem>
                         }
                     }
                 </MudSelect>
@@ -89,7 +91,7 @@
     public List<SucursalDTO> ListaSucursales { get; set; } = new List<SucursalDTO>();
     public SucursalDTO sucursalSeleccionada { get; set; }
 
-    private TipoDocumento tipoSeleccionado;
+    private int tipoSeleccionado;
     private List<KeyValuePair<int, string>> tipoDocumentos;
 
 
@@ -132,12 +134,14 @@
             if (timbrado.isExitoso)
             {
                 ListaTimbrados = timbrado.Resultado;
+                Console.WriteLine($"Timbrados cargados: {ListaTimbrados.Count}");
             }
 
             var sucursal = await _sucursalService.ObtenerTodos();
             if (sucursal.isExitoso)
             {
                 ListaSucursales = sucursal.Resultado;
+                Console.WriteLine($"Sucursales cargados: {ListaTimbrados.Count}");
             }         
         }
         catch (Exception ex)
@@ -160,7 +164,7 @@
             RangoHasta = _rangoTimbrado.RangoHasta,
             SucursalId = sucursalSeleccionada.SucursalId,
             TimbradoId = timbradoSeleccionada.TimbradoId,
-            TipoDocumentoId = tipoSeleccionado
+            TipoDocumentoId = (TipoDocumento)tipoSeleccionado
 
         };
 

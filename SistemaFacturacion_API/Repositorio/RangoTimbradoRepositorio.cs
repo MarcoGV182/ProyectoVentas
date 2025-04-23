@@ -21,6 +21,16 @@ namespace SistemaFacturacion_API.Repositorio
             await Grabar();
             return entidad;
         }
-       
+
+        public async Task ActualizarNroActual(int idRango, int nuevoNroActual)
+        {
+            var rangoTimbrado = await _db.Rango_Timbrados.FindAsync(idRango);
+            if (rangoTimbrado != null)
+            {
+                rangoTimbrado.NroActual = nuevoNroActual;
+                _db.Rango_Timbrados.Update(rangoTimbrado);
+                await Grabar();
+            }
+        }
     }
 }

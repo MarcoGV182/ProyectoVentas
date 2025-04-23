@@ -10,7 +10,7 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         [Required]
         public DateTime FechaInicioVigencia { get; set; }
         public DateTime FechaFinVigencia { get; set; }
-        public TipoTimbradoEnum TipoTimbrado { get; set; }  
+        public TipoTimbradoEnum TipoTimbrado { get; set; }
     }
 
     public enum TipoTimbradoEnum

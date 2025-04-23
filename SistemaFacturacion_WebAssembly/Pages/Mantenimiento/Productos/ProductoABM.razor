@@ -1,6 +1,4 @@
-﻿@page "/producto/ABM/{productoId:int?}"
-@using MudBlazor
-@using System.Net.Http.Json
+﻿@* @page "/producto/ABM/{productoId:int?}" *@
 @inject NavigationManager Navigation
 @inject HttpClient Http
 @inject ISnackbar _snackBar
@@ -11,160 +9,166 @@
 @inject IMarcaService _marcarvice
 @inject IUnidadMedidaService _unidadMedidaService
 
-<MudGrid Spacing="2">
-    <!-- Título -->
-    <MudItem xs="12">
-        <MudText Typo="Typo.h5" Class="mb-4">@Titulo</MudText>
-    </MudItem>
+@if (cargando)
+{
+    <div style="display: flex; justify-content: center; align-items: center; height: 300px;">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    </div>
+}
+else
+{
+    <MudGrid Spacing="2">
+        <!-- Título -->
+        <MudItem xs="12">
+            <MudText Typo="Typo.h5" Class="mb-4">@Titulo</MudText>
+        </MudItem>
 
-    <!-- Contenedor del formulario -->
-    <MudItem xs="12" sm="12" md="12">
-        <MudPaper Class="pa-4" Style="height: auto; overflow-y: auto;">
-            <EditForm Model="producto" OnValidSubmit="Guardar">
-                <DataAnnotationsValidator />
+        <!-- Contenedor del formulario -->
+        <MudItem xs="12" sm="12" md="12">
+            <MudPaper Class="pa-4" Style="height: auto; overflow-y: auto;">
+                <MudForm @ref="form">
 
-                <!-- Campo 0: Código -->
-                @if (producto.ArticuloId > 0)
-                {
-                    <MudGrid Spacing="4">
+                    <!-- Campo 0: Código -->
+                    @if (ProductoId > 0)
+                    {
+                        <MudGrid Spacing="4">
+                            <MudItem xs="12" md="6">
+                                <MudInput Value="@ProductoId" Disabled="true" />
+                            </MudItem>
+                        </MudGrid>
+                    }
+
+                    <MudGrid Spacing="2">
+                        <!-- Campo 1: Descripción -->
                         <MudItem xs="12" md="6">
-                            <MudInput Value="@producto.ArticuloId" Disabled="true" />
+                            <MudTextField Label="Descripción" @bind-Value="@producto.Descripcion" For="@(() => producto.Descripcion)" />
                         </MudItem>
+
+                        <!-- Campo 2: Precio -->
+                        <MudItem xs="12" md="6">
+                            <MudNumericField Label="Precio" T="decimal" Format="N0" @bind-Value="@producto.PrecioBase" For="@(() => producto.PrecioBase)" AdornmentIcon="@Icons.Material.Filled.Money" />
+                        </MudItem>
+
+                        <!-- Campo 3: Precio de compra -->
+                        <MudItem xs="12" md="6">
+                            <MudNumericField Label="Precio de compra" T="decimal" Format="N0" @bind-Value="@producto.PrecioCompra" For="@(() => producto.PrecioCompra)" AdornmentIcon="@Icons.Material.Filled.Money" />
+                        </MudItem>
+
+                        <!-- Campo 4: Stock mínimo -->
+                        <MudItem xs="12" md="6">
+                            <MudNumericField Label="Stock mínimo" @bind-Value="@producto.Stockminimo" For="@(() => producto.Stockminimo)" />
+                        </MudItem>
+
+                        <!-- Campo 5: Código de barra -->
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="Código de barra" @bind-Value="@producto.Codigobarra" For="@(() => producto.Codigobarra)" MaxLength="50" />
+                        </MudItem>
+
+                        <!-- Campo 6: Fecha de vencimiento -->
+                        <MudItem xs="12" md="6">
+                            <MudDatePicker Label="Fecha de vencimiento" @bind-Date="producto.FechaVencimiento" DateFormat="dd/MM/yyyy" PickerVariant="PickerVariant.Inline" Editable="true" Mask="@(new DateMask("dd/MM/yyyy"))" />
+                        </MudItem>
+
+                        <!-- Campo 7: Presentación -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Presentación" Variant="Variant.Outlined" Placeholder="Seleccione una presentación" Class="mb-3" T="PresentacionDTO" @bind-Value="presentacionSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                                @if (ListaPresentacion.Any())
+                                {
+                                    foreach (var rol in ListaPresentacion)
+                                    {
+                                        <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 8: Marca -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Marca" Variant="Variant.Outlined" Placeholder="Seleccione una marca" Class="mb-3" T="MarcaDTO" @bind-Value="marcaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                                @if (ListaMarcas.Any())
+                                {
+                                    foreach (var rol in ListaMarcas)
+                                    {
+                                        <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 9: Categoría -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Categoría" Variant="Variant.Outlined" Placeholder="Seleccione una categoría" Class="mb-3" T="CategoriaProductoDTO" @bind-Value="CategoriaSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                                @if (ListaCategoria.Any())
+                                {
+                                    foreach (var rol in ListaCategoria)
+                                    {
+                                        <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 10: Unidad de medida -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Unidad de Medida" Variant="Variant.Outlined" Placeholder="Seleccione la UM" Class="mb-3" T="UnidadMedidaDTO" @bind-Value="unidadMedidaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                                @if (ListaUnidadMedida.Any())
+                                {
+                                    foreach (var rol in ListaUnidadMedida)
+                                    {
+                                        <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 11: Tipo de impuesto -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" Placeholder="Seleccione el tipo de impuesto" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                                @if (ListaImpuestos.Any())
+                                {
+                                    foreach (var rol in ListaImpuestos)
+                                    {
+                                        <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 12: Estado -->
+                        <MudItem xs="12" md="6">
+                            <MudSelect Label="Estado" Variant="Variant.Outlined" Placeholder="Seleccione el estado" Class="mb-3" T="string" @bind-Value="@producto.Estado">
+                                <MudSelectItem Value="@("A")">Activo</MudSelectItem>
+                                <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
+                            </MudSelect>
+                        </MudItem>
+
+                        <!-- Campo 13: Observación -->
+                        <MudItem xs="12">
+                            <MudTextField Label="Observación" Variant="Variant.Outlined" Lines="3" @bind-Value="@producto.Observacion" For="@(() => producto.Observacion)" Class="mb-3" />
+                        </MudItem>
+
                     </MudGrid>
-                }
 
-                <MudGrid Spacing="2">
-                    <!-- Campo 1: Descripción -->
-                    <MudItem xs="12" md="6">
-                        <MudTextField Label="Descripción" @bind-Value="@producto.Descripcion" For="@(() => producto.Descripcion)"/>
-                    </MudItem>
-
-                    <!-- Campo 2: Precio -->
-                    <MudItem xs="12" md="6">
-                        <MudTextField Label="Precio" Format="N0" @bind-Value="@producto.PrecioBase" For="@(() => producto.PrecioBase)" />
-                    </MudItem>
-
-                    <!-- Campo 3: Precio de compra -->
-                    <MudItem xs="12" md="6">
-                        <MudTextField Label="Precio de compra" Format="N0" @bind-Value="@producto.PrecioCompra" For="@(() => producto.PrecioCompra)" />
-                    </MudItem>
-
-                    <!-- Campo 4: Stock mínimo -->
-                    <MudItem xs="12" md="6">
-                        <MudNumericField Label="Stock mínimo" @bind-Value="@producto.Stockminimo" For="@(() => producto.Stockminimo)" />
-                    </MudItem>
-
-                    <!-- Campo 5: Código de barra -->
-                    <MudItem xs="12" md="6">
-                        <MudTextField Label="Código de barra" @bind-Value="@producto.Codigobarra" For="@(() => producto.Codigobarra)" MaxLength="50" />
-                    </MudItem>
-
-                    <!-- Campo 6: Fecha de vencimiento -->
-                    <MudItem xs="12" md="6">
-                        <MudTextField InputType="InputType.Date" Label="Fecha de vencimiento" @bind-Value="@producto.FechaVencimiento" Format="yyyy-MM-dd" For="@(() => producto.FechaVencimiento)" />
-                    </MudItem>
-
-                    <!-- Campo 7: Presentación -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Presentación" Variant="Variant.Outlined" Placeholder="Seleccione una presentación" Class="mb-3" T="PresentacionDTO" @bind-Value="presentacionSeleccionada" ToStringFunc="(item) => item?.Descripcion">
-                            @if (ListaPresentacion.Any())
-                            {
-                                foreach (var rol in ListaPresentacion)
-                                {
-                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 8: Marca -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Marca" Variant="Variant.Outlined" Placeholder="Seleccione una marca" Class="mb-3" T="MarcaDTO" @bind-Value="marcaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
-                            @if (ListaMarcas.Any())
-                            {
-                                foreach (var rol in ListaMarcas)
-                                {
-                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 9: Categoría -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Categoría" Variant="Variant.Outlined" Placeholder="Seleccione una categoría" Class="mb-3" T="CategoriaProductoDTO" @bind-Value="CategoriaSeleccionado" ToStringFunc="(item) => item?.Descripcion">
-                            @if (ListaCategoria.Any())
-                            {
-                                foreach (var rol in ListaCategoria)
-                                {
-                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 10: Unidad de medida -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Unidad de Medida" Variant="Variant.Outlined" Placeholder="Seleccione la UM" Class="mb-3" T="UnidadMedidaDTO" @bind-Value="unidadMedidaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
-                            @if (ListaUnidadMedida.Any())
-                            {
-                                foreach (var rol in ListaUnidadMedida)
-                                {
-                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 11: Tipo de impuesto -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" Placeholder="Seleccione el tipo de impuesto" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado" ToStringFunc="(item) => item?.Descripcion">
-                            @if (ListaImpuestos.Any())
-                            {
-                                foreach (var rol in ListaImpuestos)
-                                {
-                                    <MudSelectItem Value="@rol">@rol.Descripcion</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 12: Estado -->
-                    <MudItem xs="12" md="6">
-                        <MudSelect Label="Estado" Variant="Variant.Outlined" Placeholder="Seleccione el estado" Class="mb-3" T="string" @bind-Value="@producto.Estado">
-                            <MudSelectItem Value="@("A")">Activo</MudSelectItem>
-                            <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
-                        </MudSelect>
-                    </MudItem>
-
-                    <!-- Campo 13: Observación -->
+                    <!-- Botones -->
                     <MudItem xs="12">
-                        <MudTextField Label="Observación" Variant="Variant.Outlined" Lines="3" @bind-Value="@producto.Observacion" For="@(() => producto.Observacion)" Class="mb-3" />
+                        <MudPaper Class="pa-4 mt-4">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="Guardar">Guardar</MudButton>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="Cancelar">Cancelar</MudButton>
+                        </MudPaper>
                     </MudItem>
 
-                </MudGrid>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
 
-                <!-- Botones -->
-                <MudItem xs="12">
-                    <MudPaper Class="pa-4 mt-4">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="Cancelar">Cancelar</MudButton>
-                    </MudPaper>
-                </MudItem>
+    </MudGrid>
 
-            </EditForm>
-        </MudPaper>
-    </MudItem>
-
-</MudGrid>
-
-
-
+}
 
 @code {
     private string Titulo;
     private MudForm form;
-    private ProductoDTO producto = new ProductoDTO();
+    private ProductoCreateDTO producto = new ProductoCreateDTO();
 
     public List<MarcaDTO> ListaMarcas { get; set; } = new List<MarcaDTO>();
     public MarcaDTO marcaSeleccionada { get; set; }
@@ -181,12 +185,17 @@
     public List<UnidadMedidaDTO> ListaUnidadMedida { get; set; } = new List<UnidadMedidaDTO>();
     public UnidadMedidaDTO unidadMedidaSeleccionada { get; set; }
 
+    private bool cargando = true;
+
     [Parameter]
     public int? ProductoId { get; set; }
 
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(producto.ArticuloId);
+        Console.WriteLine(ProductoId);
         await ObtenerListados();
 
         if (ProductoId == null)
@@ -197,22 +206,25 @@
 
         try
         {
-            marcaSeleccionada = producto.Marca == null ? null : ListaMarcas.FirstOrDefault(p => p.MarcaId == producto.Marca.MarcaId);
-            impuestoSeleccionado = producto.TipoImpuesto == null ? null : ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoId == producto.TipoImpuesto.TipoimpuestoId);
-            presentacionSeleccionada = producto.Presentacion == null ? null : ListaPresentacion.FirstOrDefault(p => p.PresentacionId == producto.Presentacion.PresentacionId);
-            CategoriaSeleccionado = producto.Categoria == null ? null : ListaCategoria.FirstOrDefault(p => p.CategoriaId == producto.Categoria.CategoriaId);
-            unidadMedidaSeleccionada = producto.UnidadMedida == null ? null : ListaUnidadMedida.FirstOrDefault(p => p.UnidadMedidaId == producto.UnidadMedida.UnidadMedidaId);
+            marcaSeleccionada = producto.MarcaId == null ? null : ListaMarcas.FirstOrDefault(p => p.MarcaId == producto.MarcaId);
+            impuestoSeleccionado = ListaImpuestos.FirstOrDefault(p => p.TipoimpuestoId == producto.TipoimpuestoId);
+            presentacionSeleccionada = producto.PresentacionId == null ? null : ListaPresentacion.FirstOrDefault(p => p.PresentacionId == producto.PresentacionId);
+            CategoriaSeleccionado = producto.CategoriaId == null ? null : ListaCategoria.FirstOrDefault(p => p.CategoriaId == producto.CategoriaId);
+            unidadMedidaSeleccionada = producto.UnidadMedidaId == null ? null : ListaUnidadMedida.FirstOrDefault(p => p.UnidadMedidaId == producto.UnidadMedidaId);
             //estadoSeleccionado = _producto.Estado;
         }
         catch (Exception ex)
         {
             _snackBar.Add($"Error al obtener los datos: {ex.Message}", Severity.Error);
         }
+
+        cargando = false;
     }
 
     private void Cancelar()
     {
-        Navigation.NavigateTo("/Producto");
+        //Navigation.NavigateTo("/Producto");
+        MudDialog.Cancel();
     }
 
     private async Task ObtenerListados()
@@ -222,13 +234,12 @@
             if (ProductoId.HasValue)
             {
                 var resultProduct = await _productoService.Obtener(ProductoId.Value);
-                if (resultProduct.isExitoso)
-                {
-                    producto = resultProduct.Resultado;
-                }
+                if (!resultProduct.isExitoso)
+                    _snackBar.Add("No se pudo cargar el producto", Severity.Warning);
+
+                var productoDTO = resultProduct.Resultado;
+                producto = CustomMapper.MapTo<ProductoDTO, ProductoCreateDTO>(productoDTO);
             }
-
-
 
             var marcaResult = await _marcarvice.ObtenerTodos();
             if (marcaResult.isExitoso)
@@ -269,63 +280,87 @@
 
     private async Task Guardar()
     {
-        string _mensaje = "";
-        bool _resultado;
-
-        if (producto.ArticuloId != 0)
+        try
         {
-            ProductoUpdateDTO _editRegistro = new ProductoUpdateDTO();
-            _editRegistro.Descripcion = producto.Descripcion;
-            _editRegistro.PrecioBase = producto.PrecioBase;
-            _editRegistro.Observacion = producto.Observacion;
-            _editRegistro.Estado = producto.Estado;
-            _editRegistro.Codigobarra = producto.Codigobarra;
-            _editRegistro.Stockminimo = producto.Stockminimo;
-            _editRegistro.PrecioBase = producto.PrecioBase;
-            _editRegistro.PrecioCompra = producto.PrecioCompra;
-            _editRegistro.Fechavencimiento = producto.FechaVencimiento;
-            _editRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
-            _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
-            _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
-            _editRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
-            _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+            await form.Validate();
 
-            var response = await _productoService.Actualizar(producto.ArticuloId, _editRegistro);
-            _resultado = response.isExitoso;
-            _mensaje = "El registro fue modificado con éxito";
+            if (form.IsValid)
+            {
+                string _mensaje = "";
+                string _error = "";
+                bool _resultado;
+
+                if (ProductoId != null)
+                {
+                    ProductoUpdateDTO _editRegistro = new ProductoUpdateDTO();                    
+                    _editRegistro.Descripcion = producto.Descripcion;
+                    _editRegistro.PrecioBase = producto.PrecioBase;
+                    _editRegistro.Observacion = producto.Observacion;
+                    _editRegistro.Estado = producto.Estado;
+                    _editRegistro.Codigobarra = producto.Codigobarra;
+                    _editRegistro.Stockminimo = producto.Stockminimo;
+                    _editRegistro.PrecioBase = producto.PrecioBase;
+                    _editRegistro.PrecioCompra = producto.PrecioCompra;
+                    _editRegistro.FechaVencimiento = producto.FechaVencimiento;
+                    _editRegistro.PresentacionId = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+                    _editRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
+                    _editRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
+                    _editRegistro.UnidadMedidaId = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
+                    _editRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+
+
+                    var response = await _productoService.Actualizar(ProductoId.Value, _editRegistro);
+                    _resultado = response.isExitoso;
+                    _error = response.ErrorMessages != null ? string.Join(",", response.ErrorMessages) : "";
+                    _mensaje = "El registro fue modificado con éxito";
+                }
+                else
+                {
+                    ProductoCreateDTO _nuevoRegistro = new ProductoCreateDTO();
+
+                    _nuevoRegistro.Descripcion = producto.Descripcion;
+                    _nuevoRegistro.PrecioBase = producto.PrecioBase;
+                    _nuevoRegistro.Observacion = producto.Observacion;
+                    _nuevoRegistro.Estado = producto.Estado;
+                    _nuevoRegistro.Codigobarra = producto.Codigobarra;
+                    _nuevoRegistro.Stockminimo = producto.Stockminimo;
+                    _nuevoRegistro.PrecioBase = producto.PrecioBase;
+                    _nuevoRegistro.PrecioCompra = producto.PrecioCompra;
+                    _nuevoRegistro.FechaVencimiento = producto.FechaVencimiento;
+                    _nuevoRegistro.PresentacionId = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
+                    _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
+                    _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
+                    _nuevoRegistro.UnidadMedidaId = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
+                    _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+
+
+                    var stockArticulo = new StockAddDTO { UbicacionId = 1 };
+                    _nuevoRegistro.Stocks = new List<StockAddDTO> { stockArticulo };
+
+                    var response = await _productoService.Crear(_nuevoRegistro);
+                    _resultado = response.isExitoso;
+                    _error = response.ErrorMessages != null ? string.Join(",",response.ErrorMessages) : "";
+                    _mensaje = "El registro fue creado con éxito";
+                }
+
+                if (_resultado)
+                {
+                    _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
+                    //Navigation.NavigateTo("/Producto");
+                    MudDialog.Close(DialogResult.Ok(true));
+                }
+                else
+                    _snackBar.Add($"Error al guardar cambios: {_error}", Severity.Error, a => a.VisibleStateDuration = 500);
+            }
+            else
+            {
+                _snackBar.Add("Revisá los datos ingresados", Severity.Warning);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ProductoCreateDTO _nuevoRegistro = new ProductoCreateDTO();
-            _nuevoRegistro.Descripcion = producto.Descripcion;
-            _nuevoRegistro.PrecioBase = producto.PrecioBase;
-            _nuevoRegistro.Observacion = producto.Observacion;
-            _nuevoRegistro.Estado = producto.Estado;
-            _nuevoRegistro.Codigobarra = producto.Codigobarra;
-            _nuevoRegistro.Stockminimo = producto.Stockminimo;
-            _nuevoRegistro.PrecioBase = producto.PrecioBase;
-            _nuevoRegistro.PrecioCompra = producto.PrecioCompra;
-            _nuevoRegistro.Fechavencimiento = producto.FechaVencimiento;
-            _nuevoRegistro.Idpresentacion = presentacionSeleccionada != null ? presentacionSeleccionada.PresentacionId : null;
-            _nuevoRegistro.MarcaId = marcaSeleccionada != null ? marcaSeleccionada.MarcaId : null;
-            _nuevoRegistro.CategoriaId = CategoriaSeleccionado != null ? CategoriaSeleccionado.CategoriaId : null;
-            _nuevoRegistro.Unidadmedidanro = unidadMedidaSeleccionada != null ? unidadMedidaSeleccionada.UnidadMedidaId : null;
-            _nuevoRegistro.TipoimpuestoId = impuestoSeleccionado.TipoimpuestoId;
+            _snackBar.Add($"Ocurrió un error: {ex.Message}", Severity.Error);
+        }   
 
-            var stockArticulo = new StockAddDTO { UbicacionId = 1 };
-            _nuevoRegistro.Stocks = new List<StockAddDTO> { stockArticulo };
-
-            var response = await _productoService.Crear(_nuevoRegistro);
-            _resultado = response.isExitoso;
-            _mensaje = "El registro fue creado con éxito";
-        }
-
-        if (_resultado)
-        {
-            _snackBar.Add(_mensaje, Severity.Success, a => a.VisibleStateDuration = 500);
-            Navigation.NavigateTo("/Producto");
-        }
-        else
-            _snackBar.Add("Error al guardar cambios", Severity.Error, a => a.VisibleStateDuration = 500);
     }
 }

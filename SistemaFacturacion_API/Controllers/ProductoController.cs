@@ -190,7 +190,8 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (_ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower()) == null)
+                var existeProducto = await _ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower(), tracked: false);
+                if (existeProducto != null)
                 {
                     var mensajeError = "El producto con el mismo nombre ingresado ya existe";
                     ModelState.AddModelError("ErrorMessages", mensajeError);

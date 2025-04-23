@@ -11,8 +11,8 @@ namespace SistemaFacturacion_Model.Modelos
         public decimal PrecioCompra { get; set; } = 0;
         public DateTime? FechaVencimiento { get; set; }
 
-        public short? Idpresentacion { get; set; }
-        [ForeignKey(nameof(Idpresentacion))]
+        public short? PresentacionId { get; set; }
+        [ForeignKey(nameof(PresentacionId))]
         public virtual Presentacion Presentacion { get; set; }
 
         public int? MarcaId { get; set; }
@@ -23,8 +23,8 @@ namespace SistemaFacturacion_Model.Modelos
         [ForeignKey(nameof(CategoriaId))]
         public virtual CategoriaProducto Categoria { get; set; }
 
-        public short? Unidadmedidanro { get; set; }
-        [ForeignKey(nameof(Unidadmedidanro))]
+        public short? UnidadMedidaId { get; set; }
+        [ForeignKey(nameof(UnidadMedidaId))]
         public virtual UnidadMedida UnidadMedida { get; set; }
 
         // Relación con stock

@@ -1,0 +1,275 @@
+﻿@page "/lista-venta"
+@attribute [Authorize]
+@inject IVentaService _Ventaservice
+@inject IDialogService _dialogService
+@inject ISnackbar _snackBar
+@inject NavigationManager _navigationManager
+@inject SweetAlertService Swal; 
+
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+
+  <MudText Typo="Typo.h5" GutterBottom="true">Lista de Ventas</MudText>
+
+   <MudPaper Elevation="3" Class="pa-4" Width="100%">
+       <MudGrid>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.Add"
+            Color="Color.Primary"
+            OnClick="AbrirNuevaVenta">
+                Nuevo Venta</MudButton>
+        </MudItem>
+            @if (isLoading)
+            {
+                <MudProgressLinear Height="40px" Width="100%" Class="mt-2" Color="Color.Primary" Indeterminate="true" />
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudTable Items="@listaVentas"
+                    Dense="true"
+                    Striped="true" Bordered="true"
+                    Filter="new Func<VentaDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                    Loading="@_loading" LoadingProgressColor="Color.Info">
+                        @* <ToolBarContent>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent> *@
+                        <ToolBarContent>
+                            <MudTextField @bind-Value="searchString1" Placeholder="Buscar por Cliente" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchString2" Placeholder="Buscar por Nro. Factura" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudDatePicker @bind-Date="fechaInicio" Label="Fecha Inicio" Variant="Variant.Outlined"
+                                           DateFormat="dd/MM/yyyy" Class="mt-0" />
+
+                            <MudDatePicker @bind-Date="fechaFin" Label="Fecha Fin" Variant="Variant.Outlined"
+                                           DateFormat="dd/MM/yyyy" Class="mt-0" />
+                            
+                            <MudSpacer />
+                            <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
+                        </ToolBarContent>
+                        <HeaderContent>
+                            <MudTh Style="width: 5px;">
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Id)">
+                                    Código
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Cliente?.Nombre)">
+                                    Cliente
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Fecha)">
+                                    Fecha
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.NroFactura)">
+                                     Nro. Factura
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Timbrado?.Numero)">
+                                    Timbrado
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.EsAutoimprenta)">
+                                    Autoimprenta
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Estado)">
+                                    Estado
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.TotalIVA)">
+                                    Total IVA
+                                </MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel SortBy="new Func<VentaDTO, object>(x=> x.Total)">
+                                    Total
+                                </MudTableSortLabel>
+                            </MudTh> 
+                            <MudTh>Acciones</MudTh>
+                            <MudTh></MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="VentaRow">
+                            <MudTd DataLabel="Codigo">@VentaRow.Id</MudTd>
+                            <MudTd DataLabel="Cliente">@($"{VentaRow.Cliente.Nombre}({VentaRow.Cliente.Nrodocumento})")</MudTd>
+                            <MudTd DataLabel="Fecha">@(VentaRow.Fecha.ToString("dd/MM/yyyy"))</MudTd>
+                            <MudTd DataLabel="NroFactura">@VentaRow.NroFactura</MudTd>
+                            <MudTd DataLabel="Timbrado">@VentaRow.Timbrado.Numero</MudTd>
+                            <MudTd DataLabel="AutoImprenta">@VentaRow.EsAutoimprenta</MudTd>
+                            <MudTd DataLabel="Estado">@VentaRow.Estado</MudTd>
+                            <MudTd DataLabel="TotalIva">@VentaRow.TotalIVA.ToString("N0")</MudTd>
+                            <MudTd DataLabel="Estado">@VentaRow.Total.ToString("N0")</MudTd>
+                            <MudTd DataLabel="">
+                                <MudFab Color="Color.Primary"
+                                StartIcon="@Icons.Material.Filled.Details"
+                                Size="Size.Small"
+                                IconSize="Size.Small"
+                                        OnClick="@(() => VerDetalleVenta(VentaRow))" />
+                                <MudFab Color="Color.Error"
+                                StartIcon="@Icons.Material.Filled.Delete"
+                                Size="Size.Small"
+                                IconSize="Size.Small"
+                                        OnClick="@(() => AnularVenta(VentaRow))" />
+                            </MudTd>
+                        </RowTemplate>
+                        <PagerContent>
+                            <MudTablePager RowsPerPageString="Filas por Página:" />
+                        </PagerContent>
+                    </MudTable>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudPaper>
+</MudContainer>
+@code {
+    List<VentaDTO> listaVentas = new List<VentaDTO>();
+    private string searchString1 = "";
+    private string searchString2 = "";
+    private DateTime? fechaInicio;
+    private DateTime? fechaFin;
+    private VentaDTO selectedItem1 = null;
+    private bool _loading = true;
+    private bool isLoading = false;
+
+    private async Task ObtenerListaVentas()
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged(); // Fuerza actualización UI
+
+            var result = await _Ventaservice.ObtenerVentas();
+
+            if (result.isExitoso)
+            {
+                listaVentas = result.Resultado;
+            }
+        }
+        catch (Exception ex)
+        {            
+            _snackBar.Add($"Error al cargar artículos: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }      
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerListaVentas();
+        _loading = false;
+    }
+
+    private bool FilterFunc1(VentaDTO element) => FilterFunc(element);
+
+    private bool FilterFunc(VentaDTO element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString1) &&
+        string.IsNullOrWhiteSpace(searchString2) &&
+        fechaInicio == null &&
+        fechaFin == null)
+            return true;
+
+
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString1) || element.Cliente.Nombre.Contains(searchString1, StringComparison.OrdinalIgnoreCase);
+        var matchesSearch2 = string.IsNullOrWhiteSpace(searchString2) || element.NroFactura.Contains(searchString2, StringComparison.OrdinalIgnoreCase);
+        // Filtro por rango de fechas
+        bool matchesDateRange = true;
+        if (fechaInicio != null || fechaFin != null)
+        {
+            // Asumiendo que element.Fecha es de tipo DateTime
+            var fechaVenta = element.Fecha.Date;
+
+            if (fechaInicio != null && fechaFin != null)
+            {
+                matchesDateRange = fechaVenta >= fechaInicio.Value.Date &&
+                                  fechaVenta <= fechaFin.Value.Date;
+            }
+            else if (fechaInicio != null)
+            {
+                matchesDateRange = fechaVenta >= fechaInicio.Value.Date;
+            }
+            else if (fechaFin != null)
+            {
+                matchesDateRange = fechaVenta <= fechaFin.Value.Date;
+            }
+        }
+
+        return matchesSearch1 && matchesSearch2 && matchesDateRange;
+    }
+
+    private void LimpiarFiltros()
+    {
+        searchString1 = string.Empty;
+        searchString2 = string.Empty;
+        fechaInicio = null;
+        fechaFin = null;
+    }
+
+    private async Task AbrirNuevaVenta()
+    {
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var dialogo = await _dialogService.ShowAsync<MdVenta>("Nuevo registro", options);
+        var resultado = await dialogo.Result;
+
+        if (!resultado.Canceled)
+        {
+            await ObtenerVentas();
+        }*/
+        _navigationManager.NavigateTo($"/Venta/ABM");
+    }
+
+    private async Task VerDetalleVenta(VentaDTO Venta)
+    {
+        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
+        var parametros = new DialogParameters { ["_Venta"] = Venta };
+
+        var dialogo = _dialogService.Show<MdVenta>("Editar registro", parametros, options);
+        var resultado = await dialogo.Result;
+        if (!resultado.Canceled)
+        {
+            await ObtenerVentas();
+        }*/
+        //_navigationManager.NavigateTo($"/Venta/ABM/{Venta.ArticuloId}");
+    }
+
+    private async Task AnularVenta(VentaDTO Venta)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = $"Anular la Venta: {Venta.Id}({Venta.NroFactura})",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "No, volver"
+            });
+
+        if (result.IsConfirmed)
+        {
+            /*
+            var resultado = await _Ventaservice.Eliminar(Venta.ArticuloId);
+
+            if (resultado.isExitoso)
+            {
+                _snackBar.Add("La Venta fue eliminada", Severity.Success, a => a.VisibleStateDuration = 500);
+                await ObtenerVentas();
+            }
+            else
+                _snackBar.Add($"No se pudo eliminar: Error: {string.Join(",",resultado.ErrorMessages)}", Severity.Error, a => a.VisibleStateDuration = 500);
+            */
+        }
+    }
+
+}

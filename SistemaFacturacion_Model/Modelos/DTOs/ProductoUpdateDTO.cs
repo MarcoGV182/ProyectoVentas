@@ -23,12 +23,12 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         [Required(ErrorMessage = "El precio de compra no puede ser nula")]
         public decimal PrecioCompra { get; set; }
 
-        public DateTime? Fechavencimiento { get; set; }
-        public short? Idpresentacion { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
+        public short? PresentacionId { get; set; }
         public int? MarcaId { get; set; }
         public short? CategoriaId { get; set; }
 
-        public short? Unidadmedidanro { get; set; }
+        public short? UnidadMedidaId { get; set; }
         [Required(ErrorMessage = "El Tipo de Impuesto es requerido")]
         public int TipoimpuestoId { get; set; }
 

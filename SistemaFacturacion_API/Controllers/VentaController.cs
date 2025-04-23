@@ -41,7 +41,7 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<IEnumerable<VentaDTO>>();
             try
             {                
-                var VentaList = _ventaService.GetVentas();
+                var VentaList = await _ventaService.GetVentas();
                 _response.isExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Resultado = _mapper.Map<IEnumerable<VentaDTO>>(VentaList);                

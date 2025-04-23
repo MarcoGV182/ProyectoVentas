@@ -14,24 +14,30 @@ namespace SistemaFacturacion_API.Services
         private readonly IMapper _mapper;
         private readonly IVentaRepositorio _VentaRepositorio;
         private readonly IStockRepositorio _stockRepositorio;
+        private readonly IRangoTimbradoRepositorio _rangoTimbradoRepositorio;
         private readonly ApplicationDbContext _context;
 
-        public VentaService(IMapper mapper, IVentaRepositorio ventaRepositorio, IStockRepositorio stockRepositorio, ApplicationDbContext context)
+        public VentaService(IMapper mapper, IVentaRepositorio ventaRepositorio, IStockRepositorio stockRepositorio, ApplicationDbContext context, IRangoTimbradoRepositorio rangoTimbradoRepositorio)
         {
             _mapper = mapper;
             _VentaRepositorio = ventaRepositorio;
             _stockRepositorio = stockRepositorio;
             _context = context;
+            _rangoTimbradoRepositorio = rangoTimbradoRepositorio;
         }
 
         public async Task<IEnumerable<VentaDTO>> GetVentas()
         {
-            var _response = new List<VentaDTO>();
+            List<VentaDTO> _response = new List<VentaDTO>();
             try
             {
-                IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
+                IEnumerable<Venta> VentaList = await _VentaRepositorio.ObtenerTodos(incluirPropiedades: "Cliente,Vendedor,Timbrado,Ubicacion,DetalleVenta");
                 _response = _mapper.Map<List<VentaDTO>>(VentaList);
-
+                _response.ForEach(x =>
+                {
+                    x.Total = x.DetalleVenta.Sum(d => d.ImporteExento + d.ImporteIVA + d.ImporteGravado);
+                    x.TotalIVA = x.DetalleVenta.Sum(d => d.ImporteIVA);
+                });
 
                 return _response;
             }
@@ -46,7 +52,7 @@ namespace SistemaFacturacion_API.Services
             var _response = new VentaDTO();
             try
             {
-                Venta Venta = await _VentaRepositorio.Obtener(v=> v.Id == id, incluirPropiedades: "TipoImpuesto,Cliente,Vendedor,Timbrado,Empresa,DetalleVenta");
+                Venta Venta = await _VentaRepositorio.Obtener(v=> v.Id == id, incluirPropiedades: "Cliente,Vendedor,Timbrado,Ubicacion,DetalleVenta");
                 _response = _mapper.Map<VentaDTO>(Venta);
                 return _response;
             }
@@ -103,6 +109,12 @@ namespace SistemaFacturacion_API.Services
 
                 // 2. Procesar los items para crear movimientos de stock
                 await ProcesarMovimientosStockAsync(ventaCreada);
+
+                // 3 . Actualizar numeracion 
+                var idRangoTimbrado = await _rangoTimbradoRepositorio.Obtener(v => v.TimbradoId == _ventaDTO.TimbradoId &&
+                                                                                                                 v.Nro_Establecimiento == _ventaDTO.Establecimiento &&
+                                                                                                                 v.Nro_PuntoExp == _ventaDTO.PuntoExpedicion);
+                await _rangoTimbradoRepositorio.ActualizarNroActual(idRangoTimbrado.Id, _ventaDTO.Numero);
 
                 await transaction.CommitAsync();
 

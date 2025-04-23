@@ -25,6 +25,8 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
         public DateTime FechaRegistro { get; set; }
         public string UsuarioIdRegistro { get; set; }        
         public string Observacion { get; set; }
+        public decimal TotalIVA { get; set; }
+        public decimal Total { get; set; }
         public IEnumerable<DetalleVentaDTO> DetalleVenta { get; set; }
     }
 }

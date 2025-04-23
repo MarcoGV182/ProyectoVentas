@@ -9,6 +9,7 @@
 @inject IRangoTimbradoService _rangoTimbradoService
 @inject IDialogService _DialogService
 @inject UsuarioEstadoService UserStateService
+@inject SweetAlertService Swal;
 
 <MudGrid>
     <!-- Cabecera del formulario -->
@@ -345,19 +346,19 @@
 
             if (resultado.isExitoso)
             {
-                _Snackbar.Add("Venta registrada correctamente!", Severity.Success);
-                ResetForm();
+                await Swal.FireAsync("Venta Registrada", $"Numero de venta: {resultado.Resultado.NroFactura}", "success");
+                await ResetForm();
             }
             else  
             {
-                _Snackbar.Add($"Ocurrió un error: {string.Join(',',resultado.ErrorMessages)}", Severity.Error);
+                await Swal.FireAsync("Ocurrió un error", $"{string.Join(',',resultado.ErrorMessages)}", "error");
                 return;
             }            
 
         }
         catch (Exception ex)
         {
-            _Snackbar.Add($"Error al registrar: {ex.Message}", Severity.Error);
+            await Swal.FireAsync("Ocurrió un error", $"{ex.Message}", "error");
         }
     }
 
@@ -471,10 +472,11 @@
         return true;
     }
 
-    private void ResetForm()
+    private async Task ResetForm()
     {
         venta = new VentaCreateDTO() 
         { DetalleVenta = new List<DetalleVentaCreateDTO>()};
         clienteSeleccionado = null;
+        await BuscarTimbrado();
     }
 }

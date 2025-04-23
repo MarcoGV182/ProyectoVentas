@@ -1,7 +1,7 @@
 ﻿@page "/producto"
 @attribute [Authorize]
 @inject IProductoService _productoservice
-@inject IDialogService _dialogServicio
+@inject IDialogService _dialogService
 @inject ISnackbar _snackBar
 @inject NavigationManager _navigationManager
 @inject SweetAlertService Swal; 
@@ -13,17 +13,21 @@
 
    <MudPaper Elevation="3" Class="pa-4" Width="100%">
        <MudGrid>
-        <MudItem xs="12">
-            <MudButton Variant="Variant.Filled" 
-            StartIcon="@Icons.Material.Filled.Add"
-            Color="Color.Primary"
-            OnClick="AbrirNuevaproducto">
-                Nuevo producto</MudButton>
-        </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           OnClick="AbrirNuevaproducto">
+                    Nuevo producto
+                </MudButton>
+            </MudItem>
+
             @if (isLoading)
             {
-                <MudProgressLinear Height="40px" Width="100%" Class="mt-2" Color="Color.Primary" Indeterminate="true" />
-            }
+                <MudItem xs="12">
+                    <MudProgressLinear Class="mt-2" Color="Color.Primary" Indeterminate="true" Size="Size.Medium" />
+                </MudItem>
+            }         
             else
             {
                 <MudItem xs="12">
@@ -31,15 +35,19 @@
                     Dense="true"
                     Striped="true" Bordered="true"
                     Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
-                    Loading="@_loading" LoadingProgressColor="Color.Info">
+                    Loading="@isLoading" LoadingProgressColor="Color.Info">
                         @* <ToolBarContent>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                     </ToolBarContent> *@
                         <ToolBarContent>
-                            <MudTextField @bind-Value="searchString1" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                            <MudTextField @bind-Value="searchString2" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                            <MudTextField @bind-Value="searchString3" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchDescripcion" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchCodigoBarras" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="searchCategoria" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudSelect @bind-Value="searchEstado" Placeholder="Filtrar por estado" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                                <MudSelectItem Value="@("A")">Activo</MudSelectItem>
+                                <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
+                            </MudSelect>
                             <MudSpacer />
                             <MudButton OnClick="LimpiarFiltros" Color="Color.Secondary" Variant="Variant.Outlined">Limpiar Filtros</MudButton>
                         </ToolBarContent>
@@ -124,7 +132,7 @@
                             <MudTd DataLabel="Stock Mínimo">@productoRow.Stockminimo</MudTd>
                             <MudTd DataLabel="Presentación">@((productoRow.Presentacion?.Descripcion) ?? "")</MudTd>
                             <MudTd DataLabel="UnidadMedida">@((productoRow.UnidadMedida?.Descripcion) ?? "")</MudTd>
-                            <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "" : productoRow.FechaVencimiento.Value.ToShortDateString())</MudTd>
+                            <MudTd DataLabel="FechaVencimiento">@((productoRow.FechaVencimiento == null) ? "" : productoRow.FechaVencimiento.Value.ToString("dd/MM/yyyy"))</MudTd>
                             <MudTd DataLabel="Estado">@((productoRow.Estado == "A") ? "Activo" : "Inactivo")</MudTd>
                             <MudTd DataLabel="">
                                 <MudFab Color="Color.Primary"
@@ -148,13 +156,15 @@
         </MudGrid>
     </MudPaper>
 </MudContainer>
+
+
 @code {
     List<ProductoDTO> listaproductos = new List<ProductoDTO>();
-    private string searchString1 = "";
-    private string searchString2 = "";
-    private string searchString3 = "";
+    private string searchDescripcion = "";
+    private string searchCodigoBarras = "";
+    private string searchCategoria = "";
+    private string searchEstado = "";    
     private ProductoDTO selectedItem1 = null;
-    private bool _loading = true;
     private bool isLoading = false;
 
     private async Task Obtenerproductos()
@@ -186,56 +196,62 @@
     protected override async Task OnInitializedAsync()
     {
         await Obtenerproductos();
-        _loading = false;
+        //_loading = false;
     }
 
-    private bool FilterFunc1(ProductoDTO element) => FilterFunc(element, searchString1, searchString2, searchString3);
+    private bool FilterFunc1(ProductoDTO element) => FilterFunc(element, searchDescripcion, searchCodigoBarras, searchCategoria, searchEstado);
 
-    private bool FilterFunc(ProductoDTO element, string searchString, string searchString_2, string searchString_3)
+    private bool FilterFunc(ProductoDTO element, string searchString, string searchString_2, string searchString_3, string searchString_4)
     {
-        if (string.IsNullOrWhiteSpace(searchString) && string.IsNullOrWhiteSpace(searchString_2) && string.IsNullOrWhiteSpace(searchString_3))
+        if (string.IsNullOrWhiteSpace(searchString) && string.IsNullOrWhiteSpace(searchString_2) && string.IsNullOrWhiteSpace(searchString_3) && string.IsNullOrWhiteSpace(searchString_4))
             return true;
 
-        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Descripcion.Contains(searchString, StringComparison.OrdinalIgnoreCase);
-        var matchesSearch2 = string.IsNullOrWhiteSpace(searchString_2) || element.Codigobarra.Contains(searchString_2, StringComparison.OrdinalIgnoreCase);
-        var matchesSearch3 = string.IsNullOrWhiteSpace(searchString_3) || (element.Categoria?.Descripcion.Contains(searchString_3, StringComparison.OrdinalIgnoreCase) ?? false);
+        Console.WriteLine(element.Descripcion);
 
-        return matchesSearch1 && matchesSearch2 && matchesSearch3;
+        var matchesSearch1 = string.IsNullOrWhiteSpace(searchString) || element.Descripcion.Trim().Contains(searchString.Trim(), StringComparison.OrdinalIgnoreCase);
+        var matchesSearch2 = string.IsNullOrWhiteSpace(searchString_2) || (!string.IsNullOrEmpty(element.Codigobarra) && element.Codigobarra.Contains(searchString_2, StringComparison.OrdinalIgnoreCase));
+        var matchesSearch3 = string.IsNullOrWhiteSpace(searchString_3) || (element.Categoria?.Descripcion.Contains(searchString_3, StringComparison.OrdinalIgnoreCase) ?? false);
+        var matchesSearch4 = string.IsNullOrWhiteSpace(searchString_4) || (element.Estado?.Contains(searchString_4, StringComparison.OrdinalIgnoreCase) ?? false);
+
+        return matchesSearch1 && matchesSearch2 && matchesSearch3 && matchesSearch4;
     }
 
     private void LimpiarFiltros()
     {
-        searchString1 = string.Empty;
-        searchString2 = string.Empty;
-        searchString3 = string.Empty;
+        searchDescripcion = string.Empty;
+        searchCodigoBarras = string.Empty;
+        searchCategoria = string.Empty;
+        searchEstado = string.Empty;
     }
 
-    private async Task AbrirNuevaproducto()
-    {
-        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var dialogo = await _dialogServicio.ShowAsync<MdProducto>("Nuevo registro", options);
-        var resultado = await dialogo.Result;
-
-        if (!resultado.Canceled)
+    private async void AbrirNuevaproducto()
+    {      
+        var parameters = new DialogParameters { ["ProductoId"] = null };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = _dialogService.Show<ProductoABM>("Nuevo registro", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
         {
-            await Obtenerproductos();
-        }*/
-        _navigationManager.NavigateTo($"/Producto/ABM");
+            await Obtenerproductos(); 
+        }
     }
+    
+    
 
     private async Task AbrirEditarproducto(ProductoDTO producto)
     {
-        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var parametros = new DialogParameters { ["_producto"] = producto };
-
-        var dialogo = _dialogServicio.Show<MdProducto>("Editar registro", parametros, options);
+        var parametros = new DialogParameters { ["ProductoId"] = producto.ArticuloId };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialogo = _dialogService.Show<ProductoABM>("Editar registro", parametros, options);
         var resultado = await dialogo.Result;
         if (!resultado.Canceled)
         {
             await Obtenerproductos();
-        }*/
-        _navigationManager.NavigateTo($"/Producto/ABM/{producto.ArticuloId}");
+        }
+        //_navigationManager.NavigateTo($"/Producto/ABM/{producto.ArticuloId}");
+       
     }
+    
 
     private async Task Eliminarproducto(ProductoDTO producto)
     {
