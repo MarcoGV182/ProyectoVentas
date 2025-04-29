@@ -103,11 +103,21 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<CategoriaProductoDTO>();
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ModelState.GetErrorMessages();
+                    return BadRequest(_response);
+                }
+
                 var existeCategoria = _CategoriaRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower());
                 if (existeCategoria.Result != null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "El Tipo de Producto con el nombre ingresado ya existe");
-                    return BadRequest(ModelState);
+                {   
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "El Tipo de Producto con el nombre ingresado ya existe" };
+                    return BadRequest(_response);
                 }
 
                 if (CreateDTO == null)

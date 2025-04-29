@@ -78,7 +78,7 @@ namespace SistemaFacturacion_API.Controllers
                     return _response;
                 }
                 _response.isExitoso = true;
-                _response.Resultado = _mapper.Map<ClienteDTO>(Cliente); ;
+                _response.Resultado = _mapper.Map<ClienteDTO>(Cliente);
             }
             catch (Exception ex)
             {
@@ -101,10 +101,11 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<ClienteDTO>();
             try
             {
-                var existeCliente = await _ClienteRepositorio.Obtener(v => v.Nrodocumento.ToLower() == CreateDTO.Nrodocumento.ToLower());
-                if (existeCliente != null)
+                if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("ErrorMessages", "El Cliente con el mismo numero de documento ingresado ya existe");
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ModelState.GetErrorMessages();
                     return BadRequest(ModelState);
                 }
 
@@ -115,11 +116,18 @@ namespace SistemaFacturacion_API.Controllers
                     return BadRequest(_response);
                 }
 
+                var existeCliente = await _ClienteRepositorio.Obtener(v => v.Nrodocumento.ToLower() == CreateDTO.Nrodocumento.ToLower());
+                if (existeCliente != null)
+                {   
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "El Cliente con el mismo numero de documento ingresado ya existe" };
+                    return BadRequest(existeCliente);
+                }
+                
                 Persona modelo = _mapper.Map<Persona>(CreateDTO);
-
                 await _ClienteRepositorio.Crear(modelo);
                 await _ClienteRepositorio.Grabar();
-
 
                 _response.isExitoso = true;
                 _response.Resultado = _mapper.Map<ClienteDTO>(modelo);
@@ -132,7 +140,7 @@ namespace SistemaFacturacion_API.Controllers
                 _response.isExitoso = false;
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.ErrorMessages = new List<string>() { ex.Message};
-                return BadRequest(ex);
+                return BadRequest(_response);
             }
 
         }

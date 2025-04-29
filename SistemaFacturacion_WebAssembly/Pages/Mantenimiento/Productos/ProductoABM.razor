@@ -71,7 +71,7 @@ else
 
                         <!-- Campo 7: Presentación -->
                         <MudItem xs="12" md="6">
-                            <MudSelect Label="Presentación" Variant="Variant.Outlined" Placeholder="Seleccione una presentación" Class="mb-3" T="PresentacionDTO" @bind-Value="presentacionSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                            <MudSelect Label="Presentación" Variant="Variant.Outlined" Placeholder="Seleccione una presentación" Clearable="true" Class="mb-3" T="PresentacionDTO" @bind-Value="presentacionSeleccionada" ToStringFunc="(item) => item?.Descripcion">
                                 @if (ListaPresentacion.Any())
                                 {
                                     foreach (var rol in ListaPresentacion)
@@ -84,7 +84,7 @@ else
 
                         <!-- Campo 8: Marca -->
                         <MudItem xs="12" md="6">
-                            <MudSelect Label="Marca" Variant="Variant.Outlined" Placeholder="Seleccione una marca" Class="mb-3" T="MarcaDTO" @bind-Value="marcaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                            <MudSelect Label="Marca" Variant="Variant.Outlined" Placeholder="Seleccione una marca" Clearable="true" Class="mb-3" T="MarcaDTO" @bind-Value="marcaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
                                 @if (ListaMarcas.Any())
                                 {
                                     foreach (var rol in ListaMarcas)
@@ -97,7 +97,7 @@ else
 
                         <!-- Campo 9: Categoría -->
                         <MudItem xs="12" md="6">
-                            <MudSelect Label="Categoría" Variant="Variant.Outlined" Placeholder="Seleccione una categoría" Class="mb-3" T="CategoriaProductoDTO" @bind-Value="CategoriaSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                            <MudSelect Label="Categoría" Variant="Variant.Outlined" Placeholder="Seleccione una categoría" Clearable="true" Class="mb-3" T="CategoriaProductoDTO" @bind-Value="CategoriaSeleccionado" ToStringFunc="(item) => item?.Descripcion">
                                 @if (ListaCategoria.Any())
                                 {
                                     foreach (var rol in ListaCategoria)
@@ -110,7 +110,7 @@ else
 
                         <!-- Campo 10: Unidad de medida -->
                         <MudItem xs="12" md="6">
-                            <MudSelect Label="Unidad de Medida" Variant="Variant.Outlined" Placeholder="Seleccione la UM" Class="mb-3" T="UnidadMedidaDTO" @bind-Value="unidadMedidaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
+                            <MudSelect Label="Unidad de Medida" Variant="Variant.Outlined" Placeholder="Seleccione la UM" Clearable="true" Class="mb-3" T="UnidadMedidaDTO" @bind-Value="unidadMedidaSeleccionada" ToStringFunc="(item) => item?.Descripcion">
                                 @if (ListaUnidadMedida.Any())
                                 {
                                     foreach (var rol in ListaUnidadMedida)
@@ -123,7 +123,7 @@ else
 
                         <!-- Campo 11: Tipo de impuesto -->
                         <MudItem xs="12" md="6">
-                            <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" Placeholder="Seleccione el tipo de impuesto" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado" ToStringFunc="(item) => item?.Descripcion">
+                            <MudSelect Label="Tipo Impuesto" Variant="Variant.Outlined" Placeholder="Seleccione el tipo de impuesto" Clearable="true" Class="mb-3" T="TipoImpuestoDTO" @bind-Value="impuestoSeleccionado" ToStringFunc="(item) => item?.Descripcion">
                                 @if (ListaImpuestos.Any())
                                 {
                                     foreach (var rol in ListaImpuestos)

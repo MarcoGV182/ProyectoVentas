@@ -183,6 +183,14 @@ namespace SistemaFacturacion_API.Controllers
             var _response = new APIResponse<Producto>();
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    _response.isExitoso = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ModelState.GetErrorMessages();
+                    return BadRequest(_response);
+                }
+
                 if (CreateDTO == null)
                 {
                     _response.isExitoso = false;
@@ -193,8 +201,7 @@ namespace SistemaFacturacion_API.Controllers
                 var existeProducto = await _ProductoRepositorio.Obtener(v => v.Descripcion.ToLower() == CreateDTO.Descripcion.ToLower(), tracked: false);
                 if (existeProducto != null)
                 {
-                    var mensajeError = "El producto con el mismo nombre ingresado ya existe";
-                    ModelState.AddModelError("ErrorMessages", mensajeError);
+                    var mensajeError = "El producto con el mismo nombre ingresado ya existe";                   
                     _response.isExitoso = false;
                     _response.ErrorMessages = new List<string>() { mensajeError };
                     _response.StatusCode = HttpStatusCode.BadRequest;

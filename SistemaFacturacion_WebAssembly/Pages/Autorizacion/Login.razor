@@ -7,25 +7,25 @@
 @layout LoginLayout
 
 <EditForm Model="@usuarioLogin" OnValidSubmit="OnValidSubmit">
-<DataAnnotationsValidator/>
+    <DataAnnotationsValidator/>
 
     <MudText Typo="Typo.h4" GutterBottom="true" Align="Align.Center">Bienvenido</MudText>
 
 
     <MudTextField T="string"
-                  @bind-Value="@usuarioLogin.DireccionEmail"
-                  Label="Direccion de Email" 
-                  Variant="Variant.Outlined"
-                  For="@(() => usuarioLogin.DireccionEmail)" />
+    @bind-Value="@usuarioLogin.DireccionEmail"
+    Label="Direccion de Email" 
+    Variant="Variant.Outlined"
+    For="@(() => usuarioLogin.DireccionEmail)" />
 
     <MudTextField Label="Contraseña" Variant="Variant.Outlined"
-                  @bind-Value="@usuarioLogin.Password" Class="mt-3"
-                  InputType="@PasswordInput"
-                  Adornment="Adornment.End"
-                  AdornmentIcon="@PasswordInputIcon"
-                  AdornmentAriaLabel="Mostrar Password"
-                  For="@(() => usuarioLogin.Password)"
-                  OnAdornmentClick="TogglePasswordVisibility" />
+    @bind-Value="@usuarioLogin.Password" Class="mt-3"
+    InputType="@PasswordInput"
+    Adornment="Adornment.End"
+    AdornmentIcon="@PasswordInputIcon"
+    AdornmentAriaLabel="Mostrar Password"
+    For="@(() => usuarioLogin.Password)"
+    OnAdornmentClick="TogglePasswordVisibility" />
 
     <MudButton Class="mt-5" 
     Variant="Variant.Filled" 
@@ -33,7 +33,7 @@
     FullWidth="true"
     Disabled="@disableButton">Iniciar Sesión</MudButton>
 
-   <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="@(myImageClass + " my-7")" />
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="@(myImageClass + " my-7")" />
 </EditForm>
 
 <MudAlert Severity="Severity.Error" Class="@(myAlert + " mt-8 mud-width-full")" Style="max-width:500px;" Elevation="25">@messageError</MudAlert>
@@ -68,34 +68,44 @@
 
     private async Task OnValidSubmit()
     {
-        myImageClass = "d-block";
-        disableButton = true;
-        APIResponse<AutorizacionResponse> result = new APIResponse<AutorizacionResponse>();
         try
         {
-            result = await _usuarioServicio.IniciarSesion(usuarioLogin);
+            myImageClass = "d-block";
+            disableButton = true;
+            APIResponse<AutorizacionResponse> result = new APIResponse<AutorizacionResponse>();
+            try
+            {
+                result = await _usuarioServicio.IniciarSesion(usuarioLogin);
+            }
+            catch (Exception ex)
+            {
+                messageError = ex.Message;
+                myImageClass = "d-none";
+                disableButton = false;
+                myAlert = "d-block";
+            }
+
+
+            if (result.isExitoso)
+            {
+                // Usar AuthService para manejar la autenticación
+                await _authService.LoginAsync(result.Resultado.Token, result.Resultado.Usuario);
+                _navigationManager.NavigateTo("/producto");
+            }
+            else
+            {
+                messageError = result.Resultado?.Mensaje != null ? string.Join("\n", result.Resultado?.Mensaje) : "";
+                myImageClass = "d-none";
+                disableButton = false;
+                myAlert = "d-block";
+            }
         }
         catch (Exception ex)
         {
-            messageError = ex.Message;
-            myImageClass = "d-none";
-            disableButton = false;
-            myAlert = "d-block";
+            Console.WriteLine($"Error:{ex.Message}");
         }
 
 
-        if (result.isExitoso) 
-        { 
-            // Usar AuthService para manejar la autenticación
-            await _authService.LoginAsync(result.Resultado.Token, result.Resultado.Usuario);
-            _navigationManager.NavigateTo("/producto");
-        }   
-        else
-        {
-            messageError = string.Join("\n",result.Resultado.Mensaje);
-            myImageClass = "d-none";
-            disableButton = false;
-            myAlert = "d-block";
-        }
+        
     }
 }

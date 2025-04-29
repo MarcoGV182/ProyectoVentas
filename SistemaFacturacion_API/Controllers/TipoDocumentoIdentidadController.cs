@@ -216,6 +216,17 @@ namespace SistemaFacturacion_API.Controllers
                     return NotFound(_response);
                 }
 
+                var TipoDocIdentPersona = await _TipoDocumentoIdentidadRepositorio.Obtener(c => c.Id == id,incluirPropiedades:"Personas", tracked: false);
+                if (TipoDocIdentPersona?.Personas.Count > 0)
+                {
+                    _response.isExitoso = false;
+                    _response.ErrorMessages = new List<string> { "Existe registros ya asignados para este documento" };
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+
+
+
                 await _TipoDocumentoIdentidadRepositorio.Eliminar(TipoDocumentoIdentidad);
                 await _TipoDocumentoIdentidadRepositorio.Grabar();
 

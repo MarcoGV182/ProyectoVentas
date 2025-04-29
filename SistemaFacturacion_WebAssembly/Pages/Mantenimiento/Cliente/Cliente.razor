@@ -1,7 +1,7 @@
 ﻿@page "/cliente"
 @attribute [Authorize]
 @inject IClienteService _Clienteservice
-@inject IDialogService _dialogServicio
+@inject IDialogService _dialogService
 @inject ISnackbar _snackBar
 @inject NavigationManager _navigationManager
 @inject SweetAlertService Swal; 
@@ -101,7 +101,7 @@
                         <MudTd DataLabel="Codigo">@ClienteRow.PersonaId</MudTd>
                         <MudTd DataLabel="Nombre">@ClienteRow.Nombre</MudTd>
                         <MudTd DataLabel="Apellido">@ClienteRow.Apellido</MudTd>
-                        <MudTd DataLabel="FechaNacimiento">@((ClienteRow.FechaNacimiento == null) ? "" : ClienteRow.FechaNacimiento.Value.ToShortDateString())</MudTd>
+                        <MudTd DataLabel="FechaNacimiento">@((ClienteRow.FechaNacimiento == null) ? "" : ClienteRow.FechaNacimiento.Value.ToString("dd/MM/yyyy"))</MudTd>
                         <MudTd DataLabel="TipoDocIdentidad">@((ClienteRow.TipoDocumentoIdentidad?.Descripcion) ?? "")</MudTd>
                         <MudTd DataLabel="NroDocumento">@ClienteRow.Nrodocumento</MudTd>
                         <MudTd DataLabel="Correo">@ClienteRow.Correo</MudTd>
@@ -183,29 +183,28 @@
 
     private async Task AbrirNuevaCliente()
     {
-        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var dialogo = await _dialogServicio.ShowAsync<MdCliente>("Nuevo registro", options);
-        var resultado = await dialogo.Result;
-
-        if (!resultado.Canceled)
+        var parameters = new DialogParameters { ["ClienteId"] = null };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = _dialogService.Show<ClienteABM>("Nuevo registro", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
         {
             await ObtenerClientes();
-        }*/
-        _navigationManager.NavigateTo($"/Cliente/ABM");
+        }
+        //_navigationManager.NavigateTo($"/Cliente/ABM");
     }
 
     private async Task AbrirEditarCliente(ClienteDTO Cliente)
     {
-        /*var options = new DialogOptions { CloseOnEscapeKey = true, BackdropClick = false };
-        var parametros = new DialogParameters { ["_Cliente"] = Cliente };
-
-        var dialogo = _dialogServicio.Show<MdCliente>("Editar registro", parametros, options);
+        var parametros = new DialogParameters { ["ClienteId"] = Cliente.PersonaId };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialogo = _dialogService.Show<ClienteABM>("Editar registro", parametros, options);
         var resultado = await dialogo.Result;
         if (!resultado.Canceled)
         {
             await ObtenerClientes();
-        }*/
-        _navigationManager.NavigateTo($"/Cliente/ABM/{Cliente.PersonaId}");
+        }
+        //_navigationManager.NavigateTo($"/Cliente/ABM/{Cliente.PersonaId}");
     }
 
     private async Task EliminarCliente(ClienteDTO Cliente)

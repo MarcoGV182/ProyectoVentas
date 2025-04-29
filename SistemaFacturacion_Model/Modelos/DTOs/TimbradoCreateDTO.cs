@@ -5,11 +5,11 @@ namespace SistemaFacturacion_Model.Modelos.DTOs
 {
     public class TimbradoCreateDTO
     {   
-        [Required]
+        [Required(ErrorMessage ="El numero es requerido")]
         public string Numero { get; set; }
-        [Required]
+        [Required(ErrorMessage ="La fecha de Vigencia es requerida")]
         public DateTime FechaInicioVigencia { get; set; }
-        public DateTime FechaFinVigencia { get; set; }
+        public DateTime? FechaFinVigencia { get; set; }
         public TipoTimbradoEnum TipoTimbrado { get; set; }
     }
 

@@ -8,8 +8,8 @@ namespace SistemaFacturacion_Model.Modelos
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public short PresentacionId { get; set; }
-        [MaxLength(100)]
+        [Required, MaxLength(200)]
         public string Descripcion { get; set; }
-        public ICollection<Producto> Productos { get; set; }
+        public virtual ICollection<Producto> Productos { get; set; }
     }
 }

@@ -72,14 +72,14 @@ namespace SistemaFacturacion_API.Mappers
             //Timbrado
             CreateMap<TimbradoDTO, Timbrado>()
                .ForMember(dest => dest.FechaInicioVigencia, opt => opt.MapFrom(src => src.FechaInicioVigencia.Date))
-               .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia.Date))
+               .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia))
                .ReverseMap();
 
             // Mapeo entre TimbradoCreateDTO y Timbrado
             CreateMap<TimbradoCreateDTO, Timbrado>()
                 .ForMember(dest => dest.FechaInicioVigencia, opt => opt.MapFrom(src => src.FechaInicioVigencia.Date))
                 .ForMember(dest => dest.TipoTimbrado, opt => opt.MapFrom(src => src.TipoTimbrado.ToString()))
-                .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia.Date));
+                .ForMember(dest => dest.FechaFinVigencia, opt => opt.MapFrom(src => src.FechaFinVigencia));
 
             // Rango timbrado
             CreateMap<Rango_Timbrados, RangoTimbradoDTO>().ReverseMap();

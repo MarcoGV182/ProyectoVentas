@@ -273,7 +273,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TipoimpuestoId");
 
-                    b.ToTable("articulo");
+                    b.ToTable("articulo", (string)null);
 
                     b.HasDiscriminator<int>("TipoArticulo");
 
@@ -293,7 +293,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("CategoriaId");
 
-                    b.ToTable("categoriaproduto");
+                    b.ToTable("categoriaproduto", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Ciudad", b =>
@@ -310,7 +310,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("CiudadId");
 
-                    b.ToTable("ciudad");
+                    b.ToTable("ciudad", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Colaborador", b =>
@@ -333,7 +333,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("PersonaId");
 
-                    b.ToTable("colaborador");
+                    b.ToTable("colaborador", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.DetalleVenta", b =>
@@ -384,7 +384,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("VentaId");
 
-                    b.ToTable("detalleventa");
+                    b.ToTable("detalleventa", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Empresa", b =>
@@ -412,7 +412,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("EmpresaId");
 
-                    b.ToTable("empresa");
+                    b.ToTable("empresa", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.HistorialRefreshToken", b =>
@@ -445,7 +445,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("HistorialTokenId");
 
-                    b.ToTable("HistorialRefreshToken");
+                    b.ToTable("HistorialRefreshToken", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Marca", b =>
@@ -462,7 +462,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("MarcaId");
 
-                    b.ToTable("marca");
+                    b.ToTable("marca", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.MovimientoStock", b =>
@@ -514,7 +514,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UbicacionId");
 
-                    b.ToTable("movimientos");
+                    b.ToTable("movimientos", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Persona", b =>
@@ -579,7 +579,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TipoDocIdentidadId");
 
-                    b.ToTable("persona");
+                    b.ToTable("persona", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.PrecioPromocional", b =>
@@ -609,7 +609,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("ArticuloId");
 
-                    b.ToTable("preciopromocional");
+                    b.ToTable("preciopromocional", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Presentacion", b =>
@@ -626,7 +626,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("PresentacionId");
 
-                    b.ToTable("presentacion");
+                    b.ToTable("presentacion", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Rango_Timbrados", b =>
@@ -667,7 +667,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TimbradoId");
 
-                    b.ToTable("rango_timbrados");
+                    b.ToTable("rango_timbrados", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.RefreshToken", b =>
@@ -701,7 +701,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("refreshtokens");
+                    b.ToTable("refreshtokens", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Stock", b =>
@@ -730,7 +730,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UbicacionId");
 
-                    b.ToTable("stock");
+                    b.ToTable("stock", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Sucursal", b =>
@@ -754,7 +754,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("EmpresaId");
 
-                    b.ToTable("sucursales");
+                    b.ToTable("sucursales", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Timbrado", b =>
@@ -787,7 +787,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("TimbradoId");
 
-                    b.ToTable("timbrado");
+                    b.ToTable("timbrado", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoDocumentoIdentidad", b =>
@@ -804,7 +804,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tipodocumentoidentidad");
+                    b.ToTable("tipodocumentoidentidad", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoImpuesto", b =>
@@ -828,7 +828,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("TipoimpuestoId");
 
-                    b.ToTable("tipoimpuesto");
+                    b.ToTable("tipoimpuesto", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.TipoServicio", b =>
@@ -844,7 +844,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("TipoServicioId");
 
-                    b.ToTable("tiposervicio");
+                    b.ToTable("tiposervicio", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Ubicacion", b =>
@@ -878,7 +878,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("SucursalId");
 
-                    b.ToTable("ubicacion");
+                    b.ToTable("ubicacion", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.UnidadMedida", b =>
@@ -894,7 +894,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasKey("UnidadMedidaId");
 
-                    b.ToTable("unidadmedida");
+                    b.ToTable("unidadmedida", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Venta", b =>
@@ -983,7 +983,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UbicacionId");
 
-                    b.ToTable("venta");
+                    b.ToTable("venta", (string)null);
                 });
 
             modelBuilder.Entity("SistemaFacturacion_Model.Modelos.Producto", b =>
@@ -1023,7 +1023,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("UnidadMedidaId");
 
-                    b.ToTable("articulo");
+                    b.ToTable("articulo", (string)null);
 
                     b.HasDiscriminator().HasValue(1);
                 });
@@ -1037,7 +1037,7 @@ namespace SistemaFacturacion_API.Migrations
 
                     b.HasIndex("TipoServicioId");
 
-                    b.ToTable("articulo");
+                    b.ToTable("articulo", (string)null);
 
                     b.HasDiscriminator().HasValue(2);
                 });

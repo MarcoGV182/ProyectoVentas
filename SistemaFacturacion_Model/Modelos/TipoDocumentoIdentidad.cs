@@ -10,5 +10,8 @@ namespace SistemaFacturacion_Model.Modelos
         public short Id { get; set; }
         [MaxLength(100)]
         public string Descripcion { get; set; }
+
+
+        public virtual ICollection<Persona> Personas { get; set; }
     }
 }

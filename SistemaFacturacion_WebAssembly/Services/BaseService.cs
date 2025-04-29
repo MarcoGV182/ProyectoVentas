@@ -89,7 +89,7 @@ namespace SistemaFacturacion_WebAssembly.Services
                     else if (apiResponse.StatusCode == HttpStatusCode.BadRequest) // Manejo específico para BadRequest
                     {
                         try
-                        {
+                        {                           
                             // Deserializa directamente como APIResponse para obtener los mensajes de error estructurados
                             var badRequestResponse = JsonConvert.DeserializeObject<APIResponse<T>>(apiContent);
 
@@ -104,7 +104,9 @@ namespace SistemaFacturacion_WebAssembly.Services
                         }
                         catch (JsonException)
                         {
-                            response.ErrorMessages = new List<string> { "Error al procesar la respuesta de error del servidor" };
+                            //response.ErrorMessages = new List<string> { "Error al procesar la respuesta de error del servidor" };
+                            response.StatusCode = HttpStatusCode.BadRequest; 
+                            response.Resultado = JsonConvert.DeserializeObject<T>(apiContent);
                         }
                     }
                     else

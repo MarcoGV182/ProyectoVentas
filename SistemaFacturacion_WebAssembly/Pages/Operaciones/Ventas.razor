@@ -29,7 +29,7 @@
                     </MudItem>
                     <MudItem xs="12" sm="4">
                         @* <MudTextField InputType="InputType.Date" Label="Fecha" @bind-Value="@venta.Fecha" Format="yyyy-MM-dd" For="@(() => venta.Fecha)" /> *@
-                        <MudDatePicker Label="Fecha (dd/MM/yyyy)" Editable="true"  Date="@venta.Fecha" DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))"/>
+                        <MudDatePicker Label="Fecha (dd/MM/yyyy)" Editable="true" Date="@venta.Fecha" DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))"/>
                     </MudItem>
                 </MudGrid>
                 <MudGrid>                   

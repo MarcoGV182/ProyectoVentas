@@ -8,7 +8,7 @@ namespace SistemaFacturacion_Model.Modelos
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MarcaId { get; set; }
-        [MaxLength(150)]
+        [Required, MaxLength(200)]
         public string Descripcion { get; set; }
     }
 }

@@ -32,10 +32,11 @@
             {
                 <MudItem xs="12">
                     <MudTable Items="@listaproductos"
-                    Dense="true"
-                    Striped="true" Bordered="true"
-                    Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
-                    Loading="@isLoading" LoadingProgressColor="Color.Info">
+                              Dense="true"
+                              HorizontalScrollbar="true"
+                              Striped="true" Bordered="true"
+                              Filter="new Func<ProductoDTO,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1"
+                              Loading="@isLoading" LoadingProgressColor="Color.Info">
                         @* <ToolBarContent>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchString1" Placeholder="Ingrese un texto y presione ENTER para buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -44,7 +45,7 @@
                             <MudTextField @bind-Value="searchDescripcion" Placeholder="Buscar por descripción" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                             <MudTextField @bind-Value="searchCodigoBarras" Placeholder="Buscar por código de barras" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                             <MudTextField @bind-Value="searchCategoria" Placeholder="Buscar por categoría" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                            <MudSelect @bind-Value="searchEstado" Placeholder="Filtrar por estado" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                            <MudSelect @bind-Value="searchEstado" Placeholder="Filtrar por estado" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Clearable="true">
                                 <MudSelectItem Value="@("A")">Activo</MudSelectItem>
                                 <MudSelectItem Value="@("I")">Inactivo</MudSelectItem>
                             </MudSelect>
